@@ -1,0 +1,20 @@
+.form-group{
+    display: block;
+    box-sizing: border-box;
+    filter: none;
+    margin-bottom: 20px;
+    opacity: 1;
+    text-align: center;
+    text-size-adjust: 100%;
+    transition-delay: 0.25s;
+    transition-duration: 0.55s;
+    transition-property: all;
+    transition-timing-function: ease-in-out;
+    -webkit-tap-highlight-color: #000000;
+}
+.input-group{
+    background-attachment: scroll;
+    background-clip: padding-box;
+    background-origin: padding-box;
+
+}
