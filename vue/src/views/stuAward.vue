@@ -27,7 +27,25 @@
         </el-form-item>
 
         <el-form-item label="成果证明材料" style="margin-bottom: 70px;">
-          <el-input type="textarea" v-model="form.desc" style="width: 50%;" :rows="6"></el-input>
+          <el-upload
+              class="upload-demo"
+              drag
+              action="http://10.236.11.12:8080/Stu/upLoadPicture"
+              multiple
+              list-type="jpg"
+              :on-success="fileUpdateS"
+          >
+
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              Drop file here or <em>click to upload</em>
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                jpg/png files with a size less than 500kb
+              </div>
+            </template>
+          </el-upload>
         </el-form-item>
 
         <el-form-item style="position: absolute; left:45%">
@@ -41,13 +59,23 @@
 </template>
 
 <script>
+import uploadFilled from "@element-plus/icons/lib/UploadFilled";
+
 export default {
   name: "stuAward",
+  components:{
+    uploadFilled,
+  },
   data(){
     return{
       form:{},
 
     }
+  },
+  methods:{
+    fileUpdateS(res){
+      console.log(res);
+    },
   },
 }
 </script>

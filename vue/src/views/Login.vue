@@ -77,7 +77,6 @@ export default {
     login(){
        this.form.user_id=this.form.user_id-0
        let formstring=JSON.stringify(this.form)
-      console.log(formstring)
         request.post("/login", formstring).then(res=>{
           console.log(res)
         if(res.data===null){

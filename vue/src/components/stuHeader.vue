@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style=" height: 60px; position: relative" :body-style="{padding:0}">
     <div>
-        <span style="margin-left: 30px">
+        <span style="margin-left: 30px" @click="backHome">
           <el-image
               style="width: 50px; height: 50px; border-radius: 50%;"
               :src="require('../assets/logo-xiaohui.png')"
@@ -56,8 +56,8 @@
 
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="changeCancel">Cancel</el-button>
-        <el-button type="primary" @click="changeP">Confirm</el-button>
+        <el-button @click="changeCancel">取消</el-button>
+        <el-button type="primary" @click="changeP">确认</el-button>
       </span>
       </template>
     </el-dialog>
@@ -94,7 +94,6 @@ export default {
     changeP(){
       if(this.form.new_password===this.form.stu_confirmNew)
       {
-        this.dialogVisible = false;
         this.form.no=this.form.no-0;
         let formstring=JSON.stringify(this.form);
         console.log(formstring)
@@ -104,6 +103,7 @@ export default {
           {
             ElMessage.error('密码错误')
           } else {
+            this.dialogVisible = false;
             ElMessage('修改成功')
           }
         })
@@ -118,6 +118,9 @@ export default {
     loginOut(){
       sessionStorage.removeItem("user")
       this.$router.push("/Login")
+    },
+    backHome(){
+      this.$router.push("/stuHome")
     },
   },
 }

@@ -73,7 +73,7 @@
           </el-form-item>
 
           <el-form-item label="是否港澳" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-            <el-radio-group v-model="form.stu_isMacau" disabled>
+            <el-radio-group v-model="form.stu_ismacau" disabled>
               <el-radio :label=0>否</el-radio>
               <el-radio :label=1>是</el-radio>
             </el-radio-group>
@@ -152,7 +152,7 @@ export default {
           stu_ethnic: "汉族",
           stu_gender: 0,
           stu_id: "522321",
-          stu_isMacau: 1,
+          stu_ismacau: 1,
           stu_name: "李四",
           stu_no: 1231234,
           stu_origin: "四川成都",
@@ -175,6 +175,7 @@ export default {
     showOriginalData(){
       // let userjava=JSON.parse(sessionStorage.getItem('user'))
       this.form=JSON.parse(sessionStorage.getItem('user'))
+      console.log("本地")
       console.log(this.form)
     },
 
@@ -192,10 +193,13 @@ export default {
     },
     onSubmit(){
       this.form.stu_no=this.form.stu_no-0;
-      this.form.stu_isMacau=this.form.stu_no-0;
-      this.form.stu_gender=this.form.stu_no-0;
+      this.form.stu_ismacau=this.form.stu_ismacau-0;
+      this.form.stu_gender=this.form.stu_gender-0;
       let formstring=JSON.stringify(this.form);
+      console.log("提交")
+      console.log(formstring)
       request.post('/Stu/upDateStudent',formstring).then(res=>{
+        console.log("结果")
         console.log(res);
         if(res.data===null){
           this.$message({
@@ -208,6 +212,9 @@ export default {
             type:"success",
             message:"修改成功"
           })
+          this.Edit= true;
+          this.isShow1=true;
+          this.isShow2=false;
           sessionStorage.setItem('user',JSON.stringify(res.data));
           this.form=res.data;
         }
