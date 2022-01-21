@@ -89,7 +89,7 @@ import request from "@/utils/request";
 import {ElMessage} from "element-plus/es/components";
 
 export default {
-  name: "stuHeader",
+  name: "gCHeader",
   components:{
     bellFilled,
     infoFilled,
@@ -139,7 +139,8 @@ export default {
       this.$router.push("/Login")
     },
     backHome(){
-      this.$router.push("/stuHome")
+
+      this.$router.push("/gCHome")
     },
     headUpdate(res){
       this.user.stu_url=res.stu_url;

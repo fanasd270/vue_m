@@ -1,12 +1,12 @@
 <template>
 <div>
-  score
+  发布公告
 </div>
 </template>
 
 <script>
 export default {
-  name: "Score"
+  name: "gCAM"
 }
 </script>
 

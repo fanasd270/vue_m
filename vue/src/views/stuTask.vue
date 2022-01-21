@@ -7,7 +7,7 @@
         我的任务
       </p>
 
-    <div style="width: 30%" v-for="(m,i) in mess.msg">
+    <div style="width: 30%" v-for="(m,i) in mess.toDoMsg">
       <transition :name="closeStyle">
       <div v-show="show[i]" class="transition-box">
         <el-card class="box-card" style="margin-top: 10px">
@@ -40,24 +40,14 @@
     <div class="block" style="width: 40%; position: absolute; right: 10%; top:30px">
       <p style="font-weight: bold;font-size: large; margin-bottom: 20px; cursor: default">以往任务记录</p>
       <el-timeline>
-        <el-timeline-item timestamp="2018/4/12" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/12 20:46</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/3" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/3 20:46</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/2" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/2 20:46</p>
-          </el-card>
-        </el-timeline-item>
+        <div v-for="(m,j) in mess.didMsg">
+          <el-timeline-item timestamp="2018/4/12" placement="top">
+            <el-card>
+              <h4>{{m.mainmsg}}</h4>
+              <p>完成于 2018/4/12 20:46</p>
+            </el-card>
+          </el-timeline-item>
+        </div>
       </el-timeline>
     </div>
   </div>
@@ -72,8 +62,9 @@ export default {
   data(){
     return{
       show:[true,true],
+      stu: {},
       mess:{
-        msg:[
+        toDoMsg:[
           {man:"小明",
             mainmsg:"1232131",
           did:0,},
@@ -81,13 +72,21 @@ export default {
             mainmsg:"100000",
             did:0},
         ],
-        totalLength:2,
+        didMsg:[
+          {man:"小",
+            mainmsg:"1232131",
+            did:1,},
+          {mam:"小",
+            mainmsg:"100000",
+            did:1,},
+        ],
       },
       closeStyle:"el-zoom-in-top",
     }
   },
 
   created() {
+    this.stu=JSON.parse(sessionStorage.getItem('user'));
     //this.readData()
   },
 
@@ -107,11 +106,13 @@ export default {
       this.closeStyle="el-zoom-in-center";
       this.show[i]=!this.show[i];
       this.mess.msg[i].did=2;
+      this.mess.didMsg.push(this.mess.toDoMsg[i]);
+      this.mess.didMsg.splice(i,1);
       this.sentBack(i);
     },
 
     readData(){
-      request.post('').then(res=>{
+      request.post('', this.stu).then(res=>{
 
         ///
         ///

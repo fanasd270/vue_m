@@ -166,17 +166,16 @@ export default {
     }
   },
 
-  created() {
-    this.showOriginalData();
-  },
+  // created() {
+  //   this.showOriginalData();
+  // },
 
   methods:{
 
     showOriginalData(){
       // let userjava=JSON.parse(sessionStorage.getItem('user'))
       this.form=JSON.parse(sessionStorage.getItem('user'))
-      console.log("本地")
-      console.log(this.form)
+
     },
 
       changeData(){

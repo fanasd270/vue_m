@@ -91,6 +91,7 @@ export default {
             message:"登录成功"
           })
           sessionStorage.setItem("user",JSON.stringify(res.data))
+
           this.$router.push("/stuHome")//跳转至主页
         }
       })

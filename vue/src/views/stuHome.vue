@@ -94,7 +94,7 @@ import school from "@element-plus/icons/lib/School";
 import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
 
 export default {
-  name: "Home",
+  name: "stuHome",
   components: {
     bellFilled,
     infoFilled,

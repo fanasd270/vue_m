@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '../layout/Layout.vue'
 import stuLayout from "@/layout/stuLayout";
+import teaLayout from "@/layout/teaLayout"
 
 const routes = [
   {
@@ -70,6 +71,70 @@ const routes = [
         component: ()=>import("@/views/stuChat"),
       },
     ]
+  },
+//教师路由
+  {
+    path: '/teaLayout',
+    name: 'teaLayout',
+    component: teaLayout,
+    redirect: '/gCHome',
+    children: [
+      {
+        path: '/gCHome',
+        name: 'gCHome',
+        component: ()=>import("@/views/gCHome"),
+      },
+      {
+        path: 'gCStuInfo',
+        name: 'gCStuInfo',
+        component: ()=>import("@/views/gCStuInfo"),
+      },
+      {
+        path: 'gCTask',
+        name: 'gCTask',
+        component: ()=>import("@/views/gCTask"),
+      },
+      {
+        path: 'gCTable',
+        name: 'gCTable',
+        component: ()=>import("@/views/gCTable"),
+      },
+      {
+        path: 'gCAlmanac',
+        name: 'gCAlmanac',
+        component: ()=>import("@/views/gCAlmanac"),
+      },
+      {
+        path: 'gCStuScore',
+        name: 'gCStuScore',
+        component: ()=>import("@/views/gCStuScore"),
+      },
+      {
+        path: 'gCSign',
+        name: 'gCSign',
+        component: ()=>import("@/views/gCSign"),
+      },
+      {
+        path: 'gCAudit',
+        name: 'gCAudit',
+        component: ()=>import("@/views/gCAudit"),
+      },
+      {
+        path: 'gCLib',
+        name: 'gCLib',
+        component: ()=>import("@/views/gCLib"),
+      },
+      {
+        path: 'gCChat',
+        name: 'gCChat',
+        component: ()=>import("@/views/gCChat"),
+      },
+      {
+        path: 'gCAM',
+        name: 'gCAM',
+        component: ()=>import("@/views/gCAM"),
+      },
+    ],
   },
 ]
 
