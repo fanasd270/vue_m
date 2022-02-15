@@ -51,15 +51,15 @@
                   :on-preview="handlePreview"
                   :on-remove="handleRemove"
                   :file-list="fileList"
-                  :multiple="false"
+                  :limit="1"
                   :auto-upload="false">
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  Drop file here or <em>click to upload</em>
+                  拖拽或 <em>点击上传</em>
                 </div>
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+<!--                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
+<!--                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>-->
               </el-upload>
             </el-form-item>
 
@@ -86,6 +86,7 @@
 
 <script>
 import uploadFilled from "@element-plus/icons/lib/UploadFilled";
+import request from "@/utils/request";
 
 export default {
   name: "stuAward",
@@ -108,7 +109,7 @@ export default {
         paper_supporting_materials: "",
         paper_status:"0",
       },
-
+      activeName: 'first'
     }
   },
   methods:{
@@ -120,7 +121,19 @@ export default {
     },
     handlePreview(file) {
       console.log(file);
-    }
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    onSubmit(){
+      this.submitUpload()
+      let user=JSON.parse(sessionStorage.getItem('user'))
+      this.paper_stuno=user.stu_no
+      this.paper_stuname=user.stu_name
+      request.post("", this.paperForm).then(res=>{
+
+      })
+    },
   },
 }
 </script>

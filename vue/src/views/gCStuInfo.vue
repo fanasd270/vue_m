@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="width: 96vw; margin: 5px 2vw 0 2vw;">
   <el-checkbox v-model="showAll" @change="handleCheckAllChange">全选</el-checkbox>
 
     <el-checkbox v-model="isShow[0]" label="班级"/>
@@ -17,8 +17,8 @@
   <el-checkbox v-model="isShow[12]" label="邮箱" />
 
   <el-scrollbar height="90vh">
-    <div style="width: 96vw; margin-left: 2vw; border: #008c8c solid">
-      <el-table ref="tableRef" row-key="stu_no" :data="tableData" style="width: 100%">
+    <div style="border: #008c8c solid;">
+      <el-table ref="tableRef" row-key="stu_no" :data="tableData" style="width: 100%" max-height="600">
         <el-table-column prop="stu_name" label="姓名" width="100" fixed/>
         <el-table-column
             prop="stu_no"
