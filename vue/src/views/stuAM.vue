@@ -5,6 +5,9 @@
   </i>
   <p style="font-weight: bolder; font-size: large ;display: inline;margin-bottom: 10px">
     公告
+    <el-button @click="downloadfile">
+
+    </el-button>
   </p>
   <el-input placeholder="请输入内容" v-model="inputSearch" clearable :prefix-icon="Search"
             style="width: 20%; position: absolute; right: 12%;">
@@ -25,6 +28,11 @@ export default {
       Search,
       inputSearch: "",
     }
+  },
+  methods:{
+    downloadfile(){
+      window.location.href='http://localhost:8080/11.xlsx'
+    },
   },
 }
 </script>
