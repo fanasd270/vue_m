@@ -7,7 +7,7 @@ module.exports = {
             '/api': {              //设置拦截器  拦截器格式   斜杠+拦截器名字，名字可以自己定
                 // target: 'http://localhost:8080',     //代理的目标地址
                 //   target:'http://10.236.12.60:8088',
-                  target:'http://10.236.11.67:8080',
+                  target:'http://10.236.11.68:8080',
                  changeOrigin: true,              //是否设置同源，输入是的
                 pathRewrite: {                   //路径重写
                     '^/api': ''                     //选择忽略拦截器里面的内容

@@ -8,8 +8,8 @@
         获奖信息维护
       </p>
     </div>
-    <div style="border: dimgray solid; margin-top: 20px; height: 100%">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
+    <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
       <el-tab-pane label="论文" name="first">
 
           <el-form ref="form" :model="paperForm" style="margin:30px 0 0 60px; font-weight: bold">
@@ -46,8 +46,10 @@
               <el-upload
                   class="upload-demo"
                   ref="upload"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="http://10.236.11.68:8080/upload_paper_info2"
+                  :http-request="paperUpload"
                   drag
+                  :on-error="fileUploadError"
                   :on-preview="handlePreview"
                   :on-remove="handleRemove"
                   :file-list="fileList"
@@ -106,7 +108,7 @@ export default {
         paper_sciSearchNumber: "",
         paper_eiSearchNumber: "",
         paper_year: "",
-        paper_supporting_materials: "",
+        paper_supporting_materials: "zzz",
         paper_status:"0",
       },
       activeName: 'first'
@@ -116,22 +118,34 @@ export default {
     submitUpload() {
       this.$refs.upload.submit();
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleClick(tab, event) {
-      console.log(tab, event);
+    // handleRemove(file, fileList) {
+    //   console.log(file, fileList);
+    // },
+    // handlePreview(file) {
+    //   console.log(file);
+    // },
+    // handleClick(tab, event) {
+    //   console.log(tab, event);
+    // },
+    fileUploadError(){
+      this.$message.error('文件上传失败')
     },
     onSubmit(){
       this.submitUpload()
-      let user=JSON.parse(sessionStorage.getItem('user'))
-      this.paper_stuno=user.stu_no
-      this.paper_stuname=user.stu_name
-      request.post("", this.paperForm).then(res=>{
+    },
+    paperUpload(param){
+      const formData=new FormData()
+      formData.append('file', param.file)
+      let that=this
+      request.post('/upload_paper_info2', formData).then(res=>{
+        this.paperForm.paper_supporting_materials=res.data
 
+        let user=JSON.parse(sessionStorage.getItem('user'))
+        that.paperForm.paper_stuno=user.stu_no
+        that.paperForm.paper_stuname=user.stu_name
+        request.post("/upload_paper_info", that.paperForm).then(res=>{
+          this.$message.success(res.msg)
+        })
       })
     },
   },

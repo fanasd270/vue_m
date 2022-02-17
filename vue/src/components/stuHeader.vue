@@ -36,8 +36,10 @@
             <el-dropdown-menu>
               <el-upload
                   class="upload-demo"
-                  action="http://10.236.11.12:8080/Stu/upLoadPicture"
-                  on-success="headUpdate"
+                  action="http://10.236.11.68:8080/Stu/upLoadPicture"
+                  :http-request="stuUploadHead"
+                  :on-success="headUpdate"
+                  :show-file-list=false
               >
                 <el-dropdown-item>更改头像</el-dropdown-item>
               </el-upload>
@@ -144,6 +146,14 @@ export default {
     headUpdate(res){
       this.user.stu_url=res.stu_url;
       sessionStorage.setItem(user,this.user);
+      this.$message.success('头像更改成功')
+    },
+    stuUploadHead(param){
+      const formData=new FormData()
+      formData.append('file', param.file)
+      request.post('/Stu/upLoadPicture', formData).then(res=>{
+        console.log(res)
+      })
     },
   },
 }
