@@ -17,8 +17,8 @@
   <el-checkbox v-model="isShow[12]" label="邮箱" />
 
   <el-scrollbar height="90vh">
-    <div style="border: #008c8c solid;">
-      <el-table ref="tableRef" row-key="stu_no" :data="tableData" style="width: 100%" max-height="600">
+    <div style="border: #008c8c solid; height: 70vh">
+      <el-table ref="tableRef" row-key="stu_no" :data="tableData" class="stuinfo" style="width: 100%" max-height="600">
         <el-table-column prop="stu_name" label="姓名" width="100" fixed/>
         <el-table-column
             prop="stu_no"
@@ -79,11 +79,18 @@
         <el-table-column prop="stu_email" label="邮箱" v-if="isShow[12]" width="120"/>
       </el-table>
     </div>
+
+    <el-button @click="exportExcel">
+      导出
+    </el-button>
   </el-scrollbar>
 </div>
 </template>
 
 <script>
+import FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 export default {
   name: "gCStuInfo",
 
@@ -246,6 +253,34 @@ export default {
           this.isShow[index]=false
         }
       }
+    },
+    exportExcel() {
+      // 设置当前日期
+      let time = new Date();
+      let year = time.getFullYear();
+      let month = time.getMonth() + 1;
+      let day = time.getDate();
+      let name = year + "" + month + "" + day;
+      // console.log(name)
+      /* generate workbook object from table */
+      //  .table要导出的是哪一个表格
+      var wb = XLSX.utils.table_to_book(document.querySelector(".stuinfo"));
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        //  name+'.xlsx'表示导出的excel表格名字
+        FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            name + ".xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
     },
   },
 }
