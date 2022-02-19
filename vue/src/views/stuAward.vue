@@ -71,6 +71,29 @@
             </el-form-item>
           </el-form>
           <div style="height: 100px"></div>
+
+        <div>历史:</div>
+        <el-scrollbar height="70vh">
+          <div v-for="(m,index) in paperDid">
+            <transition name="el-fade-in-linear">
+              <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
+                <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                  <el-descriptions-item label="论文名称:">{{paperDid[index].paper_name}}</el-descriptions-item>
+                  <el-descriptions-item label="发表期刊/会议名称:">{{paperDid[index].paper_periodical}}</el-descriptions-item>
+                  <el-descriptions-item label="出版时间:">{{paperDid[index].paper_publicationTime}}</el-descriptions-item>
+                  <el-descriptions-item label="撰写时间:">{{paperDid[index].paper_year}}</el-descriptions-item>
+                  <el-descriptions-item label="是否CSCD:">{{paperDid[index].paper_iscscd}}</el-descriptions-item>
+                  <el-descriptions-item label="SCI检索号:">{{paperDid[index].paper_sciSearchNumber}}</el-descriptions-item>
+                  <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
+                  <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>
+                </el-descriptions>
+                <!--                <el-button @click="passPaper(index)">通过</el-button>-->
+                <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
+                <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
+              </el-card>
+            </transition>
+          </div>
+        </el-scrollbar>
       </el-tab-pane>
       <el-tab-pane label="专利" name="second">
 
@@ -111,7 +134,24 @@ export default {
         paper_supporting_materials: "zzz",
         paper_status:"0",
       },
-      activeName: 'first'
+      activeName: 'first',
+      paperDid:[
+        {
+          paper_no: 0,
+          paper_stuno: 0,
+          paper_stuname: "",
+          paper_name: "",
+          paper_periodical: "",
+          paper_publicationTime: "",
+          paper_iscscd: "",
+          paper_sciSearchNumber: "",
+          paper_eiSearchNumber: "",
+          paper_year: "",
+          paper_supporting_materials: "zzz",
+          paper_status:"0",
+        },
+      ],
+      toDoShow:[true],
     }
   },
   methods:{

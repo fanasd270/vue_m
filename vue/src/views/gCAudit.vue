@@ -1,10 +1,11 @@
 <template>
 <div style="padding: 0 6% 0 6%">
   <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
-    <el-badge :value="toDoPaperNum" :max="99" v-show="numShow" style="position: absolute; left:2%"></el-badge>
+    <el-badge :value="toDoNum[0]" :max="99" v-show="numShow[0]" style="position: absolute; left:2%"></el-badge>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">
+        <div>待审核:</div>
         <el-scrollbar height="70vh">
           <div v-for="(m,index) in paperToDo">
             <transition name="el-fade-in-linear">
@@ -29,6 +30,31 @@
           </div>
         </el-scrollbar>
 
+<!--        历史-->
+        <div>历史:</div>
+        <el-scrollbar height="70vh">
+          <div v-for="(m,index) in paperDid">
+            <transition name="el-fade-in-linear">
+              <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
+                <span style="font-weight: bold; margin-right: 2%">姓名：{{paperDid[index].paper_stuname}}</span>
+                <span style="font-weight: bold;">学号：{{paperDid[index].paper_stuno}}</span>
+                <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                  <el-descriptions-item label="论文名称:">{{paperDid[index].paper_name}}</el-descriptions-item>
+                  <el-descriptions-item label="发表期刊/会议名称:">{{paperDid[index].paper_periodical}}</el-descriptions-item>
+                  <el-descriptions-item label="出版时间:">{{paperDid[index].paper_publicationTime}}</el-descriptions-item>
+                  <el-descriptions-item label="撰写时间:">{{paperDid[index].paper_year}}</el-descriptions-item>
+                  <el-descriptions-item label="是否CSCD:">{{paperDid[index].paper_iscscd}}</el-descriptions-item>
+                  <el-descriptions-item label="SCI检索号:">{{paperDid[index].paper_sciSearchNumber}}</el-descriptions-item>
+                  <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
+                  <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>
+                </el-descriptions>
+<!--                <el-button @click="passPaper(index)">通过</el-button>-->
+<!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
+<!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
+              </el-card>
+            </transition>
+          </div>
+        </el-scrollbar>
       </el-tab-pane>
 
       <el-tab-pane label="专利" name="second">
@@ -46,6 +72,8 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "gCAudit",
   data(){
@@ -53,7 +81,7 @@ export default {
       activeName: 'first',
       numShow:[false, false, false, false],
       toDoShow:[true, true, true, true, true],
-      toDoPaperNum:0,
+      toDoNum:[0, 0, 0, 0],
       paperToDo:[
         {
           paper_no: 0,
@@ -126,14 +154,83 @@ export default {
           paper_status:"0",
         },
       ],
-      did:[
-
+      paperDid:[
+        {
+          paper_no: 0,
+          paper_stuno: 0,
+          paper_stuname: "11",
+          paper_name: "22",
+          paper_periodical: "33",
+          paper_publicationTime: "11",
+          paper_iscscd: "11",
+          paper_sciSearchNumber: "11",
+          paper_eiSearchNumber: "11",
+          paper_year: "11",
+          paper_supporting_materials: "11",
+          paper_status:"0",
+        },
+        {
+          paper_no: 0,
+          paper_stuno: 2,
+          paper_stuname: "",
+          paper_name: "",
+          paper_periodical: "",
+          paper_publicationTime: "",
+          paper_iscscd: "",
+          paper_sciSearchNumber: "",
+          paper_eiSearchNumber: "",
+          paper_year: "",
+          paper_supporting_materials: "",
+          paper_status:"0",
+        },
+        {
+          paper_no: 0,
+          paper_stuno: 2,
+          paper_stuname: "",
+          paper_name: "",
+          paper_periodical: "",
+          paper_publicationTime: "",
+          paper_iscscd: "",
+          paper_sciSearchNumber: "",
+          paper_eiSearchNumber: "",
+          paper_year: "",
+          paper_supporting_materials: "",
+          paper_status:"0",
+        },
+        {
+          paper_no: 0,
+          paper_stuno: 2,
+          paper_stuname: "",
+          paper_name: "",
+          paper_periodical: "",
+          paper_publicationTime: "",
+          paper_iscscd: "",
+          paper_sciSearchNumber: "",
+          paper_eiSearchNumber: "",
+          paper_year: "",
+          paper_supporting_materials: "",
+          paper_status:"0",
+        },
+        {
+          paper_no: 0,
+          paper_stuno: 2,
+          paper_stuname: "",
+          paper_name: "",
+          paper_periodical: "",
+          paper_publicationTime: "",
+          paper_iscscd: "",
+          paper_sciSearchNumber: "",
+          paper_eiSearchNumber: "",
+          paper_year: "",
+          paper_supporting_materials: "",
+          paper_status:"0",
+        },
       ],
     }
   },
 
   created() {
-
+    this.numCount();
   },
 
   methods:{
@@ -143,20 +240,56 @@ export default {
     passPaper(index){
       this.toDoShow[index]=false
       delete this.paperToDo[index]
-      this.toDoPaperNum--
+      if(this.toDoNum[0]-1===0){
+        this.numShow[0]=false
+      } else {
+        this.toDoNum[0]--
+      }
+      // this.audit(1)
     },
     rejectPaper(index){
       this.toDoShow[index]=false
       delete this.paperToDo[index]
-      this.toDoPaperNum--
+      if(this.toDoNum[0]-1===0){
+        this.numShow[0]=false
+      } else {
+        this.toDoNum[0]--
+      }
+      // this.audit(2)
     },
     waitPaper(index){
       this.toDoShow[index]=false
-      this.toDoPaperNum--
+      if(this.toDoNum[0]-1===0){
+        this.numShow[0]=false
+      } else {
+        this.toDoNum[0]--
+      }
     },
 
     numCount(){
-      this.toDoPaperNum=this.paperToDo.length
+      this.toDoNum[0]=this.paperToDo.length
+      // this.toDoNum[1]=this.paperToDo.length
+      // this.toDoNum[2]=this.paperToDo.length
+      // this.toDoNum[3]=this.paperToDo.length
+      for(let i=0; i<4; i++){
+        if(this.toDoNum[i]===0){
+          this.numShow[i]=false
+        }
+        else {
+          this.numShow[i]=true
+        }
+      }
+    },
+    getData(){
+      let user=JSON.parse(sessionStorage.getItem('user'))
+      request.post('',user).then(res=>{
+
+      })
+    },
+    audit(sta){
+      request.post('',sta).then(res=>{
+
+      })
     },
 
   },
