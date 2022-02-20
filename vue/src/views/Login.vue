@@ -91,8 +91,15 @@ export default {
             message:"登录成功"
           })
           sessionStorage.setItem("user",JSON.stringify(res.data))
+          console.log(res.data)
 
-          this.$router.push("/stuHome")//跳转至主页
+          if(this.form.user_type===1){
+            this.$router.push("/stuHome")//跳转至主页
+          }
+          else if(this.form.user_type===0){
+            this.$router.push("/tealayout")//跳转至主页
+          }
+
         }
       })
     },

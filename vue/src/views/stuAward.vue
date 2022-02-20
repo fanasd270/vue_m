@@ -85,7 +85,7 @@
         <div>申请记录:</div>
         <el-button type="text" @click="dialogVisible[0] = true" :disabled=newButtons[0]>点击新建</el-button>
         <el-empty description="暂无信息" v-if="didHistory[0]"></el-empty>
-        <el-scrollbar height="20vh">
+        <el-scrollbar height="70vh">
           <div v-for="(m,index) in paperDid">
             <transition name="el-fade-in-linear">
               <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">

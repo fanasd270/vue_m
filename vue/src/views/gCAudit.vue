@@ -7,6 +7,7 @@
       <el-tab-pane label="论文" name="first">
         <div>待审核:</div>
         <el-scrollbar height="70vh">
+          <el-empty description="暂无信息" v-if="noInfo[0]"></el-empty>
           <div v-for="(m,index) in paperToDo">
             <transition name="el-fade-in-linear">
               <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
@@ -48,6 +49,8 @@
                   <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
                   <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>
                 </el-descriptions>
+                <el-tag type="success" v-if="paperDid[index].paper_status==='1'">已通过</el-tag>
+                <el-tag type="danger" v-if="paperDid[index].paper_status==='2'">已驳回</el-tag>
 <!--                <el-button @click="passPaper(index)">通过</el-button>-->
 <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
 <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
@@ -83,155 +86,28 @@ export default {
       toDoShow:[true, true, true, true, true],
       didShow:[true, true, true, true, true],
       toDoNum:[0, 0, 0, 0],
-      paperToDo:[
-        {
-          paper_no: 0,
-          paper_stuno: 0,
-          paper_stuname: "11",
-          paper_name: "22",
-          paper_periodical: "33",
-          paper_publicationTime: "11",
-          paper_iscscd: "11",
-          paper_sciSearchNumber: "11",
-          paper_eiSearchNumber: "11",
-          paper_year: "11",
-          paper_supporting_materials: "11",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-      ],
+      noInfo:[false,false,false,false],
+      paperToDo:[],
       paperDid:[
-        {
-          paper_no: 0,
-          paper_stuno: 0,
-          paper_stuname: "11",
-          paper_name: "22",
-          paper_periodical: "33",
-          paper_publicationTime: "11",
-          paper_iscscd: "11",
-          paper_sciSearchNumber: "11",
-          paper_eiSearchNumber: "11",
-          paper_year: "11",
-          paper_supporting_materials: "11",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
-        {
-          paper_no: 0,
-          paper_stuno: 2,
-          paper_stuname: "",
-          paper_name: "",
-          paper_periodical: "",
-          paper_publicationTime: "",
-          paper_iscscd: "",
-          paper_sciSearchNumber: "",
-          paper_eiSearchNumber: "",
-          paper_year: "",
-          paper_supporting_materials: "",
-          paper_status:"0",
-        },
+        // {
+        //   paper_no: "0",
+        //   paper_stuno: 2,
+        //   paper_stuname: "",
+        //   paper_name: "",
+        //   paper_periodical: "",
+        //   paper_publicationTime: "",
+        //   paper_iscscd: "",
+        //   paper_sciSearchNumber: "",
+        //   paper_eiSearchNumber: "",
+        //   paper_year: "",
+        //   paper_supporting_materials: "",
+        //   paper_status:"0",
+        // },
       ],
     }
   },
 
   created() {
-    this.numCount();
     this.getData();
   },
 
@@ -274,26 +150,40 @@ export default {
       }
     },
 
-    numCount(){
-      this.toDoNum[0]=this.paperToDo.length
-      // this.toDoNum[1]=this.paperToDo.length
-      // this.toDoNum[2]=this.paperToDo.length
-      // this.toDoNum[3]=this.paperToDo.length
-      for(let i=0; i<4; i++){
-        if(this.toDoNum[i]===0){
-          this.numShow[i]=false
-        }
-        else {
-          this.numShow[i]=true
-        }
-      }
-    },
+    // numCount(){
+    //   this.toDoNum[0]=this.paperToDo.length
+    //   console.log("length:"+this.paperToDo.length)
+    //   // this.toDoNum[1]=this.paperToDo.length
+    //   // this.toDoNum[2]=this.paperToDo.length
+    //   // this.toDoNum[3]=this.paperToDo.length
+    //   for(let i=0; i<4; i++){
+    //     if(this.toDoNum[i]===0){
+    //       this.numShow[i]=false
+    //       this.noInfo[i]=true
+    //     }
+    //     else {
+    //       this.numShow[i]=true
+    //       this.noInfo[i]=false
+    //     }
+    //   }
+    // },
     getData(){
       let user=JSON.parse(sessionStorage.getItem('user'))
       request.post('/find_all_paper_info_new',user).then(res=>{
         this.paperToDo=res
         for(let i=0;i<this.paperToDo.length;i++){
           this.toDoShow[i]=true
+        }
+
+        //原numcount函数内容
+        this.toDoNum[0]=this.paperToDo.length
+        if(this.toDoNum[0]===0){
+          this.numShow[0]=false
+          this.noInfo[0]=true
+        }
+        else {
+          this.numShow[0]=true
+          this.noInfo[0]=false
         }
       })
       request.post('/find_all_paper_info_old',user).then(res=>{
