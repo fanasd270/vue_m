@@ -35,7 +35,7 @@
         <el-scrollbar height="70vh">
           <div v-for="(m,index) in paperDid">
             <transition name="el-fade-in-linear">
-              <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
+              <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="didShow[index]">
                 <span style="font-weight: bold; margin-right: 2%">姓名：{{paperDid[index].paper_stuname}}</span>
                 <span style="font-weight: bold;">学号：{{paperDid[index].paper_stuno}}</span>
                 <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
@@ -81,6 +81,7 @@ export default {
       activeName: 'first',
       numShow:[false, false, false, false],
       toDoShow:[true, true, true, true, true],
+      didShow:[true, true, true, true, true],
       toDoNum:[0, 0, 0, 0],
       paperToDo:[
         {
@@ -231,6 +232,7 @@ export default {
 
   created() {
     this.numCount();
+    this.getData();
   },
 
   methods:{
@@ -239,6 +241,9 @@ export default {
     },
     passPaper(index){
       this.toDoShow[index]=false
+      request.post('/pass_paper',this.paperToDo[index]).then(res=>{
+        console.log(res.msg)
+      })
       delete this.paperToDo[index]
       if(this.toDoNum[0]-1===0){
         this.numShow[0]=false
@@ -249,6 +254,9 @@ export default {
     },
     rejectPaper(index){
       this.toDoShow[index]=false
+      request.post('/refuse_paper',this.paperToDo[index]).then(res=>{
+        console.log(res.msg)
+      })
       delete this.paperToDo[index]
       if(this.toDoNum[0]-1===0){
         this.numShow[0]=false
@@ -282,10 +290,21 @@ export default {
     },
     getData(){
       let user=JSON.parse(sessionStorage.getItem('user'))
-      request.post('',user).then(res=>{
-
+      request.post('/find_all_paper_info_new',user).then(res=>{
+        this.paperToDo=res
+        for(let i=0;i<this.paperToDo.length;i++){
+          this.toDoShow[i]=true
+        }
+      })
+      request.post('/find_all_paper_info_old',user).then(res=>{
+        this.paperDid=res
+        for(let i=0;i<this.paperDid.length;i++){
+          this.didShow[i]=true
+        }
       })
     },
+
+    //返回状态
     audit(sta){
       request.post('',sta).then(res=>{
 

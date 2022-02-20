@@ -87,7 +87,8 @@ export default {
   },
   methods:{
     downloadfile(){
-      window.location.href='http://localhost:8080/11.xlsx'
+      // window.location.href='http://localhost:8080/11.xlsx'
+      window.location.href='http://localhost:8080/background.png'
     },
     exportExcel() {
       // 设置当前日期
