@@ -2,9 +2,9 @@
 <div style="padding: 0 6% 0 6%">
   <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
     <el-badge :value="toDoNum[0]" :max="99" v-show="numShow[0]" style="position: absolute; left:2%"></el-badge>
-    <el-badge :value="toDoNum[1]" :max="99" v-show="numShow[1]" style="position: absolute; left:4%"></el-badge>
-    <el-badge :value="toDoNum[2]" :max="99" v-show="numShow[2]" style="position: absolute; left:6%"></el-badge>
-    <el-badge :value="toDoNum[3]" :max="99" v-show="numShow[3]" style="position: absolute; left:8%"></el-badge>
+    <el-badge :value="toDoNum[1]" :max="99" v-show="numShow[1]" style="position: absolute; left:7%"></el-badge>
+    <el-badge :value="toDoNum[2]" :max="99" v-show="numShow[2]" style="position: absolute; left:12%"></el-badge>
+    <el-badge :value="toDoNum[3]" :max="99" v-show="numShow[3]" style="position: absolute; left:17%"></el-badge>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">
