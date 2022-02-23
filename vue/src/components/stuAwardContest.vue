@@ -113,7 +113,6 @@ import request from "@/utils/request";
 
 export default {
   name: "stuAwardContest",
-  // inject:['reload'],
   data(){
     return{
       contestForm:{
