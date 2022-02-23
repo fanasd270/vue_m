@@ -166,9 +166,9 @@ export default {
     }
   },
 
-  // created() {
-  //   this.showOriginalData();
-  // },
+  created() {
+    this.showOriginalData();
+  },
 
   methods:{
 

@@ -177,6 +177,8 @@ export default {
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
+        }).catch(err=>{
+          that.$message.error("请求错误")
         })
       })
     },

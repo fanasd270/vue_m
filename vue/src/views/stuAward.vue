@@ -9,7 +9,7 @@
       </p>
     </div>
     <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
-    <el-tabs v-model="activeName" style="margin:0 1% 0 1%">
+    <el-tabs v-model="activeName" style="margin:0 1% 0 1%;">
       <el-tab-pane label="论文" name="first">
         <stuAwardPaper/>
       </el-tab-pane>
@@ -20,7 +20,7 @@
         <stuAwardContest/>
       </el-tab-pane>
       <el-tab-pane label="项目" name="fourth">
-
+        <stu-award-project></stu-award-project>
       </el-tab-pane>
     </el-tabs>
     </div>
@@ -31,10 +31,12 @@
 import stuAwardPatent from "@/components/stuAwardPatent";
 import stuAwardPaper from "@/components/stuAwardPaper";
 import stuAwardContest from "@/components/stuAwardContest";
+import StuAwardProject from "@/components/stuAwardProject";
 
 export default {
   name: "stuAward",
   components:{
+    StuAwardProject,
     stuAwardPatent,
     stuAwardPaper,
     stuAwardContest,
