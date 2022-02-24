@@ -90,19 +90,14 @@
 <script>
 import FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import request from "@/utils/request";
 
 export default {
   name: "gCStuInfo",
 
   data(){
     return{
-      filterClass:[
-        {text: '大数据1班', value: '大数据1班'},
-        {text: '1班', value: '1班'},
-        {text: '2班', value: '2班'},
-        {text: '3班', value: '3班'},
-        {text: '4班', value: '4班'},
-      ],
+      filterClass:[],
       filterGender:[
         {text: '男', value: 1},
         {text: '女', value: 0},
@@ -113,7 +108,7 @@ export default {
         {text: '党员', value: '党员'},
       ],
       filterEthnic:[
-        {text: '汉', value: '汉'},
+        {text: '汉族', value: '汉族'},
         {text: '少数民族', value: '少数民族'},
       ],
       filterMacau:[
@@ -125,85 +120,32 @@ export default {
           true, true, true, true, true,true,true,true,true,true,true,true,true
       ],
       tableData:[
-        {
-          stu_address: "重庆大学",//
-          stu_birthday: "1995-12-26",//
-          stu_caucus_time: "2021-10-10",//
-          stu_class: "大数据1班",//
-          stu_email: "",
-          stu_ethnic: "汉",//
-          stu_gender: 1,//
-          stu_id: "522321222222222222",//
-          stu_ismacau: 0,//
-          stu_name: "李四光",//
-          stu_no: 20204146,//
-          stu_origin: "四川成都",//
-          // stu_password: "1111"
-          // stu_photourl: "WU"
-          stu_politicalface: "共青团员",//
-          stu_qq: "122706559",
-          stu_telephone: "18357980493",
-        },
-        {
-          stu_address: "重庆大学",
-          stu_birthday: "1995-12-26",
-          stu_caucus_time: "2021",
-          stu_class: "大数据1班",
-          stu_email: "",
-          stu_ethnic: "汉",
-          stu_gender: 1,
-          stu_id: "522321",
-          stu_ismacau: 0,
-          stu_name: "李四光",
-          stu_no: 20204146,
-          stu_origin: "四川成都",
-          // stu_password: "1111"
-          // stu_photourl: "WU"
-          stu_politicalface: "共青团员",
-          stu_qq: "122706559",
-          stu_telephone: "18357980493",
-        },
-        {
-          stu_address: "重庆大学",
-          stu_birthday: "1995-12-26",
-          stu_caucus_time: "2021",
-          stu_class: "2班",
-          stu_email: "",
-          stu_ethnic: "藏族",
-          stu_gender: 0,
-          stu_id: "522321",
-          stu_ismacau: 0,
-          stu_name: "李四光",
-          stu_no: 20204146,
-          stu_origin: "四川成都",
-          // stu_password: "1111"
-          // stu_photourl: "WU"
-          stu_politicalface: "共青团员",
-          stu_qq: "122706559",
-          stu_telephone: "18357980493",
-        },
-        {
-          stu_address: "重庆大学",
-          stu_birthday: "1995-12-26",
-          stu_caucus_time: "2021",
-          stu_class: "2班",
-          stu_email: "",
-          stu_ethnic: "维吾尔族",
-          stu_gender: 0,
-          stu_id: "522321",
-          stu_ismacau: 1,
-          stu_name: "李四光",
-          stu_no: 20204146,
-          stu_origin: "四川成都",
-          // stu_password: "1111"
-          // stu_photourl: "WU"
-          stu_politicalface: "共青团员",
-          stu_qq: "122706559",
-          stu_telephone: "18357980493",
-        },
+        // {
+        //   stu_address: "重庆大学",
+        //   stu_birthday: "1995-12-26",
+        //   stu_caucus_time: "2021",
+        //   stu_class: "2班",
+        //   stu_email: "",
+        //   stu_ethnic: "维吾尔族",
+        //   stu_gender: 0,
+        //   stu_id: "522321",
+        //   stu_ismacau: 1,
+        //   stu_name: "李四光",
+        //   stu_no: 20204146,
+        //   stu_origin: "四川成都",
+        //   // stu_password: "1111"
+        //   // stu_photourl: "WU"
+        //   stu_politicalface: "共青团员",
+        //   stu_qq: "122706559",
+        //   stu_telephone: "18357980493",
+        // },
       ]
     }
   },
+  created() {
+    this.getData()
+  },
+
   methods:{
     filterClassHandler(value, row, column){
       const property = column['property']
@@ -233,10 +175,10 @@ export default {
     },
     filterEthnicHandler(value, row, column){
       const property = column['property']
-      if(value==='汉'){
-        return row[property] === value
+      if(value==='汉族'){
+        return (row[property] === value)||(row[property] === '汉')
       } else {
-        return  row[property] !== '汉'
+        return  (row[property] !== '汉族')&&(row[property] !== '汉')
       }
     },
     filterMacauHandler(value, row, column){
@@ -254,6 +196,24 @@ export default {
         }
       }
     },
+    getData(){
+      let user=JSON.parse(sessionStorage.getItem('user'))
+      request.post('/Stu/stuList', user).then(res=>{
+        this.tableData=res
+      }).catch(err=>{
+        this.$message.error("学生信息请求错误")
+      })
+
+      request.post('/classList', user).then(res=>{
+        for(let i=0; i<res.length; i++){
+          this.filterClass.push({text:res[i].class_name, value: res[i].class_name})
+        }
+
+      }).catch(err=>{
+        this.$message.error("班级信息请求错误")
+      })
+    },
+
     exportExcel() {
       // 设置当前日期
       let time = new Date();

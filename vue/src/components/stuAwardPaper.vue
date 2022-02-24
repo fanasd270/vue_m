@@ -81,8 +81,8 @@
               <el-descriptions-item label="是否CSCD:">{{paperDid[index].paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{paperDid[index].paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>-->
-              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>
+              <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>
+<!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
               <!--                  csdn收藏夹尝试不同源下载图片-->
             </el-descriptions>
             <el-tag type="success" v-if="paperDid[index].paper_status==='1'">已通过</el-tag>
