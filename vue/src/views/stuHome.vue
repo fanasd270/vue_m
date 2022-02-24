@@ -44,6 +44,14 @@
               </el-card>
             </el-col>
             <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuVol">
+                <div class="ecard">
+                  <el-icon :size="30"><bicycle /></el-icon>
+                  <span style="position: absolute; top: 35%">志愿服务与外派</span>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
               <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuAM">
                 <div class="ecard">
                   <el-icon :size="30"><bell /></el-icon>
@@ -92,6 +100,7 @@ import trophy from "@element-plus/icons/lib/Trophy";
 import bell from "@element-plus/icons/lib/Bell";
 import school from "@element-plus/icons/lib/School";
 import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
+import bicycle from "@element-plus/icons/lib/Bicycle";
 
 export default {
   name: "stuHome",
@@ -106,6 +115,7 @@ export default {
     bell,
     school,
     chatDotRound,
+    bicycle,
   },
   data(){
     return{
@@ -128,6 +138,9 @@ export default {
     },
     jumpToStuAward(){
       this.$router.push("/stuLayout/stuAward")//跳转至获奖维护页面
+    },
+    jumpToStuVol(){
+      this.$router.push("/stuLayout/stuVol")
     },
     jumpToStuAM(){
       this.$router.push("/stuLayout/stuAM")//跳转至公告页面

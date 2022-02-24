@@ -16,6 +16,16 @@
   <el-checkbox v-model="isShow[11]" label="QQ" />
   <el-checkbox v-model="isShow[12]" label="邮箱" />
 
+  <el-input
+      v-model="searchInfo.stu_name"
+      placeholder="模糊查询名字或学号"
+      :prefix-icon="Search"
+      style="width: 20%; margin-bottom: 5px"
+      @keyup.enter="searchFun"
+      clearable
+  />
+  <el-button :icon="Search" circle size="small" @click="searchFun" style="margin-left: 5px"></el-button>
+  <el-button :icon="Delete" circle size="small" @click="deleteSearch" style="margin-left: 5px"></el-button>
   <el-scrollbar height="90vh">
     <div style="border: #008c8c solid; height: 70vh">
       <el-table ref="tableRef" row-key="stu_no" :data="tableData" class="stuinfo" style="width: 100%" max-height="600">
@@ -91,9 +101,16 @@
 import FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import request from "@/utils/request";
-
+import {Search} from '@element-plus/icons-vue'
+import {Delete} from "@element-plus/icons";
 export default {
   name: "gCStuInfo",
+  setup(){
+    return{
+      Search,
+      Delete,
+    }
+  },
 
   data(){
     return{
@@ -139,7 +156,28 @@ export default {
         //   stu_qq: "122706559",
         //   stu_telephone: "18357980493",
         // },
-      ]
+      ],
+      infoCopy:[],
+      searchInfo:{
+          stu_address: "",
+          stu_birthday: "",
+          stu_caucus_time: "",
+          stu_class: "",
+          stu_email: "",
+          stu_ethnic: "",
+          stu_gender: "0",
+          stu_id: "",
+          stu_ismacau: "1",
+          stu_name: "",
+          stu_no: "0",
+          stu_origin: "",
+          stu_password: "",
+          stu_photourl: "",
+          stu_politicalface: "",
+          stu_qq: "",
+          stu_telephone: "",
+      },
+      searchedInfo:[],
     }
   },
   created() {
@@ -196,6 +234,22 @@ export default {
         }
       }
     },
+
+    //搜索
+    searchFun(){
+      this.infoCopy=JSON.parse(JSON.stringify(this.tableData))
+      let stu=JSON.stringify(this.searchInfo)
+      request.post('/Stu/findStudentsByName',stu).then(res=>{
+        this.tableData=res.data
+      }).catch(err=>{
+        this.$message.error("搜索失败")
+      })
+    },
+    deleteSearch(){
+      this.tableData=JSON.parse(JSON.stringify(this.infoCopy))
+    },
+
+
     getData(){
       let user=JSON.parse(sessionStorage.getItem('user'))
       request.post('/Stu/stuList', user).then(res=>{

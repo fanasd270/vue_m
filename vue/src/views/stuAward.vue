@@ -43,33 +43,7 @@ export default {
   },
   data(){
     return{
-      patentForm:{
-        patent_no: "",
-        patent_stu_no: "",
-        patent_stu_name: "",
-        patent_name: "",
-        patent_type: "",
-        patent_application_no: "",
-        patent_application_time: "",
-        patent_certificate_no: "",
-        patent_authorization_time: "",
-        patent_isfirstone: "",
-        patent_year: "",
-        patent_supporting_materials: "",
-        patent_status: "0"
-      },
       activeName: 'first',
-      //paperDid:[],//论文历史记录表
-      patentDid:[],//专利历史记录表
-      // contestDid:[],//竞赛
-      tagType:['success','warning','danger'],
-      //toDoShow:[],//paper每条历史记录的v-if
-      patentShow:[],//专利每条历史记录的v-if
-      // contestShow:[],//竞赛每条历史记录的v-if
-
-      newButtons:[],//新建按钮是否可用
-      dialogVisible:[false,false,false,false],//四类表单的显示
-      didHistory:[false,false,false,false],//四类空状态是否显示
     }
   },
 }

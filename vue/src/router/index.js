@@ -51,6 +51,11 @@ const routes = [
         component: ()=>import("@/views/stuAward"),
       },
       {
+        path: 'stuVol',
+        name: 'stuVol',
+        component: ()=>import("@/views/stuVol"),
+      },
+      {
         path: 'stuTask',
         name: 'stuTask',
         component: ()=>import("@/views/stuTask"),
