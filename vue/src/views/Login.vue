@@ -36,6 +36,7 @@
       </el-card>
     </div>
 
+    <span style="position: absolute; bottom: 0; height: 20px;  text-align: center;line-height: 20px; background-color: aliceblue; font-size: 10px">历史登录人次:学生:{{numCount[0]}};老师:{{numCount[1]}}|今日登录人次:学生:{{numCount[2]}};老师:{{numCount[3]}}</span>
 
 
   </div>
@@ -70,8 +71,12 @@ export default {
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
+      numCount:[],
 
     }
+  },
+  created() {
+    this.numLogin()
   },
   methods:{
     login(){
@@ -101,6 +106,12 @@ export default {
           }
 
         }
+      })
+    },
+    numLogin(){
+      request.post('/count').then(res=>{
+        this.numCount=res.data
+        console.log(this.numCount)
       })
     },
   }
