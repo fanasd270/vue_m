@@ -101,7 +101,7 @@ export default {
         voluntary_activities_time_from_to:'',
         voluntary_activities_time_long:'',
         voluntary_activities_content:'',
-        voluntary_activities_status:'',
+        voluntary_activities_status:'0',
         voluntary_activities_name:'',
         voluntary_activities_url:'',
       },

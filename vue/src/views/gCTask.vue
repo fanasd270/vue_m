@@ -87,12 +87,12 @@
       <el-scrollbar height="500px">
         <el-timeline>
           <div v-for="(m,j) in oldMsg">
-            <el-timeline-item :timestamp="m.msg_time" placement="top">
+            <el-timeline-item :timestamp="m.msg_releasetime" placement="top">
               <el-card>
-                <h4>{{m.msg_content}}</h4>
-                <p>截至时间 {{m.msg_ddl}}</p>
-                  <div style="margin: 10px 0 0 80%">
-                    <el-button type="primary" circle size="small">
+                <p style="word-break: normal; white-space: pre-wrap; word-wrap: break-word">{{m.msg_content}}</p>
+                  <div style="margin-top: 10px">
+                    <span>截止 {{m.msg_deadline}}||剩余 {{m.days}}天{{m.hours}}时{{m.minutes}}分{{m.seconds}}秒</span>
+                    <el-button type="primary" circle size="small" style="margin-left: 5px">
                       <el-icon><Edit/></el-icon>
                     </el-button>
                     <el-button type="danger" circle size="small">
@@ -136,9 +136,14 @@ export default {
       },
       oldMsg:[
         {
-          msg_content: '111',
-          msg_time: '2022/1/1 00:00',
-          msg_ddl: '2022/1/2 00:00'
+          msg_content: 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
+          msg_releasetime: '2022-1-1 00:00:00',
+          msg_deadline: '2022-2-28 00:00:00',
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+          residue: 0,
         },
       ],
       multipleSelection: [],
@@ -149,6 +154,9 @@ export default {
   created() {
     this.user=JSON.parse(sessionStorage.getItem('user'));
     //this.readData()
+    setInterval(() => {
+      this.getResidueDate();
+    }, 1000);
   },
 
 
@@ -245,6 +253,28 @@ export default {
       return time
     },
 
+    getResidueDate() {
+      for(let i=0;i<this.oldMsg.length;i++){
+        this.oldMsg[i].residue = new Date(this.oldMsg[i].msg_deadline).getTime() - new Date();
+        this.oldMsg[i].days = this.addZero(
+            Math.floor(this.oldMsg[i].residue / 1000 / 60 / 60 / 24)
+        ); //天
+        this.oldMsg[i].hours = this.addZero(
+            Math.floor((this.oldMsg[i].residue / 1000 / 60 / 60) % 24)
+        ); //时
+        this.oldMsg[i].minutes = this.addZero(
+            Math.floor((this.oldMsg[i].residue / 1000 / 60) % 60)
+        ); //分
+        this.oldMsg[i].seconds = this.addZero(Math.floor((this.oldMsg[i].residue / 1000) % 60)); //秒
+      }
+    },
+    start() {
+      // let _this = this;
+    },
+    addZero(d) {
+      return parseInt(d) < 10 ? "0" + d : d;
+    },
+
     sendTask(){
       this.mess.msg_sender=this.user.t_no
       // this.mess.stuList=this.multipleSelection
@@ -263,6 +293,12 @@ export default {
         this.mess.stuList=[]
         this.multipleSelection=[]
       })
+    },
+    cancelTask(){
+      this.mess.msg_content=''
+      this.mess.msg_deadline=''
+      this.mess.stuList=[]
+      this.multipleSelection=[]
     },
 
     filterClassHandler(value, row, column){
