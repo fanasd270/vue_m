@@ -106,7 +106,12 @@ export default {
           }
 
         }
-      })
+      }).catch(err=>{
+          this.$message({
+            type:"error",
+            message:"连接错误"
+          })
+        })
     },
     numLogin(){
       request.post('/count').then(res=>{

@@ -439,7 +439,9 @@ export default {
       this.form.stu_gender=this.form.stu_gender-0;
       let formstring=JSON.stringify(this.form);
       request.post('/Stu/findDormitoryInfo', formstring).then(res=>{
-        this.Accommodation=res.data
+        if(res.data!=null){
+          this.Accommodation=res.data
+        }
       }).catch(err=>{
         this.$message({
           type:"error",
@@ -448,7 +450,9 @@ export default {
       })
 
       request.post('/Stu/findEntranceInfo', formstring).then(res=>{
-        this.examination=res.data
+        if(res.data!=null){
+          this.examination=res.data
+        }
       }).catch(err=>{
         this.$message({
           type:"error",

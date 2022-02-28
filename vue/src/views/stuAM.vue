@@ -88,7 +88,7 @@ export default {
   methods:{
     downloadfile(){
       // window.location.href='http://localhost:8080/11.xlsx'
-      window.location.href='http://localhost:8080/background.png'
+      window.location.href='http://localhost:8080/3.重庆大学2020-2021学年国家助学金评定名单表(2).xls'
     },
     exportExcel() {
       // 设置当前日期

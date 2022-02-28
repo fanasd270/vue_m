@@ -57,6 +57,11 @@
     </el-dialog>
 
     <div>申请记录:</div>
+    <div>
+      <span>总计时常:</span>
+      <span style="color: turquoise">{{sumTime}}</span>
+      <span>小时</span>
+    </div>
     <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
@@ -94,7 +99,7 @@ export default {
   data(){
     return{
       serveForm:{
-        voluntary_activities_no:null,
+        voluntary_activities_no:'',
         voluntary_activities_stu_name:'',
         voluntary_activities_studept:'',
         voluntary_activities_stu_no:'',
@@ -112,6 +117,7 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
+      sumTime:0,
     }
   },
 
@@ -183,19 +189,8 @@ export default {
             this.toDoShow[i]=true
           }
         }
+        this.countTime()
       })
-
-      // 判断是否有正在审核的信息
-      request.post('',user).then(res=>{
-        console.log("serve审核："+res)
-        if(res===1){
-          this.newButtons=true
-        }
-        else{
-          this.newButtons=false
-        }
-      })
-
     },
 
     changeInfo(index){
@@ -206,11 +201,19 @@ export default {
     deleteInfo(index){
       let serve=JSON.stringify(this.serveDid[index])
       let that=this
-      request.post('', serve).then(res=>{
+      request.post('/delete_activity', serve).then(res=>{
         console.log(res)
         this.toDoShow[index]=false
         that.refreshComponent()
       })
+    },
+    countTime(){
+      for(let i=0,t=0;i<this.serveDid.length;i++){
+        if(this.serveDid[i].voluntary_activities_status==='1'){
+          t=this.serveDid[i].voluntary_activities_time_long-0
+          this.sumTime+=t
+        }
+      }
     },
   },
 }

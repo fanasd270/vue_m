@@ -7,14 +7,14 @@
     <p style="font-weight: bolder; font-size: large ;display: inline;margin-bottom: 10px; cursor: default">
       发布任务
     </p>
-
+<!--选择接受者抽屉-->
     <el-drawer
         title="学生列表"
         v-model="drawer"
         direction="rtl"
     >
       <span>已选:{{multipleSelection.length}}/{{tableData.length}}</span>
-      <el-table ref="tableRef" @selection-change="handleSelectionChange" row-key="stu_no" :data="tableData" class="stuinfo" style="width: 100%" max-height="600">
+      <el-table ref="tableRef" @selection-change="handleSelectionChange" row-key="stu_no" :data="tableData" style="width: 100%" max-height="600">
         <el-table-column
             type="selection"
             width="55">
@@ -37,10 +37,87 @@
 
       </el-table>
     </el-drawer>
+状态抽屉
+    <el-drawer
+        title="学生列表"
+        v-model="drawer1"
+        direction="ltr"
+    >
+      <span>已读未做:{{}}|已做:{{}}|共:{{}}</span>
+      <el-table ref="tableRef" row-key="stu_no" :data="stulist" class="stuinfo"
+                style="width: 100%" max-height="600"
+                :row-class-name="tableRowClassName"
+      >
+        <el-table-column
+            prop="status"
+            label="状态"
+            width="100"
+            :filters="this.filterStatus"
+            :filter-method="filterStatusHandler"
+            :formatter="statusFormatter"
+        />
+        <el-table-column prop="stuName" label="姓名" width="100" fixed/>
+        <el-table-column
+            prop="receiver"
+            label="学号"
+            width="100"
+            sortable
+            column-key="stu_no"
+        />
+        <el-table-column
+            prop="stuClass"
+            label="班级"
+            width="100"
+            :filters="this.filterClass"
+            :filter-method="filterClassHandler"
+        />
+
+      </el-table>
+    </el-drawer>
+<!--编辑卡片-->
+    <el-dialog
+        v-model="editCardShow"
+        title="Tips"
+        width="30%"
+        :before-close="cardClose"
+    >
+      <el-card class="box-card" style="margin-top: 10px">
+        <el-input
+            v-model="editMess.msg_content"
+            :autosize="{ minRows: 4, maxRows: 10 }"
+            type="textarea"
+            placeholder="请输入内容"
+        >
+        </el-input>
+        <el-date-picker
+            v-model="editMess.msg_deadline"
+            type="datetime"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            placeholder="设置截至时间，可忽略"
+            style="margin-top: 10px"
+        >
+        </el-date-picker>
+        <br>
+        <div style="margin-left: 40%">
+          <el-button size="mini" @click="cardClose" style="width: 27%">
+              <span style="font-size: 1px;">
+                取消
+              </span>
+          </el-button>
+          <el-button size="mini" @click="cardSend" style="width: 27%">
+              <span style="font-size: 1px;">
+                发布
+              </span>
+          </el-button>
+        </div>
+      </el-card>
+
+    </el-dialog>
+
 
     <div style="width: 30%">
       <transition name="el-zoom-in-center">
-        <div v-show="show" class="transition-box">
+        <div class="transition-box">
           <el-card class="box-card" style="margin-top: 10px">
             <el-input
                 v-model="mess.msg_content"
@@ -87,15 +164,20 @@
       <el-scrollbar height="500px">
         <el-timeline>
           <div v-for="(m,j) in oldMsg">
-            <el-timeline-item :timestamp="m.msg_releasetime" placement="top">
+            <el-timeline-item :timestamp="m.msg_releasetime" placement="top" v-if="show[j]">
               <el-card>
                 <p style="word-break: normal; white-space: pre-wrap; word-wrap: break-word">{{m.msg_content}}</p>
                   <div style="margin-top: 10px">
                     <span>截止 {{m.msg_deadline}}||剩余 {{m.days}}天{{m.hours}}时{{m.minutes}}分{{m.seconds}}秒</span>
-                    <el-button type="primary" circle size="small" style="margin-left: 5px">
+                    <br>
+                    <span @click="stuStatus(j)" style="color: red">已读未做:{{m.read}}
+                      <span style="color:#008c8c;">|已做:{{m.done}}</span>
+                      <span style="color: black">|共:{{m.all}}</span>
+                    </span>
+                    <el-button type="primary" circle size="small" style="margin-left: 5px" @click="editMessFun(j)">
                       <el-icon><Edit/></el-icon>
                     </el-button>
-                    <el-button type="danger" circle size="small">
+                    <el-button type="danger" circle size="small" @click="deleteMess(j)">
                       <el-icon><Delete/></el-icon>
                     </el-button>
                   </div>
@@ -114,6 +196,7 @@ import {Delete, Edit} from "@element-plus/icons";
 
 export default {
   name: "gCTask",
+  inject:['reload'],
   components:{
     Edit,
     Delete,
@@ -121,10 +204,17 @@ export default {
   data(){
     return{
       drawer: false,
-      show: true,
+      drawer1: false,
+      editCardShow: false,
+      show: [],
       user: {},
       tableData:[],
       filterClass:[],
+      filterStatus:[
+        {text:'未读',value:0},
+        {text:'已读未做',value:1},
+        {text:'已做',value:2},
+      ],
       mess:{
         msg_sender:0,
         msg_content:'',
@@ -134,18 +224,38 @@ export default {
         msg_releasetime: '',
         msg_deadline: '',
       },
-      oldMsg:[
-        {
-          msg_content: 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww',
-          msg_releasetime: '2022-1-1 00:00:00',
-          msg_deadline: '2022-2-28 00:00:00',
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          residue: 0,
-        },
-      ],
+      editMess:{
+        msg_no:'',
+        msg_content: '',
+        msg_sender:0,
+        msg_releasetime: '',
+        msg_deadline: '',
+        read:0,
+        done:0,
+        all:0,
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        residue: 0,
+      },
+      oldMsg:[],
+      singleMess:{
+        msg_no:'',
+        msg_content: '',
+        msg_sender:0,
+        msg_releasetime: '',
+        msg_deadline: '',
+        read:0,
+        done:0,
+        all:0,
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        residue: 0,
+      },
+      stulist:[],
       multipleSelection: [],
 
     }
@@ -157,49 +267,82 @@ export default {
     setInterval(() => {
       this.getResidueDate();
     }, 1000);
+
+    this.readData()
   },
 
 
   methods:{
-    WaitMsg(i){
-      this.closeStyle="el-zoom-in-bottom";
-      this.show[i]=!this.show[i];
-    },
-    ReadMsg(i){
-      this.closeStyle="el-zoom-in-top";
-      this.show[i]=!this.show[i];
-      this.mess.msg[i].did=1;
-      this.sentBack(i);
-    },
-    DidMsg(i){
-      this.closeStyle="el-zoom-in-center";
-      this.show[i]=!this.show[i];
-      this.mess.msg[i].did=2;
-      this.mess.didMsg.push(this.mess.toDoMsg[i]);
-      this.mess.didMsg.splice(i,1);
-      this.sentBack(i);
+    reflesh(){
+      this.reload()
     },
 
     readData(){
-      request.post('', this.user).then(res=>{
-
-        ///
-        ///
-        for(let i=0; i<this.mess.totalLength;i++){
-          this.show[i]=true;
+      request.post('/Tea/findAllStatus', this.user).then(res=>{
+        console.log("readdata")
+        console.log(res.data)
+        console.log(this.oldMsg)
+        if(res.data===null){
+          return
         }
+        for(let i=0, m;i<res.data.length;i++){
+          this.show[i]=true
+          m=JSON.parse(JSON.stringify(this.singleMess))
+          m.msg_no=res.data[i].msg_no
+          m.msg_sender=res.data[i].msg_sender
+          m.msg_content=res.data[i].msg_content
+          m.msg_releasetime=res.data[i].msg_releasetime
+          m.msg_deadline=res.data[i].msg_deadline
+          m.read=res.data[i].read
+          m.done=res.data[i].done
+          m.all=res.data[i].all
+          this.oldMsg.push(m)
+        }
+        console.log(this.oldMsg)
+
       })
     },
 
 
-    sentBack(i){
-      //requset
+    stuStatus(j){
+      request.post('Tea/findWhoReadOneMsg', this.oldMsg[j]).then(res=>{
+        console.log("oldMsg")
+        console.log(res)
+        this.stulist=res.data
+      })
+      this.drawer1=true
     },
+    macauFormatter(row, column){
+      if(row.stu_ismacau=== 0){
+        return '否'
+      } else{
+        return '是'
+      }
+    },
+    statusFormatter(row, column){
+      if(row.status===0){
+        return '未读'
+      } else if(row.status===1){
+        return '已读未做'
+      } else {
+        return '已做'
+      }
+    },
+    filterStatusHandler(value, row, column){
+      const property = column['property']
+      return row[property] === value
+    },
+    // tableRowClassName({row, rowIndex}){
+    //   if(this.row.status===0){
+    //     return 'notRead';
+    //   } else if(this.row.status===1){
+    //     return 'readBut';
+    //   } else{
+    //     return 'did';
+    //   }
+    // },
 
     chooseStu(){
-      // request.post('', this.user).then(res=>{
-      //
-      // })
       this.drawer=true
 
       request.post('/Stu/stuList', this.user).then(res=>{
@@ -256,6 +399,9 @@ export default {
     getResidueDate() {
       for(let i=0;i<this.oldMsg.length;i++){
         this.oldMsg[i].residue = new Date(this.oldMsg[i].msg_deadline).getTime() - new Date();
+        if(this.oldMsg[i].residue<0){
+          continue
+        }
         this.oldMsg[i].days = this.addZero(
             Math.floor(this.oldMsg[i].residue / 1000 / 60 / 60 / 24)
         ); //天
@@ -282,16 +428,18 @@ export default {
         this.mess.stuList.push(this.multipleSelection[i].stu_no)
       }
       this.mess.msg_releasetime=this.getTime()
+      console.log("send")
       console.log(this.mess)
       request.post('/Tea/send_msg',this.mess).then(res=>{
         this.$message({
           type:"success",
           message:res.msg,
         })
-        this.mess.msg_content=''
-        this.mess.msg_deadline=''
-        this.mess.stuList=[]
-        this.multipleSelection=[]
+        // this.mess.msg_content=''
+        // this.mess.msg_deadline=''
+        // this.mess.stuList=[]
+        // this.multipleSelection=[]
+        this.reflesh()
       })
     },
     cancelTask(){
@@ -309,10 +457,48 @@ export default {
       this.multipleSelection = val;
       // console.log(this.multipleSelection)
     },
+
+    editMessFun(j){
+      this.editCardShow=true
+      this.editMess=JSON.parse(JSON.stringify(this.oldMsg[j]))
+    },
+    cardClose(){
+      this.editCardShow=false
+      this.editMess={}
+    },
+    cardSend(){
+      request.post('/updateMsg',this.editMess).then(res=>{
+        this.$message.success(res.msg)
+        this.editCardShow=false
+        this.editMess={}
+        this.reflesh()
+      }).catch(err=>{
+        this.$message.error(res.msg)
+      })
+    },
+    deleteMess(j){
+      request.post('/deleteMsg',this.oldMsg[j]).then(res=>{
+        this.$message.success(res.msg)
+        delete this.oldMsg[j]
+        this.reflesh()
+      }).catch(err=>{
+        this.$message.error("删除失败")
+      })
+
+    },
   },
 }
 </script>
 
 <style scoped>
+.notRead {
+  background: red;
+}
+.readBut {
+  background: oldlace;
+}
+.did {
+  background: #f0f9eb;
+}
 
 </style>
