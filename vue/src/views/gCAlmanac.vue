@@ -100,7 +100,7 @@ export default {
       })
     },
     downloadFile(url){
-      window.location.href='http://localhost:9876/excel/'+url
+      window.location.href='http://10.236.11.68:9876/excel/'+url
     },
   },
 }
