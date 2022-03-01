@@ -60,7 +60,7 @@ export default {
     return{
       Search,
       inputSearch: "",
-
+      url: '3.重庆大学2020-2021学年国家助学金评定名单表(2).xls',
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -88,7 +88,7 @@ export default {
   methods:{
     downloadfile(){
       // window.location.href='http://localhost:8080/11.xlsx'
-      window.location.href='http://localhost:8080/3.重庆大学2020-2021学年国家助学金评定名单表(2).xls'
+      window.location.href='http://localhost:9876/'+this.url
     },
     exportExcel() {
       // 设置当前日期
