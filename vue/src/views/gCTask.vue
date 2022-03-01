@@ -77,7 +77,7 @@
 <!--编辑卡片-->
     <el-dialog
         v-model="editCardShow"
-        title="Tips"
+        title="更新"
         width="30%"
         :before-close="cardClose"
     >
