@@ -46,7 +46,6 @@
       <span>已读未做:{{}}|已做:{{}}|共:{{}}</span>
       <el-table ref="tableRef" row-key="stu_no" :data="stulist" class="stuinfo"
                 style="width: 100%" max-height="600"
-                :row-class-name="tableRowClassName"
       >
         <el-table-column
             prop="status"
@@ -312,13 +311,13 @@ export default {
       })
       this.drawer1=true
     },
-    macauFormatter(row, column){
-      if(row.stu_ismacau=== 0){
-        return '否'
-      } else{
-        return '是'
-      }
-    },
+    // macauFormatter(row, column){
+    //   if(row.stu_ismacau=== 0){
+    //     return '否'
+    //   } else{
+    //     return '是'
+    //   }
+    // },
     statusFormatter(row, column){
       if(row.status===0){
         return '未读'
