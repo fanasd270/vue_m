@@ -12,7 +12,9 @@
       v-model="drawer"
       direction="rtl"
   >
-    <el-button @click="downloadTemplateForGrant">导出</el-button>
+    <el-button v-if="buttonType===0" @click="downloadTemplateForGrant">导出</el-button>
+    <el-button v-if="buttonType===1" @click="downloadTemplateForSchoolars">导出</el-button>
+    <el-button v-if="buttonType===2" @click="downloadTemplateForSchoolarsB">导出</el-button>
     <span>已选:{{multipleSelection.length}}/{{tableData.length}}</span>
     <el-table ref="tableRef" @selection-change="handleSelectionChange" row-key="stu_no" :data="tableData" style="width: 100%" max-height="600">
       <el-table-column
@@ -43,7 +45,7 @@
       <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default;" @click="downloadAllStu" >
         <div class="ecard">
           <el-icon :size="30"><edit /></el-icon>
-          <span style="position: absolute; top: 35%">本科生名单</span>
+          <span style="position: absolute; top: 35%">本科生名单--辅导员</span>
         </div>
       </el-card>
     </el-col>
@@ -51,12 +53,12 @@
       <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadClassStu">
         <div class="ecard">
           <el-icon :size="30"><timer /></el-icon>
-          <span style="position: absolute; top: 35%">《学生信息导出--班主任版》</span>
+          <span style="position: absolute; top: 35%">本科生名单--班主任</span>
         </div>
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="chooseStu">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="chooseStu(0)">
         <div class="ecard">
           <el-icon :size="30"><data-analysis /></el-icon>
           <span style="position: absolute; top: 35%">助学金模板</span>
@@ -64,34 +66,34 @@
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAlmanac">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="chooseStu(1)">
         <div class="ecard">
           <el-icon :size="30"><reading /></el-icon>
-          <span style="position: absolute; top: 35%">年鉴导出</span>
+          <span style="position: absolute; top: 35%">奖学金模板</span>
         </div>
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuScore">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="chooseStu(2)">
         <div class="ecard">
           <el-icon :size="30"><trophy /></el-icon>
-          <span style="position: absolute; top: 35%">查看学生成绩</span>
+          <span style="position: absolute; top: 35%">励志奖学金模板</span>
         </div>
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToSign">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadDormitory">
         <div class="ecard">
           <el-icon :size="30"><promotion /></el-icon>
-          <span style="position: absolute; top: 35%">网上报名</span>
+          <span style="position: absolute; top: 35%">寝室信息</span>
         </div>
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAudit">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadHuXiInfo">
         <div class="ecard">
           <el-icon :size="30"><finished /></el-icon>
-          <span style="position: absolute; top: 35%">审核学生提交表单</span>
+          <span style="position: absolute; top: 35%">虎溪管委会信息</span>
         </div>
       </el-card>
     </el-col>
@@ -121,6 +123,7 @@ export default {
       tableData:[],
       multipleSelection: [],
       filterClass:[],
+      buttonType:0,
       teaAndStu:{
         teacherId:0,
         stuList:[],
@@ -153,6 +156,7 @@ export default {
       if(len===this.tableData.length){
         request.post('/getAllStudentInfoByTemplateForGrant',this.user).then(res=>{
           this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
         }).catch(err=>{
           this.$message.error("下载失败")
         })
@@ -163,14 +167,86 @@ export default {
         }
         request.post('/getSomeStudentInfoByTemplateForGrant',this.teaAndStu).then(res=>{
           this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
         }).catch(err=>{
           this.$message.error("下载失败")
         })
       }
     },
-    downloadFile(url){
-      window.location.href='http://10.236.11.68:9876/excel/'+url
+    downloadTemplateForSchoolars(){
+      let len=this.multipleSelection.length
+      if(len===this.tableData.length){
+        request.post('/getAllStudentInfoByTemplateForSchoolars',this.user).then(res=>{
+          this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
+        }).catch(err=>{
+          this.$message.error("下载失败")
+        })
+      } else {
+
+        for(let i=0;i<len;i++){
+          this.teaAndStu.stuList.push(this.multipleSelection[i].stu_no)
+        }
+        request.post('/getSomeStudentInfoByTemplateForSchoolars',this.teaAndStu).then(res=>{
+          this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
+        }).catch(err=>{
+          this.$message.error("下载失败")
+        })
+      }
     },
+    downloadTemplateForSchoolarsB(){
+      let len=this.multipleSelection.length
+      if(len===this.tableData.length){
+        request.post('/getAllStudentInfoByTemplateForSchoolarsB',this.user).then(res=>{
+          this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
+        }).catch(err=>{
+          this.$message.error("下载失败")
+        })
+      } else {
+
+        for(let i=0;i<len;i++){
+          this.teaAndStu.stuList.push(this.multipleSelection[i].stu_no)
+        }
+        request.post('/getSomeStudentInfoByTemplateForSchoolarsB',this.teaAndStu).then(res=>{
+          this.downloadFile(res.data)
+          this.teaAndStu.stuList=[]
+        }).catch(err=>{
+          this.$message.error("下载失败")
+        })
+      }
+    },
+    downloadDormitory(){
+      request.post('/getStudentBedroomInfo',this.user).then(res=>{
+        this.downloadFile(res.data)
+      }).catch(err=>{
+        this.$message.error("下载失败")
+      })
+    },
+    downloadHuXiInfo(){
+      request.post('/getHuxiInfo',this.user).then(res=>{
+        for(let i=0;i<res.data.length;i++){
+          this.downloadFile(res.data[i])
+        }
+      }).catch(err=>{
+        this.$message.error("下载失败")
+      })
+    },
+    downloadFile(url){
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none"; // 防止影响页面
+      iframe.style.height = 0; // 防止影响页面
+      iframe.src = 'http://10.236.11.68:9876/excel/'+url;
+      document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+      // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+      setTimeout(()=>{
+        iframe.remove();
+      }, 5 * 60 * 1000);
+    },
+    // downloadFile(url){
+    //   window.location.href='http://10.236.11.68:9876/excel/'+url
+    // },
 
     handleSelectionChange(val){
       this.multipleSelection = val;
@@ -181,7 +257,8 @@ export default {
       return row[property] === value
     },
 
-    chooseStu(){
+    chooseStu(num){
+      this.buttonType=num
       this.drawer=true
 
       request.post('/Stu/stuList', this.user).then(res=>{
