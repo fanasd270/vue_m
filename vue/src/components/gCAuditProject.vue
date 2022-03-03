@@ -14,7 +14,6 @@
               <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
               <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
               <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.project_year}}</el-descriptions-item>
               <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
               <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
@@ -25,6 +24,8 @@
             <el-button @click="passProject(index)">通过</el-button>
             <el-button @click="rejectProject(index)">驳回</el-button>
             <el-button @click="waitProject(index)">稍后</el-button>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.project_year}}</span>
           </el-card>
         </transition>
       </div>
@@ -45,7 +46,6 @@
               <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
               <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
               <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.project_year}}</el-descriptions-item>
               <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
               <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
@@ -55,6 +55,8 @@
             </el-descriptions>
             <el-tag type="success" v-if="m.project_audit_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.project_audit_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.project_year}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->

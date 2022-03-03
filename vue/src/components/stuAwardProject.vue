@@ -23,9 +23,6 @@
         <el-form-item label="项目参与时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="projectForm.project_join_time" clearable></el-input>
         </el-form-item>
-        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-          <el-input v-model="projectForm.project_year" clearable></el-input>
-        </el-form-item>
         <el-form-item label="指导老师姓名" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="projectForm.project_teacher_name" clearable></el-input>
         </el-form-item>
@@ -38,7 +35,9 @@
             <el-radio  label="否">否</el-radio>
           </el-radio-group>
         </el-form-item>
-
+        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-date-picker v-model="projectForm.project_year" type="year" placeholder="上报学院年份"></el-date-picker>
+        </el-form-item>
 
         <el-form-item label="成果证明材料" style="margin-bottom: 70px;">
 
@@ -85,7 +84,6 @@
               <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
               <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
               <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.project_year}}</el-descriptions-item>
               <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
               <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
@@ -96,6 +94,8 @@
             <el-tag type="success" v-if="m.project_audit_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="m.project_audit_status==='0'">待审核</el-tag>
             <el-tag type="danger" v-if="m.project_audit_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.project_year}}</span>
             <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.project_audit_status==='0'">修改</el-button>
             <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.project_audit_status==='0'">删除</el-button>
           </el-card>

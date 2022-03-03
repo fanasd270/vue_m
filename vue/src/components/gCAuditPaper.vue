@@ -12,7 +12,6 @@
               <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
               <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
               <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.paper_year}}</el-descriptions-item>
               <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
@@ -21,6 +20,8 @@
             <el-button @click="passPaper(index)">通过</el-button>
             <el-button @click="rejectPaper(index)">驳回</el-button>
             <el-button @click="waitPaper(index)">稍后</el-button>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.paper_year}}</span>
           </el-card>
         </transition>
       </div>
@@ -39,7 +40,6 @@
               <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
               <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
               <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.paper_year}}</el-descriptions-item>
               <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
@@ -47,6 +47,8 @@
             </el-descriptions>
             <el-tag type="success" v-if="m.paper_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.paper_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.paper_year}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->

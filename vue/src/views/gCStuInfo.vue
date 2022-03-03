@@ -28,14 +28,18 @@
   <el-button :icon="Delete" circle size="small" @click="deleteSearch" style="margin-left: 5px"></el-button>
   <el-scrollbar height="90vh">
     <div style="border: #008c8c solid; height: 70vh">
-      <el-table ref="tableRef" row-key="stu_no" :data="tableData" class="stuinfo" style="width: 100%" max-height="600">
+      <el-table
+          :data="tableData"
+          style="width: 100%"
+          max-height="600"
+          @row-click="stuInfoDetail">
+<!--      <el-table ref="tableRef" :data="tableData"  style="width: 100%" max-height="600" @rwo-click="stuInfoDetail">-->
         <el-table-column prop="stu_name" label="姓名" width="100" fixed/>
         <el-table-column
             prop="stu_no"
             label="学号"
             width="100"
             sortable
-            column-key="stu_no"
         />
         <el-table-column
             prop="stu_class"
@@ -94,6 +98,20 @@
       导出
     </el-button>
   </el-scrollbar>
+
+  <el-dialog
+      v-model="infoDialog"
+      title="Tips"
+      width="50%"
+  >
+    <span>This is a message</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="infoDialog = false">Cancel</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </div>
 </template>
 
@@ -133,6 +151,7 @@ export default {
         {text: '是', value: 1},
       ],
       showAll: true,
+      infoDialog: false,
       isShow:[
           true, true, true, true, true,true,true,true,true,true,true,true,true
       ],
@@ -233,6 +252,10 @@ export default {
           this.isShow[index]=false
         }
       }
+    },
+    stuInfoDetail(row){
+      console.log(row)
+      this.infoDialog=true
     },
 
     //搜索

@@ -17,9 +17,6 @@
         <el-form-item label="出版时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="paperForm.paper_publicationTime" clearable></el-input>
         </el-form-item>
-        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-          <el-input v-model="paperForm.paper_year" clearable></el-input>
-        </el-form-item>
         <el-form-item label="是否CSCD" style="width: 46%; margin-bottom: 40px; margin-right: 2%;">
           <el-radio-group v-model="paperForm.paper_iscscd">
             <el-radio  label="是">是</el-radio>
@@ -32,7 +29,9 @@
         <el-form-item label="EI检索号" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="paperForm.paper_eiSearchNumber" clearable></el-input>
         </el-form-item>
-
+        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-date-picker v-model="paperForm.paper_year" type="year" placeholder="上报学院年份"></el-date-picker>
+        </el-form-item>
 
         <el-form-item label="成果证明材料" style="margin-bottom: 70px;">
 
@@ -77,7 +76,6 @@
               <el-descriptions-item label="论文名称:">{{paperDid[index].paper_name}}</el-descriptions-item>
               <el-descriptions-item label="发表期刊/会议名称:">{{paperDid[index].paper_periodical}}</el-descriptions-item>
               <el-descriptions-item label="出版时间:">{{paperDid[index].paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{paperDid[index].paper_year}}</el-descriptions-item>
               <el-descriptions-item label="是否CSCD:">{{paperDid[index].paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{paperDid[index].paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
@@ -88,6 +86,8 @@
             <el-tag type="success" v-if="paperDid[index].paper_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="paperDid[index].paper_status==='0'">待审核</el-tag>
             <el-tag type="danger" v-if="paperDid[index].paper_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{paperDid[index].paper_year}}</span>
             <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="paperDid[index].paper_status==='0'">修改</el-button>
             <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="paperDid[index].paper_status==='0'">删除</el-button>
           </el-card>
@@ -104,6 +104,7 @@ export default {
   name: "stuAwardPaper",
   data(){
     return{
+      value1:0,
       paperForm:{
         paper_no: "",
         paper_stuno: 0,

@@ -27,10 +27,13 @@
         <el-dropdown>
       <span class="el-dropdown-link" style="margin-bottom: 30px">
         <el-image
+            v-if="user.stu_photourl!==null"
             style="width: 50px; height: 50px; border-radius: 50%;"
-            :src="require('../assets/logo-xiaohui.png')"
-            :fit="fill"
+            :src="require('/Pictures/'+user.stu_photourl)"
+            fit="fill"
+            @error="noPicture"
         ></el-image>
+        <div style="margin-top: 20px" v-if="user.stu_photourl===null">上传头像</div>
       </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -111,6 +114,9 @@ export default {
     this.user=JSON.parse(sessionStorage.getItem('user'))
   },
   methods: {
+    noPicture(){
+
+    },
     changeP(){
       if(this.form.new_password===this.form.stu_confirmNew)
       {

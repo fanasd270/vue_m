@@ -104,7 +104,7 @@ export default {
         voluntary_activities_studept:'',
         voluntary_activities_stu_no:'',
         voluntary_activities_time_from_to:'',
-        voluntary_activities_time_long:'',
+        voluntary_activities_time_long:0,
         voluntary_activities_content:'',
         voluntary_activities_status:'0',
         voluntary_activities_name:'',
@@ -147,7 +147,7 @@ export default {
       this.serveForm.voluntary_activities_name=''
       this.serveForm.voluntary_activities_studept=''
       this.serveForm.voluntary_activities_time_from_to=''
-      this.serveForm.voluntary_activities_time_long=''
+      this.serveForm.voluntary_activities_time_long=0
       this.serveForm.voluntary_activities_content=''
       this.dialogVisible=false
     },

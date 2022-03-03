@@ -107,7 +107,6 @@
     </el-col>
     <div style="clear: both"></div>
   </div>
-
 </div>
 </template>
 
@@ -118,6 +117,7 @@ export default {
   name: "gCAlmanac",
   data(){
     return{
+
       drawer: false,
       user:{},
       tableData:[],
@@ -135,6 +135,7 @@ export default {
     this.teaAndStu.teacherId=this.user.t_no
   },
   methods:{
+
     downloadAllStu(){
       request.post('/getStudentExcelInfoByGuidanceCounselor',this.user).then(res=>{
         this.downloadFile(res.data)
