@@ -27,13 +27,11 @@
         <el-dropdown>
       <span class="el-dropdown-link" style="margin-bottom: 30px">
         <el-image
-            v-if="user.stu_photourl!==null"
+            v-if="user.stu_photourl!=null&&user.stu_photourl!==''"
             style="width: 50px; height: 50px; border-radius: 50%;"
-            :src="require('/Pictures/'+user.stu_photourl)"
-            fit="fill"
-            @error="noPicture"
+            :src="require('../assets/Pictures/'+user.stu_photourl)"
         ></el-image>
-        <div style="margin-top: 20px" v-if="user.stu_photourl===null">上传头像</div>
+        <div style="margin-top: 20px" v-if="user.stu_photourl===null||user.stu_photourl===''">上传头像</div>
       </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -95,6 +93,7 @@ import {ElMessage} from "element-plus/es/components";
 
 export default {
   name: "stuHeader",
+  inject:['reload'],
   components:{
     bellFilled,
     infoFilled,
@@ -112,8 +111,16 @@ export default {
   },
   created() {
     this.user=JSON.parse(sessionStorage.getItem('user'))
+    console.log(this.user)
   },
   methods: {
+    getImgUrl(){
+      console.log("http://10.236.11.68:9876/Pictures/"+this.user.stu_photourl)
+      return "http://10.236.11.68:9876/Pictures/"+this.user.stu_photourl
+    },
+    reflesh(){
+      this.reload()
+    },
     noPicture(){
 
     },
@@ -159,6 +166,32 @@ export default {
       formData.append('file', param.file)
       request.post('/Stu/upLoadPicture', formData).then(res=>{
         console.log(res)
+        this.user.stu_photourl=res.data
+        this.user.stu_no=this.user.stu_no-0;
+        this.user.stu_ismacau=this.user.stu_ismacau-0;
+        this.user.stu_gender=this.user.stu_gender-0;
+        let formstring=JSON.stringify(this.user);
+        console.log("提交")
+        console.log(formstring)
+        request.post('/Stu/upDateStudent',formstring).then(res=>{
+          console.log("结果")
+          console.log(res);
+          if(res.data===null){
+            this.$message({
+              type:"error",
+              message:res.msg//后端给出的错误信息
+            })
+          }else {
+            this.$message({
+              type:"success",
+              message:"修改成功"
+            })
+            sessionStorage.setItem('user',JSON.stringify(res.data));
+            this.user=res.data;
+          }
+
+        });
+
       })
     },
   },

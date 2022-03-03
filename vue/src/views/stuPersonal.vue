@@ -365,7 +365,7 @@ export default {
           stu_no: 1231234,
           stu_origin: "四川成都",
           stu_password: "123456",
-          stu_photourl: "WU",
+          stu_photourl: "",
           stu_politicalface: "党员",
           stu_qq: "122706559",
           stu_telephone: "135959002",
@@ -485,6 +485,7 @@ export default {
       this.Edit[0]= false;
       this.isShow1[0]=false;
       this.isShow2[0]=true;
+      this.form=JSON.parse(sessionStorage.getItem('user'))
     },
     changeAccommodation(){
       this.Edit[1]= false;
