@@ -29,7 +29,8 @@
         <el-image
             v-if="user.stu_photourl!=null&&user.stu_photourl!==''"
             style="width: 50px; height: 50px; border-radius: 50%;"
-            :src="require('../assets/Pictures/'+user.stu_photourl)"
+            :src="headUrl"
+            @error="noPicture"
         ></el-image>
         <div style="margin-top: 20px" v-if="user.stu_photourl===null||user.stu_photourl===''">上传头像</div>
       </span>
@@ -106,18 +107,15 @@ export default {
       form:{},
       user:{},
       dialogVisible:false,
-
+      headUrl:'',
     }
   },
   created() {
     this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.updateUrl()
     console.log(this.user)
   },
   methods: {
-    getImgUrl(){
-      console.log("http://10.236.11.68:9876/Pictures/"+this.user.stu_photourl)
-      return "http://10.236.11.68:9876/Pictures/"+this.user.stu_photourl
-    },
     reflesh(){
       this.reload()
     },
@@ -188,11 +186,16 @@ export default {
             })
             sessionStorage.setItem('user',JSON.stringify(res.data));
             this.user=res.data;
+            this.updateUrl()
           }
 
         });
 
       })
+    },
+    updateUrl(){
+      this.headUrl='http://10.236.11.68:9877/Pictures/'+this.user.stu_photourl
+      console.log(this.headUrl)
     },
   },
 }
