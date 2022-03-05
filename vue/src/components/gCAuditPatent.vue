@@ -16,15 +16,13 @@
             <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
             <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
             <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-            <el-descriptions-item label="证明材料:">{{m.patent_supporting_materials}}</el-descriptions-item>
-            <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-            <!--                  csdn收藏夹尝试不同源下载图片-->
+            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
           </el-descriptions>
           <el-button @click="passPatent(index)">通过</el-button>
           <el-button @click="rejectPatent(index)">驳回</el-button>
           <el-button @click="waitPatent(index)">稍后</el-button>
           <span style="margin-left: 5px">认定时间:</span>
-          <span style="color:cornflowerblue;">{{m.patent_year}}</span>
+          <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
         </el-card>
       </transition>
     </div>
@@ -47,14 +45,12 @@
             <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
             <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
             <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-            <el-descriptions-item label="证明材料:">{{m.patent_supporting_materials}}</el-descriptions-item>
-            <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-            <!--                  csdn收藏夹尝试不同源下载图片-->
+            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
           </el-descriptions>
           <el-tag type="success" v-if="m.patent_status==='1'">已通过</el-tag>
           <el-tag type="danger" v-if="m.patent_status==='2'">已驳回</el-tag>
           <span style="margin-left: 5px">认定时间:</span>
-          <span style="color:cornflowerblue;">{{m.patent_year}}</span>
+          <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
           <!--                <el-button @click="passPaper(index)">通过</el-button>-->
           <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
           <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
@@ -67,6 +63,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAuditPatent",
@@ -81,9 +78,11 @@ export default {
       patentToDo:[],//待审核列表
       patentDid:[],
       fresh:true,
+      Fapi:'',
     }
   },
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -95,6 +94,10 @@ export default {
       this.$nextTick(()=>{
         this.fresh=true
       })
+    },
+
+    downloadPatent(m){
+      window.location.href=this.Fapi+"/Patents/"+m
     },
 
     passPatent(index){

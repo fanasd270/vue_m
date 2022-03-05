@@ -141,9 +141,7 @@
               <el-descriptions-item label="邮箱:">{{m.dispatch_email}}</el-descriptions-item>
               <el-descriptions-item label="是否录取:">{{m.dispatch_is_admission}}</el-descriptions-item>
               <el-descriptions-item label="是否200强:">{{m.dispatch_is_top200}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.dispatch_supporting_materials}}</el-descriptions-item>
-              <!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadSend(m.dispatch_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.dispatch_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="m.dispatch_status==='0'">待审核</el-tag>
@@ -159,6 +157,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "stuVolSend",
@@ -197,13 +196,18 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData()
   },
   methods:{
+    downloadSend(m){
+      window.location.href=this.Fapi+"/Dispatches/"+m
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },

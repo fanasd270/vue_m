@@ -26,9 +26,6 @@
         <el-form-item label="获奖时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="contestForm.contest_date" clearable></el-input>
         </el-form-item>
-        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-          <el-input v-model="contestForm.contest_year" clearable></el-input>
-        </el-form-item>
         <el-form-item label="指导老师姓名" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="contestForm.contest_teachername" clearable></el-input>
         </el-form-item>
@@ -40,6 +37,9 @@
             <el-radio  label="是">是</el-radio>
             <el-radio  label="否">否</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-date-picker v-model="contestForm.contest_year" type="year" placeholder="上报学院年份"></el-date-picker>
         </el-form-item>
 
 
@@ -83,24 +83,24 @@
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="contestShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="竞赛名称:">{{contestDid[index].contest_name}}</el-descriptions-item>
-              <el-descriptions-item label="项目名称:">{{contestDid[index].contest_projectname}}</el-descriptions-item>
-              <el-descriptions-item label="授予部门:">{{contestDid[index].contest_grantingdepartment}}</el-descriptions-item>
-              <el-descriptions-item label="获奖级别:">{{contestDid[index].contest_level}}</el-descriptions-item>
-              <el-descriptions-item label="获奖名次:">{{contestDid[index].contest_ranking}}</el-descriptions-item>
-              <el-descriptions-item label="获奖时间:">{{contestDid[index].contest_date}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师姓名:">{{contestDid[index].contest_teachername}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师学院:">{{contestDid[index].contest_teacherdept}}</el-descriptions-item>
-              <el-descriptions-item label="获奖证书上传:">{{contestDid[index].contest_issubmitcertificate}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>-->
-              <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="竞赛名称:">{{m.contest_name}}</el-descriptions-item>
+              <el-descriptions-item label="项目名称:">{{m.contest_projectname}}</el-descriptions-item>
+              <el-descriptions-item label="授予部门:">{{m.contest_grantingdepartment}}</el-descriptions-item>
+              <el-descriptions-item label="获奖级别:">{{m.contest_level}}</el-descriptions-item>
+              <el-descriptions-item label="获奖名次:">{{m.contest_ranking}}</el-descriptions-item>
+              <el-descriptions-item label="获奖时间:">{{m.contest_date}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
+              <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="contestDid[index].contest_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="contestDid[index].contest_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="contestDid[index].contest_status==='2'">已驳回</el-tag>
-            <el-button @click="changeContestInfo(index)" style="margin-left: 5%" v-if="contestDid[index].contest_status==='0'">修改</el-button>
-            <el-button @click="deleteContestInfo(index)" style="margin-left: 1%" v-if="contestDid[index].contest_status==='0'">删除</el-button>
+            <el-tag type="success" v-if="m.contest_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.contest_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.contest_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px">认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.contest_year.substring(0,4)}}</span>
+            <el-button @click="changeContestInfo(index)" style="margin-left: 5%" v-if="m.contest_status==='0'">修改</el-button>
+            <el-button @click="deleteContestInfo(index)" style="margin-left: 1%" v-if="m.contest_status==='0'">删除</el-button>
           </el-card>
         </transition>
       </div>
@@ -110,6 +110,8 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
+
 
 export default {
   name: "stuAwardContest",
@@ -139,13 +141,18 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData()
   },
   methods:{
+    downloadContest(m){
+      window.location.href=this.Fapi+"/Contests/"+m
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },

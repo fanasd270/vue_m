@@ -14,9 +14,7 @@
               <el-descriptions-item label="活动始、末时间:">{{m.voluntary_activities_time_from_to}}</el-descriptions-item>
               <el-descriptions-item label="参与时长:">{{m.voluntary_activities_time_long}}</el-descriptions-item>
               <el-descriptions-item label="活动内容:">{{m.voluntary_activities_content}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.voluntary_activities_url}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.voluntary_activities_url)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passServe(index)">通过</el-button>
             <el-button @click="rejectServe(index)">驳回</el-button>
@@ -41,9 +39,7 @@
               <el-descriptions-item label="活动始、末时间:">{{m.voluntary_activities_time_from_to}}</el-descriptions-item>
               <el-descriptions-item label="参与时长:">{{m.voluntary_activities_time_long}}</el-descriptions-item>
               <el-descriptions-item label="活动内容:">{{m.voluntary_activities_content}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.voluntary_activities_url}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.voluntary_activities_url)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.voluntary_activities_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.voluntary_activities_status==='2'">已驳回</el-tag>
@@ -59,6 +55,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAuditServe",
@@ -72,9 +69,11 @@ export default {
       serveToDo:[],//待审核列表
       serveDid:[],
       fresh:true,
+      Fapi:'',
     }
   },
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -88,6 +87,9 @@ export default {
       })
     },
 
+    downloadServe(m){
+      window.location.href=this.Fapi+"/Activities/"+m
+    },
     passServe(index) {
       request.post('/pass_activity', this.serveToDo[index]).then(res => {
         // console.log(res.msg)

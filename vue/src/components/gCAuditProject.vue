@@ -17,15 +17,13 @@
               <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
               <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.project_supporting_materials}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passProject(index)">通过</el-button>
             <el-button @click="rejectProject(index)">驳回</el-button>
             <el-button @click="waitProject(index)">稍后</el-button>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.project_year}}</span>
+            <span style="color:cornflowerblue;">{{m.project_year.substring(0,4)}}</span>
           </el-card>
         </transition>
       </div>
@@ -49,14 +47,12 @@
               <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
               <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.project_supporting_materials}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.project_audit_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.project_audit_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.project_year}}</span>
+            <span style="color:cornflowerblue;">{{m.project_year.substring(0,4)}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
@@ -69,6 +65,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAuditProject",
@@ -83,9 +80,11 @@ export default {
       projectToDo:[],//待审核列表
       projectDid:[],
       fresh:true,
+      Fapi:'',
     }
   },
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -99,6 +98,9 @@ export default {
       })
     },
 
+    downloadProject(m){
+      window.location.href=this.Fapi+"/Projects/"+m
+    },
     passProject(index){
       request.post('/pass_project',this.projectToDo[index]).then(res=>{
         // console.log(res.msg)

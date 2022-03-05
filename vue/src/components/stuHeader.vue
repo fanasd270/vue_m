@@ -91,6 +91,7 @@ import UserFilled from "@element-plus/icons";
 import {Avatar, Lock} from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import {ElMessage} from "element-plus/es/components";
+import fileApi from "@/components/Store"
 
 export default {
   name: "stuHeader",
@@ -194,7 +195,7 @@ export default {
       })
     },
     updateUrl(){
-      this.headUrl='http://10.236.11.68:9877/Pictures/'+this.user.stu_photourl
+      this.headUrl=fileApi.fileApi+'/Pictures/'+this.user.stu_photourl
       console.log(this.headUrl)
     },
   },

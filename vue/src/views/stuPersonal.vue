@@ -609,6 +609,7 @@ export default {
       });
     },
 
+
     onSubmitfamily(index){
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.family[index].family_stu_no=user.stu_no.toString()

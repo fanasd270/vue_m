@@ -27,9 +27,7 @@
               <el-descriptions-item label="邮箱:">{{m.dispatch_email}}</el-descriptions-item>
               <el-descriptions-item label="是否录取:">{{m.dispatch_is_admission}}</el-descriptions-item>
               <el-descriptions-item label="是否200强:">{{m.dispatch_is_top200}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.dispatch_supporting_materials}}</el-descriptions-item>
-              <!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadSend(m.dispatch_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passSend(index)">通过</el-button>
             <el-button @click="rejectSend(index)">驳回</el-button>
@@ -67,9 +65,7 @@
               <el-descriptions-item label="邮箱:">{{m.dispatch_email}}</el-descriptions-item>
               <el-descriptions-item label="是否录取:">{{m.dispatch_is_admission}}</el-descriptions-item>
               <el-descriptions-item label="是否200强:">{{m.dispatch_is_top200}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.dispatch_supporting_materials}}</el-descriptions-item>
-              <!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadSend(m.dispatch_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.dispatch_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.dispatch_status==='2'">已驳回</el-tag>
@@ -85,6 +81,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAuditSend",
@@ -148,9 +145,11 @@ export default {
         dispatch_supporting_materials:'',
       }],
       fresh:true,
+      Fapi:'',
     }
   },
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -162,6 +161,10 @@ export default {
       this.$nextTick(() => {
         this.fresh = true
       })
+    },
+
+    downloadSend(m){
+      window.location.href=this.Fapi+"/Dispatches/"+m
     },
 
     passSend(index) {

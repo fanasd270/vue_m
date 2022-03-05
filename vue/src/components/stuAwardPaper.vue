@@ -73,23 +73,21 @@
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="论文名称:">{{paperDid[index].paper_name}}</el-descriptions-item>
-              <el-descriptions-item label="发表期刊/会议名称:">{{paperDid[index].paper_periodical}}</el-descriptions-item>
-              <el-descriptions-item label="出版时间:">{{paperDid[index].paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="是否CSCD:">{{paperDid[index].paper_iscscd}}</el-descriptions-item>
-              <el-descriptions-item label="SCI检索号:">{{paperDid[index].paper_sciSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="EI检索号:">{{paperDid[index].paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{paperDid[index].paper_supporting_materials}}</el-descriptions-item>
-<!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
+              <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
+              <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
+              <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
+              <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="paperDid[index].paper_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="paperDid[index].paper_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="paperDid[index].paper_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.paper_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.paper_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.paper_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{paperDid[index].paper_year}}</span>
-            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="paperDid[index].paper_status==='0'">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="paperDid[index].paper_status==='0'">删除</el-button>
+            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
+            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.paper_status==='0'">修改</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.paper_status==='0'">删除</el-button>
           </el-card>
         </transition>
       </div>
@@ -99,6 +97,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "stuAwardPaper",
@@ -126,13 +125,19 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData()
   },
   methods:{
+    downloadPaper(m){
+      console.log("点击下载")
+      window.location.href=this.Fapi+"/Papers/"+m
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },

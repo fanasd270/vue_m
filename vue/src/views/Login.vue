@@ -28,13 +28,61 @@
           </el-form>
 
           <div>
-            <span style="cursor:default">没有账号？</span>
-            <span style="color:dodgerblue; cursor: pointer">注册</span>
+            <span style="cursor:default">忘记密码？</span>
+            <span style="color:dodgerblue; cursor: pointer" @click="changePassword">找回</span>
           </div>
 
         </div>
       </el-card>
     </div>
+
+    <el-dialog
+        v-model="dialogVisible"
+        title="找回密码"
+        width="30%"
+    >
+      <el-form  :model="cPasswaord">
+        <el-form-item label="账号">
+          <el-input v-model="cPasswaord.stu_no" placeholder="请输入需找回的账号" clearable/>
+        </el-form-item>
+        <el-form-item label="验证码" v-if="numInputShow" style="width: 60%">
+          <el-input v-model="cPasswaord.stu_code" placeholder="邮箱验证码/区分大小写" clearable/>
+        </el-form-item>
+      </el-form>
+
+
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancelChange">取消</el-button>
+        <el-button @click="commitChange" v-if="commitCShow">找回</el-button>
+        <el-button @click="commitNum" v-if="commitNShow">确认</el-button>
+      </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+        v-model="dialogVisible1"
+        title="重置密码"
+        width="30%"
+    >
+
+      <el-form  :model="updateP">
+        <el-form-item label="新密码">
+          <el-input v-model="updateP.new_password" placeholder="请输入新密码" clearable show-password/>
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input v-model="comfirmP" placeholder="请确认密码" clearable show-password/>
+        </el-form-item>
+      </el-form>
+
+
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible1=false">取消</el-button>
+        <el-button @click="comfirm">确认</el-button>
+      </span>
+      </template>
+    </el-dialog>
 
     <span style="position: absolute; bottom: 0; height: 20px;  text-align: center;line-height: 20px; background-color: aliceblue; font-size: 10px">历史登录人次:学生:{{numCount[0]}};老师:{{numCount[1]}}|今日登录人次:学生:{{numCount[2]}};老师:{{numCount[3]}}</span>
 
@@ -61,6 +109,21 @@ export default {
   },
   data(){
     return {
+      dialogVisible:false,
+      dialogVisible1:false,
+      numInputShow:false,
+      commitCShow:true,
+      commitNShow:false,
+      cPasswaord:{
+        stu_no:null,
+        stu_code:'',
+      },
+      updateP:{
+        old_password:'',
+        new_password:'',
+        no:null,
+      },
+      comfirmP:'',
       form:{
         user_id:"",
         user_password:"",
@@ -79,6 +142,58 @@ export default {
     this.numLogin()
   },
   methods:{
+    changePassword(){
+      this.commitCShow=true
+      this.commitNShow=false
+      this.numInputShow=false
+      this.cPasswaord.stu_no=null
+      this.cPasswaord.stu_code=''
+      this.updateP.no=null
+      this.updateP.old_password=''
+      this.updateP.new_password=''
+      this.dialogVisible=true
+    },
+    cancelChange(){
+      this.dialogVisible=false
+    },
+    commitChange(){
+      this.cPasswaord.stu_no=this.cPasswaord.stu_no-0
+      request.post('/findpassword',this.cPasswaord).then(res=>{
+        if(res.code===0){
+          this.$message.error(res.msg)
+        }
+        else {
+        this.$message.success(res.msg)
+          this.commitCShow=false
+          this.commitNShow=true
+          this.numInputShow=true
+        }
+      })
+    },
+    commitNum(){
+      request.post('/judgeemailcode',this.cPasswaord).then(res=>{
+        if(res.code===0){
+          this.$message.error(res.msg)
+        }
+        else{
+          this.dialogVisible=false
+          this.dialogVisible1=true
+          this.updateP.old_password=this.cPasswaord.stu_code
+          this.updateP.no=this.cPasswaord.stu_no
+        }
+      })
+    },
+    comfirm(){
+      if(this.updateP.new_password===this.comfirmP){
+        request.post('/passwordbyemail',this.updateP).then(res=>{
+          this.$message.success("修改成功")
+          this.dialogVisible1=false
+        })
+      }
+      else{
+        this.$message.error("两次密码输入不一致！")
+      }
+    },
     login(){
        this.form.user_id=this.form.user_id-0
        let formstring=JSON.stringify(this.form)

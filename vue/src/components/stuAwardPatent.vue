@@ -84,15 +84,13 @@
               <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
               <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
               <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.patent_supporting_materials}}</el-descriptions-item>
-<!--              <el-descriptions-item label="证明材料:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.patent_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="m.patent_status==='0'">待审核</el-tag>
             <el-tag type="danger" v-if="m.patent_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.patent_year}}</span>
+            <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
             <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.patent_status==='0'">修改</el-button>
             <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.patent_status==='0'">删除</el-button>
           </el-card>
@@ -104,6 +102,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "stuAwardPatent",
@@ -131,13 +130,18 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData()
   },
   methods:{
+    downloadPatent(m){
+      window.location.href=this.Fapi+"/Patents/"+m
+    },
     submitUpload() {
       this.$refs.upload.submit();
     },

@@ -112,6 +112,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAlmanac",
@@ -238,16 +239,13 @@ export default {
       const iframe = document.createElement("iframe");
       iframe.style.display = "none"; // 防止影响页面
       iframe.style.height = 0; // 防止影响页面
-      iframe.src = 'http://10.236.11.68:9877/excel/'+url;
+      iframe.src = fileApi.fileApi+'/excel/'+url;
       document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
       // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
       setTimeout(()=>{
         iframe.remove();
       }, 5 * 60 * 1000);
     },
-    // downloadFile(url){
-    //   window.location.href='http://10.236.11.68:9876/excel/'+url
-    // },
 
     handleSelectionChange(val){
       this.multipleSelection = val;

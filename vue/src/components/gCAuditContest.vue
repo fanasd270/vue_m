@@ -18,13 +18,13 @@
               <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
               <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.contest_supporting_materials}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passContest(index)">通过</el-button>
             <el-button @click="rejectContest(index)">驳回</el-button>
             <el-button @click="waitContest(index)">稍后</el-button>
+            <span style="margin-left: 5px" >认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.contest_year.substring(0,4)}}</span>
           </el-card>
         </transition>
       </div>
@@ -49,12 +49,12 @@
               <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
               <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
               <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.contest_supporting_materials}}</el-descriptions-item>
-              <!--                  <el-descriptions-item label="获奖证书:"><a href="http://localhost:8080/background.png"></a></el-descriptions-item>-->
-              <!--                  csdn收藏夹尝试不同源下载图片-->
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.contest_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.contest_status==='2'">已驳回</el-tag>
+            <span style="margin-left: 5px" >认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.contest_year.substring(0,4)}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
@@ -67,6 +67,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCAuditContest",
@@ -81,10 +82,12 @@ export default {
       contestToDo:[],//待审核列表
       contestDid:[],
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -98,6 +101,9 @@ export default {
       })
     },
 
+    downloadContest(m){
+      window.location.href=this.Fapi+"/Contests/"+m
+    },
     passContest(index){
       request.post('/pass_contest',this.contestToDo[index]).then(res=>{
         // console.log(res.msg)

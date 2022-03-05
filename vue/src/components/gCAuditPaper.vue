@@ -15,13 +15,13 @@
               <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.paper_supporting_materials}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passPaper(index)">通过</el-button>
             <el-button @click="rejectPaper(index)">驳回</el-button>
             <el-button @click="waitPaper(index)">稍后</el-button>
-            <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.paper_year}}</span>
+            <span style="margin-left: 5px" >认定时间:</span>
+            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
           </el-card>
         </transition>
       </div>
@@ -43,12 +43,12 @@
               <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
               <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
               <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:">{{m.paper_supporting_materials}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.paper_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.paper_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.paper_year}}</span>
+            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
@@ -61,6 +61,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileApi from "@/components/Store"
 
 export default {
   name: "gCAuditPaper",
@@ -75,10 +76,12 @@ export default {
       paperToDo:[],//论文待审核列表
       paperDid:[],
       fresh:true,
+      Fapi:'',
     }
   },
 
   created() {
+    this.Fapi=fileApi.fileApi
     this.getData();
   },
 
@@ -90,6 +93,11 @@ export default {
       this.$nextTick(()=>{
         this.fresh=true
       })
+    },
+
+    downloadPaper(m){
+      console.log("点击下载")
+      window.location.href=this.Fapi+"/Papers/"+m
     },
 
     passPaper(index){
