@@ -45,7 +45,7 @@
               >
                 <el-dropdown-item>更改头像</el-dropdown-item>
               </el-upload>
-              <el-dropdown-item @click="dialogVisible=true">更改密码</el-dropdown-item>
+              <el-dropdown-item @click="changePassword">更改密码</el-dropdown-item>
               <el-dropdown-item @click="loginOut">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -58,7 +58,7 @@
 
       <el-form :model="form" label-width="120px">
         <el-form-item label="账号">
-          <el-input v-model="form.no" :prefix-icon="Avatar"></el-input>
+          <el-input v-model="form.no" :prefix-icon="Avatar" disabled></el-input>
         </el-form-item>
         <el-form-item label="密码">
           <el-input v-model="form.old_password" show-password :prefix-icon="Lock"></el-input>
@@ -122,6 +122,10 @@ export default {
     },
     noPicture(){
 
+    },
+    changePassword(){
+      this.dialogVisible=true
+      this.form.no=this.user.stu_no
     },
     changeP(){
       if(this.form.new_password===this.form.stu_confirmNew)

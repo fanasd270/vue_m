@@ -23,27 +23,59 @@
                 <el-input v-model="form.stu_name" disabled></el-input>
               </el-form-item>
 
+              <el-form-item label="学号" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
+                <el-input v-model="form.stu_no" disabled></el-input>
+              </el-form-item>
+
+              <el-form-item label="班级" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
+                <el-select v-model="form.stu_class" :disabled="Edit[0]">
+                  <el-option
+                      v-for="item in classType"
+                      :key="item.class_name"
+                      :label="item.class_name"
+                      :value="item.class_name">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="专业" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
+                <el-select v-model="form.stu_major" :disabled="Edit[0]">
+                  <el-option
+                      v-for="item in majorType"
+                      :key="item.major_name"
+                      :label="item.major_name"
+                      :value="item.major_name">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="出生日期" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
+                <el-date-picker
+                    v-model="form.stu_birthday"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    :disabled="Edit[0]">
+                </el-date-picker>
+              </el-form-item>
+
+              <el-form-item label="入学时间" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
+                <el-date-picker
+                    v-model="form.stu_join_time"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    :disabled="Edit[0]">
+                </el-date-picker>
+              </el-form-item>
+
               <el-form-item label="性别" style="width: 23%; margin-bottom: 40px; margin-right: 2%;">
-                <el-radio-group v-model="form.stu_gender" disabled>
+                <el-radio-group v-model="form.stu_gender" :disabled="Edit[0]">
                   <el-radio  :label=1>男</el-radio>
                   <el-radio  :label=0>女</el-radio>
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item label="班级" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
-                <el-input v-model="form.stu_class" disabled></el-input>
-              </el-form-item>
-
-              <el-form-item label="出生日期" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="form.stu_birthday" disabled></el-input>
-              </el-form-item>
-
-              <el-form-item label="学号" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-                <el-input v-model="form.stu_no" disabled></el-input>
-              </el-form-item>
-
               <el-form-item label="民族" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-                <el-input v-model="form.stu_ethnic" disabled></el-input>
+                <el-input v-model="form.stu_ethnic" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
               <el-form-item label="籍贯" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
@@ -70,7 +102,7 @@
               </el-form-item>
 
               <el-form-item label="身份证号" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-                <el-input v-model="form.stu_id" disabled></el-input>
+                <el-input v-model="form.stu_id" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
               <el-form-item label="常驻地址" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
@@ -126,7 +158,22 @@
           <div style="width: 88%; margin-top: 30px; position: relative">
             <el-form  :model="Accommodation" label-width="34%">
               <el-form-item label="楼栋" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-                <el-input v-model="Accommodation.accommodation_information_building" :disabled="Edit[1]"></el-input>
+                <el-select v-model="stu_building[0]" :disabled="Edit[1]" style="width: 49%;" placeholder=" ">
+                  <el-option
+                      v-for="item in buildingName"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name">
+                  </el-option>
+                </el-select>
+                <el-select v-model="stu_building[1]" :disabled="Edit[1]" style="width: 49%" placeholder=" ">
+                  <el-option
+                      v-for="item in buildingNum"
+                      :key="item.num"
+                      :label="item.num"
+                      :value="item.num">
+                  </el-option>
+                </el-select>
               </el-form-item>
 
               <el-form-item label="门牌号" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
@@ -351,11 +398,19 @@ export default {
       Edit:[true, true,true, true, true],
       isShow1:[true, true,true, true, true],
       isShow2:[false,false,false,false, false],
+      classType:[],
+      majorType:[
+        {major_name:'软件工程'},
+        {major_name:'大数据'},
+        {major_name:'人工智能'},
+      ],
       form:{
           stu_address: "重庆大学",
           stu_birthday: "1995-12-26",
+          stu_join_time:'',
           stu_caucus_time: "2021",
           stu_class: "1",
+          stu_major:'0',
           stu_email: "ch@163",
           stu_ethnic: "汉族",
           stu_gender: 0,
@@ -379,6 +434,24 @@ export default {
         accommodation_information_building:"",
         accommodation_information_ismain:"否",
       },
+      buildingName:[
+        {name:'梅园'},
+        {name:'兰园'},
+        {name:'竹园'},
+        {name:'菊园'},
+        {name:'松园'},
+      ],
+      buildingNum:[
+        {num:"一栋"},
+        {num:"二栋"},
+        {num:"三栋"},
+        {num:"四栋"},
+        {num:"五栋"},
+        {num:"六栋"},
+        {num:"七栋"},
+        {num:"八栋"},
+      ],
+      stu_building:[],
       AccommodationCopy:{},
 
       examination:{
@@ -441,6 +514,8 @@ export default {
       request.post('/Stu/findDormitoryInfo', formstring).then(res=>{
         if(res.data!=null){
           this.Accommodation=res.data
+          this.stu_building[0]=this.Accommodation.accommodation_information_building.substring(0,2)
+          this.stu_building[1]=this.Accommodation.accommodation_information_building.substring(2,4)
         }
       }).catch(err=>{
         this.$message({
@@ -477,6 +552,9 @@ export default {
           type:"error",
           message:"家庭信息请求失败"
         })
+      })
+      request.post('/findallclasslist').then(res=>{
+        this.classType=res.data
       })
 
     },
@@ -519,6 +597,8 @@ export default {
       this.isShow1[1]=true;
       this.isShow2[1]=false;
       this.Accommodation=JSON.parse(JSON.stringify(this.AccommodationCopy))
+      this.stu_building[0]=this.Accommodation.accommodation_information_building.substring(0,2)
+      this.stu_building[1]=this.Accommodation.accommodation_information_building.substring(2,4)
     },
     CancelExamination(){
       this.Edit[2]=true;
@@ -567,6 +647,7 @@ export default {
     onSubmitAccommodation(){
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.Accommodation.accommodation_information_stu_no=user.stu_no.toString()
+      this.Accommodation.accommodation_information_building=this.stu_building[0]+this.stu_building[1]
       // this.Accommodation.accommodation_information_ismain=this.Accommodation.accommodation_information_ismain.toString()
       let form=JSON.stringify(this.Accommodation)
       console.log("提交信息：")
@@ -614,6 +695,14 @@ export default {
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.family[index].family_stu_no=user.stu_no.toString()
       let form=JSON.stringify(this.family[index])
+
+      if(this.family[0].family_ismain===this.family[1].family_ismain){
+        this.$message({
+          type:"error",
+          message:"不能有多个或没有第一监护人!"
+        })
+        return
+      }
 
       request.post('/Stu/updateFamilyInfo',form).then(res=>{
         this.$message({
