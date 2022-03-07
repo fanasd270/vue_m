@@ -6,6 +6,8 @@
     <div id="barchart" :style="{ width: '380px', height: '300px' }"></div>
   </div>
 
+  <el-button @click="changeOption"></el-button>
+
 </template>
 
 <script>
@@ -16,41 +18,55 @@ import { onMounted } from "vue";
 export default {
   name: "gCLib",
 
-  setup() {
-    onMounted(() => {
-      var myChart = echarts.init(document.getElementById("barchart"));
-      // 指定图表的配置项和数据
-      var option = {
-        title: {
-          text: "ECharts入门",
-        },
-        legend: {
-          data: ["销量"],
-        },
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-        },
-        yAxis: {},
+  mounted() {
+    this.init()
+  },
+
+  data() {
+    return {
+      option : {
         series: [
           {
-            name: "销量",
-            type: "bar",
-            data: [13, 25, 46, 21, 40, 20],
-          },
-        ],
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    })
-    return {}
+            type: 'pie',
+            data: [
+              {
+                value: 335,
+                name: '直接访问'
+              },
+              {
+                value: 234,
+                name: '联盟广告'
+              },
+              {
+                value: 1548,
+                name: '搜索引擎'
+              }
+            ]
+          }
+        ]
+      },
+
+    };
   },
-  data() {
-    return {};
+
+
+
+  methods: {
+    changeOption(){
+      this.option.series[0].data[0].name='111'
+      this.init()
+    },
+    init(){
+      var myChart = echarts.init(document.getElementById("barchart"));
+      myChart.setOption(this.option);
+    },
+
+
+    getData(){
+
+    },
+
   },
-
-
-
-  methods: {},
 }
 </script>
 
