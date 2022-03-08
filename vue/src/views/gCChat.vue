@@ -6,8 +6,8 @@
           <div style="padding-bottom: 10px; border-bottom: 1px solid #ccc">在线用户<span style="font-size: 12px">（点击聊天气泡开始聊天）</span></div>
           <div style="padding: 10px 0" v-for="user in users" :key="user.username">
             <span>{{ user.username }}</span>
-            <i class="el-icon-chat-dot-round" style="margin-left: 10px; font-size: 16px; cursor: pointer"
-               @click="chatUser = user.username">气泡</i>
+            <i style="margin-left: 10px; font-size: 16px; cursor: pointer"
+               @click="chatUser = user.username"><el-icon><chat-dot-round /></el-icon></i>
             <span style="font-size: 12px;color: limegreen; margin-left: 5px" v-if="user.username === chatUser">chatting...</span>
           </div>
         </el-card>
@@ -34,14 +34,28 @@
 </template>
 
 <script>
+import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
+import Store from "@/components/Store";
+import request from "@/utils/request";
+
 let socket;
 
 export default {
   name: "gCChat",
 
+  components:{
+    chatDotRound,
+    Store,
+  },
   data() {
     return {
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      headUrl1:'',
+      headUrl2:'',
+      FileApi:'',
+      otherChater:{
+        stu_no:null,
+      },
       user: {},
       isCollapse: false,
       users: [],
@@ -52,6 +66,7 @@ export default {
     }
   },
   created() {
+    this.FileApi=Store.fileApi
     this.init()
   },
   methods: {
@@ -69,11 +84,11 @@ export default {
           console.log("您的浏览器支持WebSocket");
           // 组装待发送的消息 json
           // {"from": "zhang", "to": "admin", "text": "聊天文本"}
-          let message = {from: this.user.username, to: this.chatUser, text: this.text}
+          let message = {from: this.user.t_name+this.user.t_no, to: this.chatUser, text: this.text}
           socket.send(JSON.stringify(message));  // 将组装好的json发送给服务端，由服务端进行转发
-          this.messages.push({user: this.user.username, text: this.text})
+          this.messages.push({user: this.user.t_name+this.user.t_no, text: this.text})
           // 构建消息内容，本人消息
-          this.createContent(null, this.user.username, this.text)
+          this.createContent(null, this.user.t_name+this.user.t_no, this.text)
           this.text = '';
         }
       }
@@ -81,35 +96,46 @@ export default {
     createContent(remoteUser, nowUser, text) {  // 这个方法是用来将 json的聊天消息数据转换成 html的。
       let html
       // 当前用户消息
+      console.log(nowUser)
       if (nowUser) { // nowUser 表示是否显示当前用户发送的聊天消息，绿色气泡
+        let url=this.headUrl1
         html = "<div class=\"el-row\" style=\"padding: 5px 0\">\n" +
             "  <div class=\"el-col el-col-22\" style=\"text-align: right; padding-right: 10px\">\n" +
             "    <div class=\"tip left\">" + text + "</div>\n" +
             "  </div>\n" +
             "  <div class=\"el-col el-col-2\">\n" +
             "  <span class=\"el-avatar el-avatar--circle\" style=\"height: 40px; width: 40px; line-height: 40px;\">\n" +
-            "    <img src=\"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png\" style=\"object-fit: cover;\">\n" +
+            "    <img src=\""+url+"\" style=\"object-fit: cover;\">\n" +
             "  </span>\n" +
             "  </div>\n" +
             "</div>";
+        this.content += html;
       } else if (remoteUser) {   // remoteUser表示远程用户聊天消息，蓝色的气泡
-        html = "<div class=\"el-row\" style=\"padding: 5px 0\">\n" +
-            "  <div class=\"el-col el-col-2\" style=\"text-align: right\">\n" +
-            "  <span class=\"el-avatar el-avatar--circle\" style=\"height: 40px; width: 40px; line-height: 40px;\">\n" +
-            "    <img src=\"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png\" style=\"object-fit: cover;\">\n" +
-            "  </span>\n" +
-            "  </div>\n" +
-            "  <div class=\"el-col el-col-22\" style=\"text-align: left; padding-left: 10px\">\n" +
-            "    <div class=\"tip right\">" + text + "</div>\n" +
-            "  </div>\n" +
-            "</div>";
+
+        let num=remoteUser.substring(remoteUser.length-8,remoteUser.length)
+        this.otherChater.stu_no=num-0
+        console.log("num"+this.otherChater.stu_no)
+        request.post('/Stu/findStuPicture',this.otherChater).then(res=>{
+          this.headUrl2=this.FileApi+'/Pictures/'+res.data;
+          let url=this.headUrl2
+          html = "<div class=\"el-row\" style=\"padding: 5px 0\">\n" +
+              "  <div class=\"el-col el-col-2\" style=\"text-align: right\">\n" +
+              "  <span class=\"el-avatar el-avatar--circle\" style=\"height: 40px; width: 40px; line-height: 40px;\">\n" +
+              "    <img src=\""+url+"\" style=\"object-fit: cover;\">\n" +
+              "  </span>\n" +
+              "  </div>\n" +
+              "  <div class=\"el-col el-col-22\" style=\"text-align: left; padding-left: 10px\">\n" +
+              "    <div class=\"tip right\">" + text + "</div>\n" +
+              "  </div>\n" +
+              "</div>";
+          this.content += html;
+        })
       }
-      console.log(html)
-      this.content += html;
     },
     init() {
       this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {}
       let username = this.user.t_name+this.user.t_no;
+      this.headUrl1=this.FileApi+'/Pictures/';
       let _this = this;
       if (typeof (WebSocket) == "undefined") {
         console.log("您的浏览器不支持WebSocket");
@@ -158,7 +184,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .tip {
   color: white;
   text-align: center;
