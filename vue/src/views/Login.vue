@@ -7,12 +7,21 @@
 
           <div style="color:#000000;font-weight: bold ;font-size:30px; text-align: center; margin-bottom: 30px; cursor:default" >欢迎登录</div>
           <el-form ref="formRef" :model="form" >
-            <el-form-item>
+            <el-form-item v-if="form.user_type!==2">
               <el-input v-model="form.user_id" :prefix-icon="Avatar"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="form.user_type!==2">
               <el-input v-model="form.user_password" :prefix-icon="Lock" show-password @keyup.enter="login"></el-input>
             </el-form-item>
+
+            <el-form-item v-if="form.user_type===2">
+              <el-input v-model="keyForm.family_tel" :prefix-icon="phone" style="width: 71%"></el-input>
+              <el-button @click="getKey" >获取验证码</el-button>
+            </el-form-item>
+            <el-form-item v-if="form.user_type===2">
+              <el-input v-model="keyForm.family_code" :prefix-icon="chatDotSquare" @keyup.enter="login"></el-input>
+            </el-form-item>
+
             <el-form-item>
               <div style="margin-left: 65px;">
                 <el-radio-group v-model="form.user_type">
@@ -97,13 +106,17 @@ import '@/assets/css/entypo.css';
 import {Avatar,Lock} from "@element-plus/icons-vue"
 
 import request from "@/utils/request";
+import phone from "@element-plus/icons/lib/Phone";
+import chatDotSquare from "@element-plus/icons/lib/ChatDotSquare";
 
 export default {
   name: "Login",
   setup(){
     return {
       Avatar,
-      Lock
+      Lock,
+      phone,
+      chatDotSquare,
     }
 
   },
@@ -129,6 +142,11 @@ export default {
         user_password:"",
         user_type:1,
       },
+      keyForm:{
+        family_tel:'',
+        family_code:'',
+      },
+
       note:{
         backgroundImage:"url("+require("../assets/background.png")+")",
         backgroundRepeat:"no-repeat",
@@ -142,6 +160,20 @@ export default {
     this.numLogin()
   },
   methods:{
+
+    getKey(){
+      request.post('/familylogin_code',this.keyForm).then(res=>{
+        if(res.code===1){
+          this.$message.success(res.msg)
+        }
+        else{
+          this.$message.error(res.msg)
+        }
+      }).catch(err=>{
+        this.$message.error("发生错误")
+      })
+    },
+
     changePassword(){
       this.commitCShow=true
       this.commitNShow=false
@@ -195,38 +227,51 @@ export default {
       }
     },
     login(){
-       this.form.user_id=this.form.user_id-0
-       let formstring=JSON.stringify(this.form)
+
+      if(this.form.user_type===2){
+        request.post('/familycode',this.keyForm).then(res=>{
+          if(res.code===1){
+            this.$message.success("登录成功")
+          }
+          else{
+            this.$message.error("登录失败")
+          }
+        })
+      }
+      else{
+        this.form.user_id=this.form.user_id-0
+        let formstring=JSON.stringify(this.form)
         request.post("/login", formstring).then(res=>{
           console.log(res)
-        if(res.data===null){
-          this.$message({
-            type:"error",
-            message:res.msg//后端给出的错误信息
-          })
-        }
-        else{
-          this.$message({
-            type:"success",
-            message:"登录成功"
-          })
-          sessionStorage.setItem("user",JSON.stringify(res.data))
-          console.log(res.data)
-
-          if(this.form.user_type===1){
-            this.$router.push("/stuHome")//跳转至主页
+          if(res.data===null){
+            this.$message({
+              type:"error",
+              message:res.msg//后端给出的错误信息
+            })
           }
-          else if(this.form.user_type===0){
-            this.$router.push("/tealayout")//跳转至主页
-          }
+          else{
+            this.$message({
+              type:"success",
+              message:"登录成功"
+            })
+            sessionStorage.setItem("user",JSON.stringify(res.data))
+            console.log(res.data)
 
-        }
-      }).catch(err=>{
+            if(this.form.user_type===1){
+              this.$router.push("/stuHome")//跳转至主页
+            }
+            else if(this.form.user_type===0){
+              this.$router.push("/tealayout")//跳转至主页
+            }
+
+          }
+        }).catch(err=>{
           this.$message({
             type:"error",
             message:"连接错误"
           })
         })
+      }
     },
     numLogin(){
       request.post('/count').then(res=>{

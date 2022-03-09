@@ -7,14 +7,14 @@
       报表
     </p>
 
-    <div style="margin: 32px 10px 0 150px; position: relative">
-      <span style="position: absolute; top: 20px">党团统计</span>
-      <el-dropdown split-button type="primary" style="margin-left: 100px;">
+    <div>
+<!--      <span style="position: absolute; top: 20px">党团统计</span>-->
+      <el-dropdown split-button type="primary" style="margin-bottom: 20px;">
         选择班级
         <template #dropdown>
           <el-dropdown-menu style="margin: 0 3px 0 3px">
-            <el-checkbox v-model="checkAllDT" @change="CheckAllChangeDT">全选</el-checkbox>
-            <el-checkbox-group v-model="checkedClassList" @change="changeOptionDT">
+            <el-checkbox v-model="checkAll" @change="CheckAllChange">全选</el-checkbox>
+            <el-checkbox-group v-model="checkedClassList" @change="changeOption">
               <div v-for="(m,i) in DTClassList">
                 <el-checkbox :label="m" size="large"></el-checkbox>
               </div>
@@ -25,8 +25,20 @@
     </div>
 
 
-    <div class="echarts">
-      <div id="barchart" :style="{ width: '380px', height: '300px' }"></div>
+    <div class="echarts" style="display: inline-block">
+      <div>党团统计</div>
+      <div id="chartDT" :style="{ width: '380px', height: '300px' }"></div>
+    </div>
+
+
+    <div class="echarts" style="display: inline-block">
+      <div>民族统计</div>
+      <div id="chartEthnic" :style="{ width: '380px', height: '300px' }"></div>
+    </div>
+
+    <div class="echarts" style="display: inline-block">
+      <div>降级生统计</div>
+      <div id="chartDemoted" :style="{ width: '380px', height: '300px' }"></div>
     </div>
   </div>
 </template>
@@ -41,10 +53,16 @@ export default {
   data() {
     return {
       user:{},
-      checkAllDT:true,
+      checkAll:true,
+
       DTClassList:[],
+      EthnicClassList:[],
       checkedClassList:[],
+
       DTMsg:[],
+      EthnicMsg:[],
+      DemotedMsg:[],
+
       option : {
         series: [
           {
@@ -74,11 +92,64 @@ export default {
         },
       },
 
+      optionEthnic : {
+        series: [
+          {
+            type: 'pie',
+            data: [
+              {
+                value: 0,
+                name: '少数民族'
+              },
+              {
+                value: 0,
+                name: '汉族'
+              }
+            ]
+          }
+        ],
+        tooltip:{
+          trigger:'item',
+          axisPointer:{
+            type:'shadow'
+          },
+          formatter:'{b}:{c}<br/>百分比:{d}%'
+        },
+      },
+
+      optionDemoted : {
+        series: [
+          {
+            type: 'pie',
+            data: [
+              {
+                value: 0,
+                name: '降级生'
+              },
+              {
+                value: 0,
+                name: '普通生'
+              }
+            ]
+          }
+        ],
+        tooltip:{
+          trigger:'item',
+          axisPointer:{
+            type:'shadow'
+          },
+          formatter:'{b}:{c}<br/>百分比:{d}%'
+        },
+      },
+
+
     };
   },
 
   mounted() {
     this.init()
+    this.initEthnic()
+    this.initDemoted()
   },
 
   created() {
@@ -89,22 +160,30 @@ export default {
 
   methods: {
     //党团班级全选按钮
-    CheckAllChangeDT(){
-      if(this.checkAllDT===true){
+    CheckAllChange(){
+      if(this.checkAll===true){
         this.checkedClassList=this.DTClassList
       }
       else{
         this.checkedClassList=[]
       }
-      this.changeOptionDT()
+      this.changeOption()
     },
     //党团班级选择改变
-    changeOptionDT(){
-      //重置数据
+    changeOption(){
+      //重置党团数据
       this.option.series[0].data[0].value=0
       this.option.series[0].data[1].value=0
       this.option.series[0].data[2].value=0
+      //重置民族数据
+      this.optionEthnic.series[0].data[0].value=0
+      this.optionEthnic.series[0].data[1].value=0
+      //重置降级生
+      this.optionDemoted.series[0].data[0].value=0
+      this.optionDemoted.series[0].data[1].value=0
+
       for(let i in this.checkedClassList){
+        //党团
         for(let j=0;j<this.DTMsg.length;j+=3){
           if(this.checkedClassList[i]===this.DTMsg[j].ele_class){
             this.option.series[0].data[0].value+=this.DTMsg[j].ele_count
@@ -113,13 +192,42 @@ export default {
             break
           }
         }
+        //民族
+        for(let j=0;j<this.EthnicMsg.length;j+=2){
+          if(this.checkedClassList[i]===this.EthnicMsg[j].ele_class){
+            this.optionEthnic.series[0].data[0].value+=this.EthnicMsg[j].ele_count
+            this.optionEthnic.series[0].data[1].value+=this.EthnicMsg[j+1].ele_count
+            break
+          }
+        }
+        //降级生
+        for(let j=0;j<this.DemotedMsg.length;j+=2){
+          if(this.checkedClassList[i]===this.DemotedMsg[j].ele_class){
+            this.optionDemoted.series[0].data[0].value+=this.DemotedMsg[j].ele_count
+            this.optionDemoted.series[0].data[1].value+=this.DemotedMsg[j+1].ele_count
+            break
+          }
+        }
+
       }
       this.init()
+      this.initEthnic()
+      this.initDemoted()
     },
     //重新画党团图
     init(){
-      var myChart = echarts.init(document.getElementById("barchart"));
+      var myChart = echarts.init(document.getElementById("chartDT"));
       myChart.setOption(this.option);
+    },
+
+    initEthnic(){
+      var myChart = echarts.init(document.getElementById("chartEthnic"));
+      myChart.setOption(this.optionEthnic);
+    },
+
+    initDemoted(){
+      var myChart = echarts.init(document.getElementById("chartDemoted"));
+      myChart.setOption(this.optionDemoted);
     },
 
 
@@ -131,10 +239,27 @@ export default {
           this.DTClassList.push(this.DTMsg[i].ele_class)
         }
         this.checkedClassList=this.DTClassList
-        this.changeOptionDT()
+        this.changeOption()
         console.log(this.DTMsg)
+
+        request.post('/ethnic_minority',this.user).then(res=>{
+          this.EthnicMsg=res.data
+          console.log(res.data)
+          this.changeOption()
+        }).catch(err=>{
+          this.$message.error("获取信息失败")
+        })
+
+        request.post('/findDemoted_student',this.user).then(res=>{
+          this.DemotedMsg=res.data
+          console.log(res.data)
+          this.changeOption()
+        }).catch(err=>{
+          this.$message.error("获取信息失败")
+        })
+
       }).catch(err=>{
-        this.$message.error("获取党团信息失败")
+        this.$message.error("获取信息失败")
       })
     },
 
