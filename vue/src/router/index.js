@@ -46,10 +46,15 @@ const routes = [
         component: ()=>import("@/views/stuScore"),
       },
       {
-        path: 'stuAward',
-        name: 'stuAward',
-        component: ()=>import("@/views/stuAward"),
+        path:'stuGrowthProfile',
+        name:'stuGrowthProfile',
+        component:()=>import("@/views/stuGrowthProfile")
       },
+      // {
+      //   path: 'stuAward',
+      //   name: 'stuAward',
+      //   component: ()=>import("@/views/stuAward"),
+      // },
       {
         path: 'stuVol',
         name: 'stuVol',

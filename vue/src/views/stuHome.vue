@@ -36,18 +36,10 @@
               </el-card>
             </el-col>
             <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuAward">
+              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuGrowthProfile">
                 <div class="ecard">
                   <el-icon :size="30"><trophy /></el-icon>
-                  <span style="position: absolute; top: 35%">获奖信息维护</span>
-                </div>
-              </el-card>
-            </el-col>
-            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuVol">
-                <div class="ecard">
-                  <el-icon :size="30"><bicycle /></el-icon>
-                  <span style="position: absolute; top: 35%">志愿服务与外派</span>
+                  <span style="position: absolute; top: 35%">成长档案</span>
                 </div>
               </el-card>
             </el-col>
@@ -136,11 +128,8 @@ export default {
     jumpToStuScore(){
       this.$router.push("/stuLayout/stuScore")//跳转至成绩页面
     },
-    jumpToStuAward(){
-      this.$router.push("/stuLayout/stuAward")//跳转至获奖维护页面
-    },
-    jumpToStuVol(){
-      this.$router.push("/stuLayout/stuVol")
+    jumpToStuGrowthProfile(){
+      this.$router.push("/stuLayout/stuGrowthProfile")//跳转至成长档案页面
     },
     jumpToStuAM(){
       this.$router.push("/stuLayout/stuAM")//跳转至公告页面

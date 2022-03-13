@@ -18,7 +18,7 @@
           <el-input v-model="serveForm.voluntary_activities_time_from_to" clearable></el-input>
         </el-form-item>
         <el-form-item label="参与时长" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-          <el-input v-model="serveForm.voluntary_activities_time_long" clearable></el-input>
+          <el-input v-model="serveForm.voluntary_activities_time_long" clearable @input="NumberCheck"></el-input>
         </el-form-item>
         <el-form-item label="活动内容" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="serveForm.voluntary_activities_content" clearable></el-input>
@@ -103,7 +103,7 @@ export default {
         voluntary_activities_studept:'',
         voluntary_activities_stu_no:'',
         voluntary_activities_time_from_to:'',
-        voluntary_activities_time_long:0,
+        voluntary_activities_time_long:null,
         voluntary_activities_content:'',
         voluntary_activities_status:'0',
         voluntary_activities_name:'',
@@ -126,6 +126,19 @@ export default {
     this.getData()
   },
   methods:{
+    NumberCheck(num) {
+      let str = this.serveForm.voluntary_activities_time_long;
+      //限制只能输入一个小数点
+      if (str.indexOf(".") !== -1) {
+        var str_ = str.substr(str.indexOf(".") + 1);
+        if (str_.indexOf(".") !== -1) {
+          str = str.substr(0, str.indexOf(".") + str_.indexOf(".") + 1);
+        }
+      }
+      //正则替换，保留数字和小数点
+      str = str.replace(/[^\d^\.]+/g,'')
+      this.serveForm.voluntary_activities_time_long=str
+    },
     downloadServe(m){
       window.location.href=this.Fapi+"/Activities/"+m
     },
@@ -151,7 +164,7 @@ export default {
       this.serveForm.voluntary_activities_name=''
       this.serveForm.voluntary_activities_studept=''
       this.serveForm.voluntary_activities_time_from_to=''
-      this.serveForm.voluntary_activities_time_long=0
+      this.serveForm.voluntary_activities_time_long=null
       this.serveForm.voluntary_activities_content=''
       this.dialogVisible=false
     },

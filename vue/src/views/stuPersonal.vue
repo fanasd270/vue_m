@@ -289,25 +289,25 @@
                 <el-input v-model="family[0].family_name" :disabled="Edit[3]"></el-input>
               </el-form-item>
 
-              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[0].family_age" :disabled="Edit[3]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[0].family_age" :disabled="Edit[3]"></el-input>-->
+<!--              </el-form-item>-->
 
               <el-form-item label="电话" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
                 <el-input v-model="family[0].family_tel" :disabled="Edit[3]"></el-input>
               </el-form-item>
 
-              <el-form-item label="工作" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[0].family_work" :disabled="Edit[3]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="工作" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[0].family_work" :disabled="Edit[3]"></el-input>-->
+<!--              </el-form-item>-->
 
-              <el-form-item label="职务" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[0].family_duties" :disabled="Edit[3]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="职务" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[0].family_duties" :disabled="Edit[3]"></el-input>-->
+<!--              </el-form-item>-->
 
-              <el-form-item label="工作地点" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[0].family_workplace" :disabled="Edit[3]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="工作地点" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[0].family_workplace" :disabled="Edit[3]"></el-input>-->
+<!--              </el-form-item>-->
 
               <el-form-item label="是否第一监护人" style="width: 23%; margin-bottom: 40px; margin-right: 2%;">
                 <el-radio-group v-model="family[0].family_ismain" :disabled="Edit[3]">
@@ -337,25 +337,25 @@
                 <el-input v-model="family[1].family_name" :disabled="Edit[4]"></el-input>
               </el-form-item>
 
-              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[1].family_age" :disabled="Edit[4]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[1].family_age" :disabled="Edit[4]"></el-input>-->
+<!--              </el-form-item>-->
 
               <el-form-item label="电话" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
                 <el-input v-model="family[1].family_tel" :disabled="Edit[4]"></el-input>
               </el-form-item>
 
-              <el-form-item label="工作" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[1].family_work" :disabled="Edit[4]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="工作" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[1].family_work" :disabled="Edit[4]"></el-input>-->
+<!--              </el-form-item>-->
 
-              <el-form-item label="职务" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[1].family_duties" :disabled="Edit[4]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="职务" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[1].family_duties" :disabled="Edit[4]"></el-input>-->
+<!--              </el-form-item>-->
 
-              <el-form-item label="工作地点" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
-                <el-input v-model="family[1].family_workplace" :disabled="Edit[4]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="工作地点" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
+<!--                <el-input v-model="family[1].family_workplace" :disabled="Edit[4]"></el-input>-->
+<!--              </el-form-item>-->
 
               <el-form-item label="是否第一监护人" style="width: 23%; margin-bottom: 40px; margin-right: 2%;">
                 <el-radio-group v-model="family[1].family_ismain" :disabled="Edit[4]">
