@@ -238,69 +238,224 @@
               <el-descriptions-item label="是否第一监护人">{{detailInfo.stu_family[1].family_ismain}}</el-descriptions-item>
             </el-descriptions>
           </el-collapse-item>
+          <el-collapse-item title="成长档案" name="4">
+            <el-collapse v-model="activeName2" style="margin-left: 3%">
+              <el-collapse-item title="社会工作" name="5">
+              <el-table :data="detailInfo.socialWords" style="width: 100%">
+                <el-table-column label="年度" width="180">
+                  <template #default="scope">
+                    <div style="display: flex; align-items: center">
+                      <el-icon><timer /></el-icon>
+                      <span style="margin-left: 10px">{{ scope.row.social_activity_start_time }}年-{{scope.row.social_activity_end_time}}年</span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="职务" width="180">
+                  <template #default="scope">
+                    <div style="display: flex; align-items: center">
+                      <span style="margin-left: 10px">{{ scope.row.social_activity_name }}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+              </el-collapse-item>
+              <el-collapse-item title="论文" name="1">
+                <div v-for="(m,index) in detailInfo.paper">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
+                    <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
+                    <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
+                    <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
+                    <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
+                    <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item title="专利" name="2">
+                <div v-for="(m,index) in detailInfo.patent">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
+                    <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
+                    <el-descriptions-item label="专利申请号:">{{m.patent_application_no}}</el-descriptions-item>
+                    <el-descriptions-item label="专利申请日:">{{m.patent_application_time}}</el-descriptions-item>
+                    <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
+                    <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
+                    <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item title="竞赛" name="3">
+                <div v-for="(m,index) in detailInfo.contest">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="竞赛名称:">{{m.contest_name}}</el-descriptions-item>
+                    <el-descriptions-item label="项目名称:">{{m.contest_projectname}}</el-descriptions-item>
+                    <el-descriptions-item label="授予部门:">{{m.contest_grantingdepartment}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖级别:">{{m.contest_level}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖名次:">{{m.contest_ranking}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖时间:">{{m.contest_date}}</el-descriptions-item>
+                    <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
+                    <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item title="项目" name="4">
+                <div v-for="(m,index) in detailInfo.project">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="项目名称:">{{m.project_name}}</el-descriptions-item>
+                    <el-descriptions-item label="项目所在单位:">{{m.project_unit}}</el-descriptions-item>
+                    <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
+                    <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
+                    <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
+                    <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
+                    <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
+                    <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-collapse-item>
+          <el-collapse-item title="个人发展规划" name="5">
+
+            <el-select v-model="selectYear" placeholder="请选择学期" style="width: 20%" @change="selectYearChanged">
+              <el-option
+                  v-for="item in developmentPlanYears"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+            <el-descriptions class="margin-top" :column="1" border>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    基本信息
+                  </div>
+                </template>
+                <div style="width: 33%;display: inline-block">
+                  <span>姓名:</span>
+                  <span>{{developmentPlan.development_planning_stu_name}}</span>
+                </div>
+                <div style="width: 33%;display: inline-block">
+                  <span style="width: 16%">学号:</span>
+                  <span style="width: 16%">{{developmentPlan.development_planning_stu_no}}</span>
+                </div>
+                <div style="width: 33%;display: inline-block">
+                  <span style="width: 16%">班级:</span>
+                  <span style="width: 16%">{{developmentPlan.development_planning_stu_class}}</span>
+                </div>
+                <div style="width: 33%;display: inline-block">
+                  <span style="width: 16%">宿舍:</span>
+                  <span style="width: 16%">{{developmentPlan.development_planning_room}}</span>
+                </div>
+                <div style="width: 33%;display: inline-block">
+                  <span style="width: 16%">GPA:</span>
+                  <span style="width: 16%">{{developmentPlan.development_planning_gpa}}</span>
+                </div>
+                <div style="width: 33%;display: inline-block">
+                  <span style="width: 16%">累计不及格学分:</span>
+                  <span style="width: 16%">{{developmentPlan.development_planning_nopass_point}}</span>
+                </div>
+              </el-descriptions-item>
+
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    个人愿景(十年后你想成为什么样的人)
+                  </div>
+                </template>
+                {{developmentPlan.development_planning_wish}}
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    第一职业目标
+                  </div>
+                </template>
+                {{developmentPlan.development_planning_planone}}
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    第二职业目标
+                  </div>
+                </template>
+                {{developmentPlan.development_planning_plantwo}}
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    个人总结
+                  </div>
+                </template>
+                {{developmentPlan.development_planning_summary}}
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    实现职业目标的行动计划
+                  </div>
+                </template>
+                <el-form  :model="developmentPlan" label-width="4em" label-position="left">
+                  <el-form-item :label="developmentPlan.year+'年计划和目标'">
+                    {{developmentPlan.development_planning_howtonextyear}}
+                  </el-form-item>
+                  <el-form-item :label="developmentPlan.year-0+1+'年计划和目标'">
+                    {{developmentPlan.development_planning_howtonext2year}}
+                  </el-form-item>
+                </el-form>
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    {{developmentPlan.year}}年{{developmentPlan.year2}}季学期的目标与规划
+                  </div>
+                </template>
+                <el-form  :model="developmentPlan" label-width="4em" label-position="left">
+                  <el-form-item label="目标">
+                    {{developmentPlan.development_planning_thisyearplan}}
+                  </el-form-item>
+                  <el-form-item label="过往的成功经验">
+                    {{developmentPlan.development_planning_successful_experience}}
+                  </el-form-item>
+                  <el-form-item label="详细规划">
+                    {{developmentPlan.development_planning_details}}
+                  </el-form-item>
+                </el-form>
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    家长意见
+                  </div>
+                </template>
+                {{developmentPlan.development_planning_familymean}}
+
+              </el-descriptions-item>
+            </el-descriptions>
+
+
+
+
+          </el-collapse-item>
         </el-collapse>
         <div>志愿时长:{{detailInfo.volunteerTime}}</div>
 
-        <el-collapse v-model="activeName2">
-          <el-collapse-item title="论文" name="1">
-            <div v-for="(m,index) in detailInfo.paper">
-              <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-                <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
-                <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
-                <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-                <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
-                <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
-                <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-                <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
-              </el-descriptions>
-            </div>
-          </el-collapse-item>
-          <el-collapse-item title="专利" name="2">
-            <div v-for="(m,index) in detailInfo.patent">
-              <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-                 <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
-                 <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
-                 <el-descriptions-item label="专利申请号:">{{m.patent_application_no}}</el-descriptions-item>
-                 <el-descriptions-item label="专利申请日:">{{m.patent_application_time}}</el-descriptions-item>
-                 <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
-                 <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
-                 <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-                 <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
-            </el-descriptions>
-            </div>
-          </el-collapse-item>
-          <el-collapse-item title="竞赛" name="3">
-            <div v-for="(m,index) in detailInfo.contest">
-              <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-                <el-descriptions-item label="竞赛名称:">{{m.contest_name}}</el-descriptions-item>
-                <el-descriptions-item label="项目名称:">{{m.contest_projectname}}</el-descriptions-item>
-                <el-descriptions-item label="授予部门:">{{m.contest_grantingdepartment}}</el-descriptions-item>
-                <el-descriptions-item label="获奖级别:">{{m.contest_level}}</el-descriptions-item>
-                <el-descriptions-item label="获奖名次:">{{m.contest_ranking}}</el-descriptions-item>
-                <el-descriptions-item label="获奖时间:">{{m.contest_date}}</el-descriptions-item>
-                <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
-                <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
-                <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
-                <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
-              </el-descriptions>
-            </div>
-          </el-collapse-item>
-          <el-collapse-item title="项目" name="4">
-            <div v-for="(m,index) in detailInfo.project">
-              <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-                <el-descriptions-item label="项目名称:">{{m.project_name}}</el-descriptions-item>
-                <el-descriptions-item label="项目所在单位:">{{m.project_unit}}</el-descriptions-item>
-                <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
-                <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
-                <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
-                <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
-                <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
-                <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
-                <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
-              </el-descriptions>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
+
       </div>
     </div>
     <template #footer>
@@ -357,27 +512,7 @@ export default {
       isShow:[
           true, true, true, true, true,true,true,true,true,true,true,true,true
       ],
-      tableData:[
-        // {
-        //   stu_address: "重庆大学",
-        //   stu_birthday: "1995-12-26",
-        //   stu_caucus_time: "2021",
-        //   stu_class: "2班",
-        //   stu_email: "",
-        //   stu_ethnic: "维吾尔族",
-        //   stu_gender: 0,
-        //   stu_id: "522321",
-        //   stu_ismacau: 1,
-        //   stu_name: "李四光",
-        //   stu_no: 20204146,
-        //   stu_origin: "四川成都",
-        //   // stu_password: "1111"
-        //   // stu_photourl: "WU"
-        //   stu_politicalface: "共青团员",
-        //   stu_qq: "122706559",
-        //   stu_telephone: "18357980493",
-        // },
-      ],
+      tableData:[],
       infoCopy:[],
       searchInfo:{
           stu_address: "",
@@ -402,6 +537,33 @@ export default {
       detailInfo:{},
       headUrl:'',
       Fapi:'',
+
+
+      developmentPlanYears:[],
+      selectYear:'',
+      developmentPlan:{
+        development_planning_no:'',
+        development_planning_stu_no:'20201686',
+        development_planning_stu_name:'zhangsan',
+        development_planning_stu_class:'软件工程01',
+        development_planning_room:'竹园五栋322',
+        development_planning_gpa:'0.00',
+        development_planning_nopass_point:'0',
+        development_planning_wish:'123123213123213213qweqeqweqweqweqweqweqweqweq123123213123213213qweqeqweqweqweqweqweqweqweq123123213123213213qweqeqweqweqweqweqweqweqweq123123213123213213qweqeqweqweqweqweqweqweqweq',
+        development_planning_planone:'潜伏期而夫妻恩爱算法为',
+        development_planning_plantwo:'我发我发士大夫哇额外',
+        development_planning_summary:'分为氛围分为氛围发',
+        development_planning_howtonextyear:'分为氛围服务',
+        development_planning_howtonext2year:'官方撒给我',
+        development_planning_thisyearplan:'分为氛围分为我服务范围',
+        development_planning_successful_experience:'法撒旦发威锋网服务',
+        development_planning_details:'分为FEWFWE',
+        development_planning_familymean:'fefefefefefe',
+        development_planning_status:'0',
+        development_planning_family_status:'0',
+        year:'',
+        year2:'',
+      },
     }
   },
   created() {
@@ -410,6 +572,16 @@ export default {
   },
 
   methods:{
+    //详细信息页面函数
+    selectYearChanged(val){
+      for(let i=0;i<this.developmentPlanYears.length;i++){
+        if(val===this.developmentPlanYears[i]){
+          this.developmentPlan=this.detailInfo.developmentPlannings[i]
+          break
+        }
+      }
+    },
+
     downloadProject(m){
       window.location.href=this.Fapi+"/Projects/"+m
     },
@@ -481,6 +653,19 @@ export default {
         this.infoDialog=true
         this.activeName1='0'
         this.activeName2='0'
+
+        let year
+        this.developmentPlanYears=[]
+        this.developmentPlan={}
+        for(let i=0;i<this.detailInfo.developmentPlannings.length;i++){
+          year=this.detailInfo.developmentPlannings[i].year+this.detailInfo.developmentPlannings[i].year2
+          this.developmentPlanYears.push(JSON.parse(JSON.stringify(year)))
+        }
+        if(this.developmentPlanYears.length!==0){
+          this.selectYear=this.developmentPlanYears[0]
+          this.developmentPlan=this.detailInfo.developmentPlannings[0]
+        }
+
       }).catch(err=>{
         this.$message.error("获取失败")
       })

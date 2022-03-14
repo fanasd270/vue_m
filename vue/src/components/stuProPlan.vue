@@ -41,7 +41,7 @@
         </p>
         <el-form  :model="doing" label-width="34%" :inline="true">
           <el-form-item label="类别" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-            <el-select v-model="doing.type" placeholder=" " :disabled="Edit[1]">
+            <el-select v-model="doing.is_doing_category" placeholder=" " :disabled="Edit[1]">
               <el-option label="科研" value="科研"></el-option>
               <el-option label="论文" value="论文"></el-option>
               <el-option label="竞赛" value="竞赛"></el-option>
@@ -50,9 +50,13 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item label="项目名称" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
+            <el-input v-model="doing.is_doing_name" :disabled="Edit[1]"></el-input>
+          </el-form-item>
+
           <el-form-item label="完成期限" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
             <el-date-picker
-                v-model="doing.finite"
+                v-model="doing.is_doing_end"
                 type="month"
                 placeholder="选择月"
                 value-format="YYYY-MM"
@@ -61,12 +65,12 @@
           </el-form-item>
 
           <el-form-item label="指导老师" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
-            <el-input v-model="doing.guide" :disabled="Edit[1]"></el-input>
+            <el-input v-model="doing.is_doing_guide_teacher" :disabled="Edit[1]"></el-input>
           </el-form-item>
 
           <el-form-item label="团队成员" style="margin-bottom: 40px; width: 30%; margin-right: 2%;">
-            <div v-for="(m,i) in doing.team" v-if="teamShow">
-              <el-input v-model="m.name" :disabled="Edit[1]" style="width: 60%; margin-right: 3px"></el-input>
+            <div v-for="(m,i) in doing.is_doing_member" v-if="teamShow">
+              <el-input v-model="doing.is_doing_member[i]" :disabled="Edit[1]" style="width: 60%; margin-right: 3px"></el-input>
               <el-button type="danger" size="small"  circle @click="deleteTeam(i)" :disabled="Edit[1]">
                 <el-icon><Delete/></el-icon>
               </el-button>
@@ -100,6 +104,7 @@ export default {
  },
   data(){
     return{
+      user:{},
       Edit:[true,true],
       isShow1:[true,true],
       isShow2:[false,false],
@@ -110,15 +115,37 @@ export default {
       },
       planCopy:{},
       doing:{
-        type:'',
-        finite:'',
-        team:[],
-        guide:'',
+        is_doing_no:null,
+        is_doing_stu_no:'',
+        is_doing_stu_name:'',
+        is_doing_name:'',
+        is_doing_category:'',
+        is_doing_end:'',
+        is_doing_member:[],
+        is_doing_guide_teacher:'',
       },
       doingCopy:{},
     }
   },
+  created() {
+    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.doing.is_doing_stu_no=this.user.stu_no+''
+    this.doing.is_doing_stu_name=this.user.stu_name
+    this.getData()
+  },
   methods:{
+    getData(){
+      let u=JSON.parse(JSON.stringify(this.user))
+      u.stu_no-=0
+      request.post('/find_my_is_doing',u).then(res=>{
+        if(res.data!==null){
+          this.doing=res.data
+        }
+        console.log(res.data)
+      }).catch(err=>{
+        this.$message.error("访问错误")
+      })
+    },
     changeInfo(i){
       this.Edit[i]=false
       this.isShow1[i]=false
@@ -138,16 +165,18 @@ export default {
           this.Edit[i]=true
           this.isShow1[i]=true
           this.isShow2[i]=false
+          this.$message.success("修改成功")
         }).catch(err=>{
           this.$message.error("修改失败")
         })
       }else{
-        request.post('',this.doing).then(res=>{
+        request.post('/upload_is_doing',this.doing).then(res=>{
 
-
+          console.log(this.doing)
           this.Edit[i]=true
           this.isShow1[i]=true
           this.isShow2[i]=false
+          this.$message.success("修改成功")
         }).catch(err=>{
           this.$message.error("修改失败")
         })
@@ -165,14 +194,14 @@ export default {
       }
     },
     deleteTeam(i){
-      this.doing.team.splice(i,1)
+      this.doing.is_doing_member.splice(i,1)
       this.teamShow=false
       this.$nextTick(()=>{
         this.teamShow=true
       })
     },
     addTeam(){
-      this.doing.team.push({name:''})
+      this.doing.is_doing_member.push('')
       this.teamShow=false
       this.$nextTick(()=>{
         this.teamShow=true
