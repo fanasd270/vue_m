@@ -1236,6 +1236,11 @@ export default {
     },
 
     onSubmitNewDevelopmentPlan(){
+      console.log(this.newDevelopmentPlan)
+      if(this.newDevelopmentPlan.year===null||this.newDevelopmentPlan.year2===null||!this.newDevelopmentPlan.year||!this.newDevelopmentPlan.year2){
+        this.$message.error("请选择学期")
+        return
+      }
       for(let i=0;i<this.years.length;i++){
         if(this.years[i]===this.newDevelopmentPlan.year+this.newDevelopmentPlan.year2){
           this.$message.error("所选学期已存在，请勿重复上传！")
