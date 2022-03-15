@@ -321,132 +321,136 @@
           </el-collapse-item>
           <el-collapse-item title="个人发展规划" name="5">
 
-            <el-select v-model="selectYear" placeholder="请选择学期" style="width: 20%" @change="selectYearChanged">
-              <el-option
-                  v-for="item in developmentPlanYears"
-                  :key="item"
-                  :label="item"
-                  :value="item">
-              </el-option>
-            </el-select>
-            <el-descriptions class="margin-top" :column="1" border>
+            <div v-if="developmentPlanYears.length!==0">
+              <el-select v-model="selectYear" placeholder="请选择学期" style="width: 20%" @change="selectYearChanged">
+                <el-option
+                    v-for="item in developmentPlanYears"
+                    :key="item"
+                    :label="item"
+                    :value="item">
+                </el-option>
+              </el-select>
+              <el-button @click="downloadPlan" style="margin-left: 5px">下载</el-button>
+              <el-descriptions class="margin-top" :column="1" border>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    基本信息
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      基本信息
+                    </div>
+                  </template>
+                  <div style="width: 33%;display: inline-block">
+                    <span>姓名:</span>
+                    <span>{{developmentPlan.development_planning_stu_name}}</span>
                   </div>
-                </template>
-                <div style="width: 33%;display: inline-block">
-                  <span>姓名:</span>
-                  <span>{{developmentPlan.development_planning_stu_name}}</span>
-                </div>
-                <div style="width: 33%;display: inline-block">
-                  <span style="width: 16%">学号:</span>
-                  <span style="width: 16%">{{developmentPlan.development_planning_stu_no}}</span>
-                </div>
-                <div style="width: 33%;display: inline-block">
-                  <span style="width: 16%">班级:</span>
-                  <span style="width: 16%">{{developmentPlan.development_planning_stu_class}}</span>
-                </div>
-                <div style="width: 33%;display: inline-block">
-                  <span style="width: 16%">宿舍:</span>
-                  <span style="width: 16%">{{developmentPlan.development_planning_room}}</span>
-                </div>
-                <div style="width: 33%;display: inline-block">
-                  <span style="width: 16%">GPA:</span>
-                  <span style="width: 16%">{{developmentPlan.development_planning_gpa}}</span>
-                </div>
-                <div style="width: 33%;display: inline-block">
-                  <span style="width: 16%">累计不及格学分:</span>
-                  <span style="width: 16%">{{developmentPlan.development_planning_nopass_point}}</span>
-                </div>
-              </el-descriptions-item>
-
-
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    个人愿景(十年后你想成为什么样的人)
+                  <div style="width: 33%;display: inline-block">
+                    <span style="width: 16%">学号:</span>
+                    <span style="width: 16%">{{developmentPlan.development_planning_stu_no}}</span>
                   </div>
-                </template>
-                {{developmentPlan.development_planning_wish}}
-              </el-descriptions-item>
-
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    第一职业目标
+                  <div style="width: 33%;display: inline-block">
+                    <span style="width: 16%">班级:</span>
+                    <span style="width: 16%">{{developmentPlan.development_planning_stu_class}}</span>
                   </div>
-                </template>
-                {{developmentPlan.development_planning_planone}}
-              </el-descriptions-item>
-
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    第二职业目标
+                  <div style="width: 33%;display: inline-block">
+                    <span style="width: 16%">宿舍:</span>
+                    <span style="width: 16%">{{developmentPlan.development_planning_room}}</span>
                   </div>
-                </template>
-                {{developmentPlan.development_planning_plantwo}}
-              </el-descriptions-item>
-
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    个人总结
+                  <div style="width: 33%;display: inline-block">
+                    <span style="width: 16%">GPA:</span>
+                    <span style="width: 16%">{{developmentPlan.development_planning_gpa}}</span>
                   </div>
-                </template>
-                {{developmentPlan.development_planning_summary}}
-              </el-descriptions-item>
-
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    实现职业目标的行动计划
+                  <div style="width: 33%;display: inline-block">
+                    <span style="width: 16%">累计不及格学分:</span>
+                    <span style="width: 16%">{{developmentPlan.development_planning_nopass_point}}</span>
                   </div>
-                </template>
-                <el-form  :model="developmentPlan" label-width="4em" label-position="left">
-                  <el-form-item :label="developmentPlan.year+'年计划和目标'">
-                    {{developmentPlan.development_planning_howtonextyear}}
-                  </el-form-item>
-                  <el-form-item :label="developmentPlan.year-0+1+'年计划和目标'">
-                    {{developmentPlan.development_planning_howtonext2year}}
-                  </el-form-item>
-                </el-form>
+                </el-descriptions-item>
 
-              </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    {{developmentPlan.year}}年{{developmentPlan.year2}}季学期的目标与规划
-                  </div>
-                </template>
-                <el-form  :model="developmentPlan" label-width="4em" label-position="left">
-                  <el-form-item label="目标">
-                    {{developmentPlan.development_planning_thisyearplan}}
-                  </el-form-item>
-                  <el-form-item label="过往的成功经验">
-                    {{developmentPlan.development_planning_successful_experience}}
-                  </el-form-item>
-                  <el-form-item label="详细规划">
-                    {{developmentPlan.development_planning_details}}
-                  </el-form-item>
-                </el-form>
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      个人愿景(十年后你想成为什么样的人)
+                    </div>
+                  </template>
+                  {{developmentPlan.development_planning_wish}}
+                </el-descriptions-item>
 
-              </el-descriptions-item>
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      第一职业目标
+                    </div>
+                  </template>
+                  {{developmentPlan.development_planning_planone}}
+                </el-descriptions-item>
 
-              <el-descriptions-item>
-                <template #label>
-                  <div class="cell-item" style="width: 4em">
-                    家长意见
-                  </div>
-                </template>
-                {{developmentPlan.development_planning_familymean}}
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      第二职业目标
+                    </div>
+                  </template>
+                  {{developmentPlan.development_planning_plantwo}}
+                </el-descriptions-item>
 
-              </el-descriptions-item>
-            </el-descriptions>
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      个人总结
+                    </div>
+                  </template>
+                  {{developmentPlan.development_planning_summary}}
+                </el-descriptions-item>
+
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      实现职业目标的行动计划
+                    </div>
+                  </template>
+                  <el-form  :model="developmentPlan" label-width="4em" label-position="left">
+                    <el-form-item :label="developmentPlan.year+'年计划和目标'">
+                      {{developmentPlan.development_planning_howtonextyear}}
+                    </el-form-item>
+                    <el-form-item :label="developmentPlan.year-0+1+'年计划和目标'">
+                      {{developmentPlan.development_planning_howtonext2year}}
+                    </el-form-item>
+                  </el-form>
+
+                </el-descriptions-item>
+
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      {{developmentPlan.year}}年{{developmentPlan.year2}}季学期的目标与规划
+                    </div>
+                  </template>
+                  <el-form  :model="developmentPlan" label-width="4em" label-position="left">
+                    <el-form-item label="目标">
+                      {{developmentPlan.development_planning_thisyearplan}}
+                    </el-form-item>
+                    <el-form-item label="过往的成功经验">
+                      {{developmentPlan.development_planning_successful_experience}}
+                    </el-form-item>
+                    <el-form-item label="详细规划">
+                      {{developmentPlan.development_planning_details}}
+                    </el-form-item>
+                  </el-form>
+
+                </el-descriptions-item>
+
+                <el-descriptions-item>
+                  <template #label>
+                    <div class="cell-item" style="width: 4em">
+                      家长意见
+                    </div>
+                  </template>
+                  <span v-if="developmentPlan.development_planning_family_status==='0'">家长还未填写</span>
+                  {{developmentPlan.development_planning_familymean}}
+
+                </el-descriptions-item>
+              </el-descriptions>
+            </div>
 
 
 
@@ -582,6 +586,11 @@ export default {
       }
     },
 
+    downloadPlan(){
+      request.post('/Tea/writeplanning',this.developmentPlan).then(res=>{
+        window.location.href=this.Fapi+"/Word/"+res.data
+      })
+    },
     downloadProject(m){
       window.location.href=this.Fapi+"/Projects/"+m
     },

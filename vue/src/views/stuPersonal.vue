@@ -378,6 +378,192 @@
       </div>
     </el-tab-pane>
     <el-tab-pane label="个人规划">
+
+
+      <el-dialog
+          v-model="newDlmplan"
+          title="新建个人发展规划书"
+          width="70%"
+      >
+          <div style="margin: 5px 0 5px 5px">
+            <el-date-picker v-model="newDevelopmentPlan.year" type="year" placeholder="选择学年" value-format="YYYY" style="width: 10em">
+            </el-date-picker>
+            <el-select v-model="newDevelopmentPlan.year2" style="width: 6em;" placeholder=" ">
+              <el-option
+                  v-for="item in yearTime"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name">
+              </el-option>
+            </el-select>
+          </div>
+          <div style="width: 98%; margin-top: 30px; position: relative">
+            <el-descriptions class="margin-top" :column="1" border>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    基本信息
+                  </div>
+                </template>
+
+                <el-form  :model="newDevelopmentPlan" label-width="34%" :inline="true">
+                  <el-form-item label="姓名">
+                    <el-input v-model="newDevelopmentPlan.development_planning_stu_name" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="学号">
+                    <el-input v-model="newDevelopmentPlan.development_planning_stu_no" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="班级">
+                    <el-input v-model="newDevelopmentPlan.development_planning_stu_class" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="宿舍">
+                    <el-input v-model="newDevelopmentPlan.development_planning_room"></el-input>
+                  </el-form-item>
+                  <el-form-item label="GPA">
+                    <el-input v-model="newDevelopmentPlan.development_planning_gpa"></el-input>
+                  </el-form-item>
+                  <el-form-item label="累计不及格学分">
+                    <el-input v-model="newDevelopmentPlan.development_planning_nopass_point"></el-input>
+                  </el-form-item>
+                </el-form>
+              </el-descriptions-item>
+
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    个人愿景(十年后你想成为什么样的人)
+                  </div>
+                </template>
+                <el-input
+                    v-model="newDevelopmentPlan.development_planning_wish"
+                    :rows="4"
+                    type="textarea"
+                    placeholder="1.职业发展（职位、技术技能等）：
+2.经济能力（总收入、可支配收入等）:
+3.生活品质（衣食住行达到的水平等）:
+4.社会地位描述：
+"
+                />
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    第一职业目标
+                  </div>
+                </template>
+                <el-input
+                    v-model="newDevelopmentPlan.development_planning_planone"
+                    :rows="2"
+                    type="textarea"
+                    placeholder="对照个人景，你现在最想实现的目标"
+                />
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    第二职业目标
+                  </div>
+                </template>
+                <el-input
+                    v-model="newDevelopmentPlan.development_planning_plantwo"
+                    :rows="2"
+                    type="textarea"
+                    placeholder="第一目标无法实现情况下的备选目标"
+                />
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    个人总结
+                  </div>
+                </template>
+                <el-input
+                    v-model="newDevelopmentPlan.development_planning_summary"
+                    :rows="6"
+                    type="textarea"
+                    placeholder="1.围绕职业目标进行总结，2.自入学以来的个人情况，3.重点分析已具备的条件、存在的差距和难点，4.不少于150字"
+                />
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    实现职业目标的行动计划
+                  </div>
+                </template>
+                <el-form  :model="newDevelopmentPlan" label-width="4em" label-position="left">
+                  <el-form-item :label="newDevelopmentPlan.year+'年计划和目标'">
+                    <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_howtonextyear"></el-input>
+                  </el-form-item>
+                  <el-form-item :label="newDevelopmentPlan.year-0+1+'年计划和目标'">
+                    <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_howtonext2year"></el-input>
+                  </el-form-item>
+                </el-form>
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    {{newDevelopmentPlan.year}}年{{newDevelopmentPlan.year2}}季学期的目标与规划
+                  </div>
+                </template>
+                <el-form  :model="newDevelopmentPlan" label-width="4em" label-position="left">
+                  <el-form-item label="目标">
+                    <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_thisyearplan"
+                              placeholder="对照职业目标和年度目标，2.具体明确，如：GPA上升0.3"
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="过往的成功经验">
+                    <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_successful_experience"
+                              placeholder="可迁移到现有目标，2.帮助执行现有目标"
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="详细规划">
+                    <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_details"
+                              placeholder="1.详尽，2.可执行，3.定期回顾调整"
+                    ></el-input>
+                  </el-form-item>
+                </el-form>
+
+              </el-descriptions-item>
+
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item" style="width: 4em">
+                    家长意见
+                  </div>
+                </template>
+                <el-input type="textarea" :rows="4" v-model="newDevelopmentPlan.development_planning_familymean" disabled
+                          placeholder="针对学生的职业发展，家长可提供的助力、存在的困难、希望学院给予的支持等等"
+                ></el-input>
+
+              </el-descriptions-item>
+            </el-descriptions>
+
+
+
+            <br>
+            <div style="position: relative; left:50%; display: inline-flex">
+              <el-button type="primary" @click="onSubmitNewDevelopmentPlan" style="margin-right: 50px">确认</el-button>
+              <el-button @click="CancelNewDevelopmentPlan">取消</el-button>
+            </div>
+
+          </div>
+
+
+      </el-dialog>
+
+
       <div style="padding-left: 6%; padding-right: 6%;">
         <div style="margin-bottom: 10px; margin-top: 20px;">
           <i style="background-color: blue;">
@@ -391,16 +577,26 @@
 
         <div style="border: dimgray solid">
           <div style="margin: 5px 0 5px 5px">
-            <el-date-picker v-model="developmentPlan.year" type="year" placeholder="选择学年" value-format="YYYY" :disabled="Edit[5]" style="width: 10em">
-            </el-date-picker>
-            <el-select v-model="developmentPlan.year2" :disabled="Edit[5]" style="width: 4em;" placeholder=" ">
+<!--            <el-date-picker v-model="developmentPlan.year" type="year" placeholder="选择学年" value-format="YYYY" :disabled="Edit[5]" style="width: 10em">-->
+<!--            </el-date-picker>-->
+<!--            <el-select v-model="developmentPlan.year2" :disabled="Edit[5]" style="width: 4em;" placeholder=" ">-->
+<!--              <el-option-->
+<!--                  v-for="item in yearTime"-->
+<!--                  :key="item.name"-->
+<!--                  :label="item.name"-->
+<!--                  :value="item.name">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+            <el-select v-model="selectYear" placeholder="请选择学期" style="width: 20%" @change="selectYearChanged">
               <el-option
-                  v-for="item in yearTime"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name">
+                  v-for="item in years"
+                  :key="item"
+                  :label="item"
+                  :value="item">
               </el-option>
             </el-select>
+
+            <el-button @click="setANewPlan">新建</el-button>
           </div>
           <div style="width: 88%; margin-top: 30px; position: relative">
               <el-descriptions class="margin-top" :column="1" border>
@@ -414,13 +610,13 @@
 
                   <el-form  :model="developmentPlan" label-width="34%" :inline="true">
                     <el-form-item label="姓名">
-                      <el-input v-model="developmentPlan.development_planning_stu_name" :disabled="Edit[5]"></el-input>
+                      <el-input v-model="developmentPlan.development_planning_stu_name" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="学号">
-                      <el-input v-model="developmentPlan.development_planning_stu_no" :disabled="Edit[5]"></el-input>
+                      <el-input v-model="developmentPlan.development_planning_stu_no" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="班级">
-                      <el-input v-model="developmentPlan.development_planning_stu_class" :disabled="Edit[5]"></el-input>
+                      <el-input v-model="developmentPlan.development_planning_stu_class" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="宿舍">
                       <el-input v-model="developmentPlan.development_planning_room" :disabled="Edit[5]"></el-input>
@@ -552,7 +748,7 @@
                       家长意见
                     </div>
                   </template>
-                  <el-input type="textarea" :rows="4" v-model="developmentPlan.development_planning_familymean" :disabled="Edit[5]"
+                  <el-input type="textarea" :rows="4" v-model="developmentPlan.development_planning_familymean" disabled
                             placeholder="针对学生的职业发展，家长可提供的助力、存在的困难、希望学院给予的支持等等"
                   ></el-input>
 
@@ -562,7 +758,7 @@
 
 
               <br>
-              <el-button style="position: relative; left:55%" v-if="isShow1[5]" @click="changeDevelopmentPlan">修改</el-button>
+              <el-button style="position: relative; left:55%" v-if="isShow1[5]&&this.years.length!==0" @click="changeDevelopmentPlan">修改</el-button>
               <div style="position: relative; left:50%; display: inline-flex" v-if="isShow2[5]">
                 <el-button type="primary" @click="onSubmitDevelopmentPlan" style="margin-right: 50px">确认</el-button>
                 <el-button @click="CancelDevelopmentPlan">取消</el-button>
@@ -603,6 +799,7 @@ export default {
         {major_name:'大数据'},
         {major_name:'人工智能'},
       ],
+      user:{},
       form:{
           stu_address: "重庆大学",
           stu_birthday: "1995-12-26",
@@ -718,16 +915,42 @@ export default {
         year:'',
         year2:'',
       },
+      newDevelopmentPlan:{},
+      dlmPlans:[],
+      years:[],
+      selectYear:'',
       developmentPlanCopy:{},
+
+      newDlmplan:false,
+
     }
   },
 
   created() {
     this.showOriginalData();
+    this.user=JSON.parse(sessionStorage.getItem('user'))
     this.getData();
   },
 
   methods:{
+
+    setANewPlan(){
+      this.newDlmplan=true
+      this.newDevelopmentPlan={}
+      this.newDevelopmentPlan.development_planning_stu_no=this.user.stu_no+''
+      this.newDevelopmentPlan.development_planning_stu_name=this.user.stu_name
+      this.newDevelopmentPlan.development_planning_stu_class=this.user.stu_class
+      this.newDevelopmentPlan.development_planning_status='0'
+      this.newDevelopmentPlan.development_planning_family_status='0'
+    },
+    selectYearChanged(val){
+      for(let i=0;i<this.years.length;i++){
+        if(val===this.years[i]){
+          this.developmentPlan=this.dlmPlans[i]
+          break
+        }
+      }
+    },
 
     showOriginalData(){
       // let userjava=JSON.parse(sessionStorage.getItem('user'))
@@ -785,9 +1008,23 @@ export default {
         this.classType=res.data
       })
 
-      request.post('/Stu/getStudentPlan', formstring).then(res=>{
+      request.post('/findDevelopments', formstring).then(res=>{
+        console.log("developments")
+        console.log(res)
         if(res.data!=null){
-          this.developmentPlan=res.data
+          this.dlmPlans=res.data
+          //this.developmentPlan=res.data
+          let year
+          this.years=[]
+          this.developmentPlan={}
+          for(let i=0;i<this.dlmPlans.length;i++){
+            year=this.dlmPlans[i].year+this.dlmPlans[i].year2
+            this.years.push(JSON.parse(JSON.stringify(year)))
+          }
+          if(this.dlmPlans.length!==0){
+            this.selectYear=this.years[0]
+            this.developmentPlan=this.dlmPlans[0]
+          }
         }
       }).catch(err=>{
         this.$message({
@@ -862,6 +1099,12 @@ export default {
       this.isShow1[5]=true;
       this.isShow2[5]=false;
       this.developmentPlan=JSON.parse(JSON.stringify(this.developmentPlanCopy))
+    },
+    CancelNewDevelopmentPlan(){
+      this.newDlmplan=false
+      this.newDevelopmentPlan={}
+      this.newDevelopmentPlan.development_planning_status='0'
+      this.newDevelopmentPlan.development_planning_family_status='0'
     },
 
     onSubmit(){
@@ -975,6 +1218,7 @@ export default {
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.developmentPlan.development_planning_stu_no=user.stu_no.toString()
       let form=JSON.stringify(this.developmentPlan)
+      console.log(this.developmentPlan)
       request.post('/Stu/uploadPlan',form).then(res=>{
         this.$message({
           type:"success",
@@ -989,6 +1233,24 @@ export default {
           message:"修改失败"
         })
       });
+    },
+
+    onSubmitNewDevelopmentPlan(){
+      for(let i=0;i<this.years.length;i++){
+        if(this.years[i]===this.newDevelopmentPlan.year+this.newDevelopmentPlan.year2){
+          this.$message.error("所选学期已存在，请勿重复上传！")
+          return
+        }
+      }
+
+      console.log("新上传")
+      console.log(this.newDevelopmentPlan)
+      request.post('/Stu/uploadPlan',this.newDevelopmentPlan).then(res=>{
+        this.$message.success("上传成功")
+        this.CancelNewDevelopmentPlan()
+      }).catch(err=>{
+        this.$message.error("上传失败")
+      })
     },
 
   }

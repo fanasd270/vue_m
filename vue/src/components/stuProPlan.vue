@@ -7,7 +7,7 @@
         </p>
         <el-form  :model="plan" label-width="34%" :inline="true">
           <el-form-item label="类别" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
-            <el-select v-model="plan.type" placeholder=" " :disabled="Edit[0]">
+            <el-select v-model="plan.plan_category" placeholder=" " :disabled="Edit[0]">
               <el-option label="科研" value="科研"></el-option>
               <el-option label="论文" value="论文"></el-option>
               <el-option label="竞赛" value="竞赛"></el-option>
@@ -18,13 +18,14 @@
 
           <el-form-item label="计划开展时间段" style="margin-bottom: 40px; width: 46%; margin-right: 2%;">
             <el-date-picker
-                v-model="plan.time"
+                v-model="planTime"
                 type="monthrange"
                 range-separator="至"
                 start-placeholder="开始月份"
                 end-placeholder="结束月份"
                 value-format="YYYY-MM"
-                :disabled="Edit[0]">
+                :disabled="Edit[0]"
+            @change="plan.plan_start_time=planTime[0];plan.plan_end_time=planTime[1]">
             </el-date-picker>
           </el-form-item>
 
@@ -110,9 +111,14 @@ export default {
       isShow2:[false,false],
       teamShow:[true],
       plan:{
-        type:'',
-        time:[],
+        plan_no:'',
+        plan_category:'',
+        plan_end_time:'',
+        plan_start_time:'',
+        plan_stu_no:'',
+        plan_stu_name:'',
       },
+      planTime:[],
       planCopy:{},
       doing:{
         is_doing_no:null,
@@ -131,6 +137,8 @@ export default {
     this.user=JSON.parse(sessionStorage.getItem('user'))
     this.doing.is_doing_stu_no=this.user.stu_no+''
     this.doing.is_doing_stu_name=this.user.stu_name
+    this.plan.plan_stu_no=this.user.stu_no+''
+    this.plan.plan_stu_name=this.user.stu_name
     this.getData()
   },
   methods:{
@@ -142,6 +150,15 @@ export default {
           this.doing=res.data
         }
         console.log(res.data)
+      }).catch(err=>{
+        this.$message.error("访问错误")
+      })
+      request.post('/find_my_plan',u).then(res=>{
+        if(res.data!==null){
+          this.plan=res.data
+          this.planTime[0]=this.plan.plan_start_time
+          this.planTime[1]=this.plan.plan_end_time
+        }
       }).catch(err=>{
         this.$message.error("访问错误")
       })
@@ -159,8 +176,8 @@ export default {
     },
     onSubmit(i){
       if(i===0){
-        request.post('',this.plan).then(res=>{
-
+        console.log(this.plan)
+        request.post('/upload_plan',this.plan).then(res=>{
 
           this.Edit[i]=true
           this.isShow1[i]=true
