@@ -18,7 +18,9 @@
     </el-table-column>
     <el-table-column
         prop="final_Information_stu_name"
-        label="姓名">
+        label="姓名"
+        :filters="this.filterName"
+        :filter-method="filterNameHandler">
     </el-table-column>
     <el-table-column
         prop="final_Information_year"
@@ -55,13 +57,11 @@
     </el-table-column>
     <el-table-column
         prop="final_Information_examination_situation"
-        label="考试情况"
-        sortable>
+        label="考试情况">
     </el-table-column>
     <el-table-column
         prop="final_Information_examination_type"
-        label="考试类型"
-        sortable>
+        label="考试类型">
     </el-table-column>
   </el-table>
 </template>
@@ -74,6 +74,7 @@ export default {
   data(){
     return{
       user:{},
+      filterName:[],
       otherTermsPoint:{},
       showPoints:[],
       choosedTerm:'',
@@ -84,6 +85,10 @@ export default {
     this.getData()
   },
   methods:{
+    filterNameHandler(value, row, column){
+      const property = column['property']
+      return row[property] === value
+    },
     changeTerms(val){
       this.showPoints=this.otherTermsPoint[val]
     },
@@ -91,6 +96,11 @@ export default {
       request.post('/findallExaminationByyear',this.user).then(res=>{
         console.log(res)
         this.otherTermsPoint=res.data
+        for(let item in this.otherTermsPoint){
+          let val=this.otherTermsPoint[item][0].final_Information_stu_name
+          this.filterName.push({text:val,value:val})
+        }
+        console.log()
       })
     },
   },

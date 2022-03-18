@@ -9,8 +9,8 @@
         <el-tab-pane label="学科成绩" name="second">
           <g-c-score-course-view/>
         </el-tab-pane>
-        <el-tab-pane label="333" name="third">
-
+        <el-tab-pane label="综合测评" name="third">
+          <g-c-score-grade-point-view/>
         </el-tab-pane>
       </el-tabs>
     </el-tab-pane>
@@ -22,8 +22,8 @@
         <el-tab-pane label="学科成绩" name="second">
           <g-c-score-course/>
         </el-tab-pane>
-        <el-tab-pane label="333" name="third">
-
+        <el-tab-pane label="综合测评" name="third">
+          <g-c-score-grade-point/>
         </el-tab-pane>
       </el-tabs>
 
@@ -37,9 +37,13 @@ import GCScoreGrandPont from "@/components/gCScoreGrandPont";
 import GCScoreGrandPointView from "@/components/gCScoreGrandPointView";
 import GCScoreCourseView from "@/components/gCScoreCourseView";
 import GCScoreCourse from "@/components/gCScoreCourse";
+import GCScoreGradePoint from "@/components/gCScoreGradePoint";
+import GCScoreGradePointView from "@/components/gCScoreGradePointView";
 export default {
   name: "gCStuScore",
   components:{
+    GCScoreGradePointView,
+    GCScoreGradePoint,
     GCScoreCourse,
     GCScoreCourseView,
     GCScoreGrandPointView,
