@@ -1,12 +1,16 @@
 <template>
-<div>
-  成绩查询
-</div>
+  <stu-and-family-score-view/>
 </template>
 
 <script>
+
+
+import StuAndFamilyScoreView from "@/components/stuAndFamilyScoreView";
 export default {
-  name: "stuScore"
+  name: "stuScore",
+  components:{
+    StuAndFamilyScoreView,
+  },
 }
 </script>
 

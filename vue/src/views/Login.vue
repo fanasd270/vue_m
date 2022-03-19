@@ -190,6 +190,11 @@ export default {
     },
     commitChange(){
       this.cPasswaord.stu_no=this.cPasswaord.stu_no-0
+      if(this.cPasswaord.stu_no===0){
+        this.cPasswaord.stu_no=null
+        this.$message.warning("请输入账号")
+        return
+      }
       request.post('/findpassword',this.cPasswaord).then(res=>{
         if(res.code===0){
           this.$message.error(res.msg)
@@ -232,6 +237,11 @@ export default {
         request.post('/familycode',this.keyForm).then(res=>{
           if(res.code===1){
             this.$message.success("登录成功")
+            sessionStorage.setItem("user",JSON.stringify(res.data))
+            let family={type:'fam'}
+            sessionStorage.setItem("family",JSON.stringify(family))
+            console.log(res.data)
+            this.$router.push("/familyHome")
           }
           else{
             this.$message.error("登录失败")
@@ -258,6 +268,8 @@ export default {
             console.log(res.data)
 
             if(this.form.user_type===1){
+              let family={type:'stu'}
+              sessionStorage.setItem("family",JSON.stringify(family))
               this.$router.push("/stuHome")//跳转至主页
             }
             else if(this.form.user_type===0){

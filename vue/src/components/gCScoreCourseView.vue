@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="choosedTerm" placeholder="请选择" @change="changeTerms">
+  <el-select v-model="choosedTerm" placeholder="请选择" @change="changeTerms" style="margin-right: 10px">
     <el-option
         v-for="(item,key,index) in otherTermsPoint"
         :key="key"
@@ -7,6 +7,17 @@
         :value="key">
     </el-option>
   </el-select>
+
+  <el-input
+      v-model="searchInfo"
+      placeholder="搜索学生或课程"
+      :prefix-icon="Search"
+      style="width: 20%; margin-bottom: 5px"
+      @keyup.enter="searchFun"
+      clearable
+      @clear="clearSearch"
+  />
+  <el-button :icon="Search" circle size="small" @click="searchFun" style="margin-left: 5px"></el-button>
 
   <el-table
       :data="showPoints"
@@ -18,9 +29,7 @@
     </el-table-column>
     <el-table-column
         prop="final_Information_stu_name"
-        label="姓名"
-        :filters="this.filterName"
-        :filter-method="filterNameHandler">
+        label="姓名">
     </el-table-column>
     <el-table-column
         prop="final_Information_year"
@@ -38,6 +47,11 @@
     <el-table-column
         prop="final_Information_coursecode"
         label="课程代码"
+    >
+    </el-table-column>
+    <el-table-column
+        prop="credits"
+        label="课程学分"
     >
     </el-table-column>
     <el-table-column
@@ -64,20 +78,42 @@
         label="考试类型">
     </el-table-column>
   </el-table>
+  <el-pagination
+      v-model:currentPage="currentPage"
+      :page-sizes="[5, 10, 20, 50]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+  >
+  </el-pagination>
 </template>
 
 <script>
 import request from "@/utils/request";
+import {Search} from "@element-plus/icons";
 
 export default {
   name: "gCScoreCourseView",
+  setup(){
+    return{
+      Search,
+    }
+  },
   data(){
     return{
       user:{},
-      filterName:[],
       otherTermsPoint:{},
       showPoints:[],
       choosedTerm:'',
+
+      searchInfo:'',
+      showPointsCopy:[],
+      //分页数据
+      currentPage: 1,
+      pageSize:10,
+      total:0,
     }
   },
   created() {
@@ -85,22 +121,45 @@ export default {
     this.getData()
   },
   methods:{
-    filterNameHandler(value, row, column){
-      const property = column['property']
-      return row[property] === value
+    searchFun(){
+      let fuzzy=this.searchInfo
+      if(fuzzy){
+        this.showPoints=this.showPointsCopy.filter((value)=>{
+          return value.final_Information_stu_name.includes(fuzzy)||value.final_Information_no_coursename.includes(fuzzy)
+        })
+      }else{
+        this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
+      }
+    },
+    clearSearch(){
+      this.showDataChange()
+
+    },
+    handleSizeChange(pageSize){//改变每页数量触发
+      this.searchInfo=null
+      this.pageSize=pageSize
+      this.showDataChange()
+    },
+    handleCurrentChange(currentPage){//改变页码触发
+      this.searchInfo=null
+      this.currentPage=currentPage
+      this.showDataChange()
+    },
+    showDataChange(){
+      this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
     changeTerms(val){
-      this.showPoints=this.otherTermsPoint[val]
+      this.showPoints=JSON.parse(JSON.stringify(this.otherTermsPoint[val]))
+      this.total=this.showPoints.length
+      this.showPointsCopy=this.otherTermsPoint[val]
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
     getData(){
       request.post('/findallExaminationByyear',this.user).then(res=>{
+        console.log("course")
         console.log(res)
         this.otherTermsPoint=res.data
-        for(let item in this.otherTermsPoint){
-          let val=this.otherTermsPoint[item][0].final_Information_stu_name
-          this.filterName.push({text:val,value:val})
-        }
-        console.log()
       })
     },
   },

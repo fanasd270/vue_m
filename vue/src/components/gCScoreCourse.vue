@@ -1,5 +1,10 @@
 <template>
-  <div style="margin-top: 10px">
+  <div style="margin-top: 10px"
+       v-loading.fullscreen="loading"
+       element-loading-text="正在加载"
+       element-loading-spinner="el-icon-loading"
+       element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <div v-if="coursePointTable.length===0">
       <el-button @click="downloadCourse" style="margin-right: 10px">下载单科成绩模板</el-button>
       <el-upload
@@ -59,6 +64,11 @@
           >
       </el-table-column>
       <el-table-column
+          prop="credits"
+          label="课程学分"
+      >
+      </el-table-column>
+      <el-table-column
           prop="final_Information_character"
           label="修读性质"
           >
@@ -95,6 +105,7 @@ export default {
       Fapi:'',
       grandPointUrl:'',
       coursePointTable:[],
+      loading:false
     }
   },
   created() {
@@ -110,7 +121,6 @@ export default {
     uploadCoursePoint(param){
       const formData=new FormData()
       formData.append('file', param.file)
-
       request.post('/issubmitingforEx').then(res=>{
         console.log("状态")
         console.log(res.data)
@@ -118,12 +128,17 @@ export default {
           this.$message.warning('服务器正忙，请稍等')
           return
         }
+        this.loading=true
         request.post('/uploadExcelforGradePoint', formData).then(res=>{
           let read={path:res.data}
           request.post('/readExcelforExamination',read).then(res=>{
             console.log(res.data)
-            this.$notify.success("操作成功，请在确认信息无误后点击确认上传，此操作请在五分钟内完成，之后将自动取消")
+            this.loading=false
+            this.$message.success("操作成功，请在确认信息无误后点击确认上传，此操作请在五分钟内完成，之后将自动取消")
             this.coursePointTable=res.data
+          }).catch(err=>{
+            this.loading=false
+            this.$message.error("上传失败")
           })
         })
       })
@@ -134,9 +149,14 @@ export default {
       })
     },
     comfirmUploadCoursePoint(){
+      this.loading=true
       request.post('/submitExamination').then(res=>{
+        this.loading=false
         this.$message.success("上传成功")
         this.coursePointTable=[]
+      }).catch(err=>{
+        this.loading=false
+        this.$message.error("上传失败")
       })
     },
   },

@@ -5,13 +5,13 @@
           <el-tooltip
               class="box-item"
               effect="dark"
-              content="点击返回主页"
+              :content="contentText"
               placement="bottom-start"
           >
         <el-image
             style="width: 50px; height: 50px; border-radius: 50%;"
             :src="require('../assets/logo-xiaohui.png')"
-            :fit="fill"
+            fit="fill"
         ></el-image>
       </el-tooltip>
           <span style="position: absolute; top:15px;margin-left: 20px; font-weight: bold; cursor: default">
@@ -43,9 +43,9 @@
                   :on-success="headUpdate"
                   :show-file-list=false
               >
-                <el-dropdown-item>更改头像</el-dropdown-item>
+                <el-dropdown-item :disabled="userFamily.type==='fam'">更改头像</el-dropdown-item>
               </el-upload>
-              <el-dropdown-item @click="changePassword">更改密码</el-dropdown-item>
+              <el-dropdown-item @click="changePassword" :disabled="userFamily.type==='fam'">更改密码</el-dropdown-item>
               <el-dropdown-item @click="loginOut">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -105,16 +105,23 @@ export default {
     return{
       Avatar,
       Lock,
+      contentText:null,
       form:{},
       user:{},
+      userFamily:{},
       dialogVisible:false,
       headUrl:'',
     }
   },
   created() {
     this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.userFamily=JSON.parse(sessionStorage.getItem('family'))
+    if(this.userFamily.type==="stu"){
+      this.contentText="点击返回主页"
+    } else {
+      this.contentText="点击退出登录"
+    }
     this.updateUrl()
-    console.log(this.user)
   },
   methods: {
     reflesh(){
@@ -154,10 +161,15 @@ export default {
     },
     loginOut(){
       sessionStorage.removeItem("user")
+      sessionStorage.removeItem("family")
       this.$router.push("/Login")
     },
     backHome(){
-      this.$router.push("/stuHome")
+      if(this.userFamily.type==='stu'){
+        this.$router.push("/stuHome")
+      }else{
+        this.loginOut()
+      }
     },
     headUpdate(res){
       this.user.stu_url=res.stu_url;

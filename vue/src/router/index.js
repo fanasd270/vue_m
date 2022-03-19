@@ -23,6 +23,12 @@ const routes = [
     name: 'Login',
     component: ()=>import("@/views/Login")
   },
+    //家长路由
+  {
+    path: '/familyHome',
+    name: 'familyHome',
+    component: ()=>import("@/views/familyHome")
+  },
     //学生路由
   {
     path:'/stuLayout',
