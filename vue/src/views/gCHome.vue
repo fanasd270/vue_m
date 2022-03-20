@@ -55,7 +55,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToSign">
               <div class="ecard">
                 <el-icon :size="30"><promotion /></el-icon>
-                <span style="position: absolute; top: 35%">网上报名</span>
+                <span style="position: absolute; top: 35%">下载中心</span>
               </div>
             </el-card>
           </el-col>

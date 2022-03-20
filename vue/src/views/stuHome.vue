@@ -46,8 +46,8 @@
             <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
               <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuAM">
                 <div class="ecard">
-                  <el-icon :size="30"><bell /></el-icon>
-                  <span style="position: absolute; top: 35%">查看公告</span>
+                  <el-icon :size="30"><promotion /></el-icon>
+                  <span style="position: absolute; top: 35%">下载中心</span>
                 </div>
               </el-card>
             </el-col>
@@ -93,6 +93,7 @@ import bell from "@element-plus/icons/lib/Bell";
 import school from "@element-plus/icons/lib/School";
 import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
 import bicycle from "@element-plus/icons/lib/Bicycle";
+import promotion from "@element-plus/icons/lib/Promotion";
 
 export default {
   name: "stuHome",
@@ -108,6 +109,7 @@ export default {
     school,
     chatDotRound,
     bicycle,
+    promotion,
   },
   data(){
     return{

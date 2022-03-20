@@ -1,12 +1,12 @@
 <template>
-<div>
-  网上报名
-</div>
+<download-center/>
 </template>
 
 <script>
+import DownloadCenter from "@/components/downloadCenter";
 export default {
-  name: "gCSign"
+  name: "gCSign",
+  components: {DownloadCenter}
 }
 </script>
 
