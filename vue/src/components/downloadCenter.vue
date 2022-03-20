@@ -90,6 +90,7 @@ import fileApi from "@/components/Store";
 import request from "@/utils/request";
 export default {
   name: "downloadCenter",
+  inject:['reload'],
   data(){
     return{
       user:{},
@@ -127,10 +128,14 @@ export default {
     this.getData()
   },
   methods:{
+    reflesh(){
+      this.reload()
+    },
 
     deleteMine(item){
       request.post('/Tea/deleFileDB',item).then(res=>{
         this.$message.success("删除成功")
+        this.reflesh()
       }).catch(err=>{
         this.$message.error("删除失败")
       })
@@ -181,6 +186,7 @@ export default {
           request.post("/Tea/uploadFileDB",this.upForm).then(res=>{
             that.$message.success(res.msg)
             this.dialogVisible=false
+            this.reflesh()
           }).catch(err=>{
             that.$message.error("请求错误")
           })
@@ -191,6 +197,7 @@ export default {
           request.post("/Stu/uploadFileDB",this.upForm).then(res=>{
             that.$message.success(res.msg)
             this.dialogVisible=false
+            this.reflesh()
           }).catch(err=>{
             that.$message.error("请求错误")
           })
