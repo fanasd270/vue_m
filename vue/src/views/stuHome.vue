@@ -134,7 +134,7 @@ export default {
       this.$router.push("/stuLayout/stuGrowthProfile")//跳转至成长档案页面
     },
     jumpToStuAM(){
-      this.$router.push("/stuLayout/stuAM")//跳转至公告页面
+      this.$router.push("/stuLayout/stuDownloadCenter")//跳转至下载页面
     },
     jumpToStuSchedule(){
       this.$router.push("/stuLayout/stuSchedule")//跳转至课程表页面

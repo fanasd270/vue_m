@@ -72,9 +72,9 @@ const routes = [
         component: ()=>import("@/views/stuTask"),
       },
       {
-        path: 'stuAM',
-        name: 'stuAM',
-        component: ()=>import("@/views/stuAM"),
+        path: 'stuDownloadCenter',
+        name: 'stuDownloadCenter',
+        component: ()=>import("@/views/stuDownloadCenter"),
       },
       {
         path: 'stuSchedule',
@@ -126,9 +126,9 @@ const routes = [
         component: ()=>import("@/views/gCStuScore"),
       },
       {
-        path: 'gCSign',
-        name: 'gCSign',
-        component: ()=>import("@/views/gCSign"),
+        path: 'gCDownloadCenter',
+        name: 'gCDownloadCenter',
+        component: ()=>import("@/views/gCDownloadCenter"),
       },
       {
         path: 'gCAudit',
@@ -136,9 +136,9 @@ const routes = [
         component: ()=>import("@/views/gCAudit"),
       },
       {
-        path: 'gCLib',
-        name: 'gCLib',
-        component: ()=>import("@/views/gCLib"),
+        path: 'gCDorm',
+        name: 'gCDorm',
+        component: ()=>import("@/views/gCDorm"),
       },
       {
         path: 'gCChat',

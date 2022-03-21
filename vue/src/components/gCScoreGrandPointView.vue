@@ -1,79 +1,92 @@
 <template>
-  <el-select v-model="choosedTerm" placeholder="请选择" @change="changeTerms">
-    <el-option
-        v-for="(item,key,index) in otherTermsPoint"
-        :key="key"
-        :label="key"
-        :value="key">
-    </el-option>
-  </el-select>
+  <div v-loading="loading">
+    <el-select v-model="choosedTerm" placeholder="请选择" @change="changeTerms">
+      <el-option
+          v-for="(item,key,index) in otherTermsPoint"
+          :key="key"
+          :label="key"
+          :value="key">
+      </el-option>
+    </el-select>
 
-  <el-table
-      :data="showPoints"
-      stripe
-      style="width: 100%">
-    <el-table-column
-        prop="grade_point_stu_no"
-        label="学号">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_stu_name"
-        label="姓名">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_stu_class"
-        label="班级">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_mrjorpercentage"
-        label="专业百分比"
-        sortable>
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_national_english"
-        label="国家英语">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_gpa"
-        label="学生课程平均绩点"
-        sortable>
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_rankforclass"
-        label="年级排名"
-        sortable>
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_rankformajor"
-        label="专业排名"
-        sortable>
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_major_num"
-        label="专业人数">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_english_score"
-        label="英语学分">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_sportsscore"
-        label="体育总学分">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_healthknowledge"
-        label="健康知识">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_long_distance_run"
-        label="长跑">
-    </el-table-column>
-    <el-table-column
-        prop="grade_point_general_knowledge"
-        label="全校通识">
-    </el-table-column>
+    <el-table
+        @sort-change="sortChange"
+        :data="showPoints"
+        stripe
+        style="width: 100%">
+      <el-table-column
+          prop="grade_point_stu_no"
+          label="学号">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_stu_name"
+          label="姓名">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_stu_class"
+          label="班级">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_mrjorpercentage"
+          label="专业百分比"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_national_english"
+          label="国家英语">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_gpa"
+          label="学生课程平均绩点"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_rankforclass"
+          label="年级排名"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_rankformajor"
+          label="专业排名"
+          sortable>
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_major_num"
+          label="专业人数">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_english_score"
+          label="英语学分">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_sportsscore"
+          label="体育总学分">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_healthknowledge"
+          label="健康知识">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_long_distance_run"
+          label="长跑">
+      </el-table-column>
+      <el-table-column
+          prop="grade_point_general_knowledge"
+          label="全校通识">
+      </el-table-column>
 
-  </el-table>
+    </el-table>
+    <el-pagination
+        v-model:currentPage="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+    >
+    </el-pagination>
+  </div>
 </template>
 
 <script>
@@ -83,10 +96,16 @@ export default {
   name: "gCScoreGrandPointView",
   data(){
     return{
+      loading:false,
       user:{},
       otherTermsPoint:{},
       showPoints:[],
+      showPointsCopy:[],
       choosedTerm:'',
+
+      currentPage: 1,
+      pageSize:10,
+      total:0,
     }
   },
 
@@ -95,18 +114,60 @@ export default {
     this.getData()
   },
   methods:{
+    sortChange(val){
+      console.log(val)
+      if(val.order==='descending'){
+        this.showPointsCopy.sort(function (a,b){
+          let x=a[val.prop]
+          let y=b[val.prop]
+          return((x>=y)?-1:((x<y)?1:0))
+        })
+      }else{
+        this.showPointsCopy.sort(function (a,b){
+          let x=a[val.prop]
+          let y=b[val.prop]
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+
+      console.log(this.showPointsCopy)
+      this.showDataChange()
+    },
+
+    handleSizeChange(pageSize){//改变每页数量触发
+      this.searchInfo=null
+      this.pageSize=pageSize
+      this.showDataChange()
+    },
+    handleCurrentChange(currentPage){//改变页码触发
+      this.searchInfo=null
+      this.currentPage=currentPage
+      this.showDataChange()
+    },
+    showDataChange(){
+      this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
+    },
+
     changeTerms(val){
-      this.showPoints=this.otherTermsPoint[val]
+      this.showPoints=JSON.parse(JSON.stringify(this.otherTermsPoint[val]))
+      this.total=this.showPoints.length
+      this.showPointsCopy=this.otherTermsPoint[val]
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
     getData(){
+      this.loading=true
       request.post('/findAllGradePiontTatol',this.user).then(res=>{
         request.post('/findallGradePointByyear',this.user).then(res=>{
           console.log(res)
           this.otherTermsPoint=res.data
-          if(this.otherTermsPoint["总绩点"]){
-            this.choosedTerm="总绩点"
-            this.showPoints=this.otherTermsPoint[this.choosedTerm]
-          }
+          this.loading=false
+          // if(this.otherTermsPoint["总绩点"]){
+          //   this.choosedTerm="总绩点"
+          //   this.choosedTerm(this.choosedTerm)
+          // }
+        }).catch(err=>{
+          this.loading=false
         })
       })
     },

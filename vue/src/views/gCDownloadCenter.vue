@@ -1,13 +1,12 @@
 <template>
-  <download-center/>
+<download-center/>
 </template>
 
 <script>
 import DownloadCenter from "@/components/downloadCenter";
-
 export default {
-  name: "stuAM",
-  components: {DownloadCenter},
+  name: "gCDownloadCenter",
+  components: {DownloadCenter}
 }
 </script>
 

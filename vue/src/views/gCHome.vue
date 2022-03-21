@@ -68,10 +68,10 @@
             </el-card>
           </el-col>
           <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToLib">
+            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToDorm">
               <div class="ecard">
                 <el-icon :size="30"><school /></el-icon>
-                <span style="position: absolute; top: 35%">图书管理</span>
+                <span style="position: absolute; top: 35%">宿舍管理</span>
               </div>
             </el-card>
           </el-col>
@@ -163,13 +163,13 @@ export default {
       this.$router.push("/teaLayout/gCStuScore")//跳转至学生成绩页面
     },
     jumpToSign(){
-      this.$router.push("/teaLayout/gCSign")//跳转至网上报名页面
+      this.$router.push("/teaLayout/gCDownloadCenter")//跳转至网上报名页面
     },
     jumpToAudit(){
       this.$router.push("/teaLayout/gCAudit")//跳转至审核页面
     },
-    jumpToLib(){
-      this.$router.push("/teaLayout/gCLib")//跳转至图书管理页面
+    jumpToDorm(){
+      this.$router.push("/teaLayout/gCDorm")//跳转至宿舍管理页面
     },
     jumpToChat(){
       this.$router.push("/teaLayout/gCChat")//跳转至师生交流页面
