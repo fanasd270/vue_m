@@ -6,54 +6,278 @@
     <p style="font-weight: bolder; font-size: large ;display: inline;margin-bottom: 10px; cursor: default">
       报表
     </p>
+    <br>
 
-    <div>
-<!--      <span style="position: absolute; top: 20px">党团统计</span>-->
-      <el-dropdown split-button type="primary" style="margin-bottom: 20px;">
-        选择班级
-        <template #dropdown>
-          <el-dropdown-menu style="margin: 0 3px 0 3px">
-            <el-checkbox v-model="checkAll" @change="CheckAllChange">全选</el-checkbox>
-            <el-checkbox-group v-model="checkedClassList" @change="changeOption">
-              <div v-for="(m,i) in DTClassList">
-                <el-checkbox :label="m" size="large"></el-checkbox>
-              </div>
-            </el-checkbox-group>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+    <div style="width: 40%; height: 400px;border-radius: 2px;border: solid #9AFF9A; margin-bottom: 5px; display: inline-block;
+    vertical-align: top">
+
+    </div>
+    <div style="display: inline-block; width: 40%; height: 400px; margin-left: 20%;border-radius: 2px;border: solid #9AFF9A;
+    margin-bottom: 5px;
+    vertical-align: top">
+      <div style="display: inline-block; margin-left: 40%">志愿时长</div>
+      <el-input style="width: 25%; margin-left: 10px" v-model="timeLimit" placeholder="输入最低时长" @input="timeChange"/>
+      <el-divider></el-divider>
+      <el-scrollbar height="310px">
+        <el-table
+            :data="volunteerData"
+            style="width: 100%">
+          <el-table-column
+              type="index"
+              width="50">
+          </el-table-column>
+          <el-table-column
+              prop="stu_name"
+              label="姓名"
+              width="100">
+          </el-table-column>
+          <el-table-column
+              prop="stu_no"
+              label="学号">
+          </el-table-column>
+          <el-table-column
+              prop="stu_class"
+              label="班级"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="time"
+              label="时长"
+              sortable>
+          </el-table-column>
+        </el-table>
+      </el-scrollbar>
     </div>
 
+    <div style="border-radius: 2px;border: solid #9AFF9A">
+      <div>
+        <!--      <span style="position: absolute; top: 20px">党团统计</span>-->
+        <el-dropdown split-button type="primary" style="margin-bottom: 20px;">
+          选择班级
+          <template #dropdown>
+            <el-dropdown-menu style="margin: 0 3px 0 3px">
+              <el-checkbox v-model="checkAll" @change="CheckAllChange">全选</el-checkbox>
+              <el-checkbox-group v-model="checkedClassList" @change="changeOption">
+                <div v-for="(m,i) in DTClassList">
+                  <el-checkbox :label="m" size="large"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
 
-    <div class="echarts" style="display: inline-block">
-      <div>党团统计</div>
-      <div id="chartDT" :style="{ width: '380px', height: '300px' }"></div>
+
+      <div class="echarts" style="display: inline-block">
+        <div>党团统计</div>
+        <div id="chartDT" :style="{ width: '380px', height: '300px' }"></div>
+      </div>
+
+
+      <div class="echarts" style="display: inline-block">
+        <div>民族统计</div>
+        <div id="chartEthnic" :style="{ width: '380px', height: '300px' }"></div>
+      </div>
+
+      <div class="echarts" style="display: inline-block">
+        <div>降级生统计</div>
+        <div id="chartDemoted" :style="{ width: '380px', height: '300px' }"></div>
+      </div>
     </div>
 
+    <div style="border-radius: 2px;border: solid #9AFF9A; margin-top: 10px">
 
-    <div class="echarts" style="display: inline-block">
-      <div>民族统计</div>
-      <div id="chartEthnic" :style="{ width: '380px', height: '300px' }"></div>
+      <div style="margin-top: 5px">
+        <el-select v-model="choosedClass" placeholder="请选择" @change="changeClass" style="margin-right: 10px">
+          <el-option
+              v-for="(item,key,index) in otherClassPoint"
+              :key="key"
+              :label="key"
+              :value="key">
+          </el-option>
+        </el-select>
+
+        <el-input
+            v-model="searchInfo"
+            placeholder="搜索学生或课程"
+            :prefix-icon="Search"
+            style="width: 20%; margin-bottom: 5px"
+            @keyup.enter="searchFun"
+            clearable
+            @clear="clearSearch"
+        />
+        <el-button :icon="Search" circle size="small" @click="searchFun" style="margin-left: 5px"></el-button>
+      </div>
+
+      <el-table
+          :data="showPoints"
+          stripe
+          style="width: 100%">
+        <el-table-column
+            prop="final_Information_no_stu_no"
+            label="学号"
+            width="120">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_stu_name"
+            label="姓名">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_year"
+            label="学年学期"
+            :filters="this.filterTerms"
+            :filter-method="filterTermsHandler">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_dept"
+            label="学院"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_no"
+            label="班级"
+            width="120">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_no_coursename"
+            label="课程名称"
+            width="150">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_coursecode"
+            label="课程代码"
+            width="120"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="credits"
+            label="课程学分"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_character"
+            label="修读性质"
+        >
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_comprehensive_achievements"
+            label="综合成绩"
+            sortable>
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_effective_achievement"
+            label="有效成绩"
+            sortable>
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_examination_situation"
+            label="考试情况">
+        </el-table-column>
+        <el-table-column
+            prop="final_Information_examination_type"
+            label="考试类型">
+        </el-table-column>
+      </el-table>
+      <el-pagination
+          v-model:currentPage="currentPage"
+          :page-sizes="[5, 10, 20, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      >
+      </el-pagination>
     </div>
 
-    <div class="echarts" style="display: inline-block">
-      <div>降级生统计</div>
-      <div id="chartDemoted" :style="{ width: '380px', height: '300px' }"></div>
-    </div>
   </div>
+
+<!--  图表学生详细信息-->
+  <el-dialog
+      v-model="InfoListShow"
+      :title="InfoName"
+      width="60%"
+  >
+    <el-table :data="showChartInfoList">
+      <el-table-column prop="stu_name" label="姓名" width="100" fixed/>
+      <el-table-column
+          prop="stu_no"
+          label="学号"
+          width="130"
+      />
+      <el-table-column
+          prop="stu_class"
+          label="班级"
+          width="130"
+      />
+      <el-table-column
+          prop="stu_gender"
+          label="性别"
+          :formatter="genderFormatter"
+      />
+      <el-table-column
+          prop="stu_politicalface"
+          label="政治面貌"
+          width="100"
+      />
+      <el-table-column prop="stu_caucus_time" label="入党/团时间" width="120"/>
+      <el-table-column
+          prop="stu_ethnic"
+          label="民族"
+          width="100"
+      />
+      <el-table-column
+          prop="stu_ismacau"
+          label="是否港澳"
+          width="100"
+          :formatter="macauFormatter"
+      />
+      <el-table-column prop="stu_origin" label="籍贯"  width="180"/>
+      <el-table-column prop="stu_id" label="身份证号" width="180"/>
+      <el-table-column prop="stu_birthday" label="出生年月" width="120"/>
+      <el-table-column prop="stu_address" label="常驻地址"  width="180"/>
+      <el-table-column prop="stu_telephone" label="电话"  width="120"/>
+      <el-table-column prop="stu_qq" label="QQ" width="120"/>
+      <el-table-column prop="stu_email" label="邮箱"  width="220"/>
+    </el-table>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="InfoListShow = false">关闭</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import * as echarts from "echarts";
 import request from "@/utils/request";
+import {Search} from "@element-plus/icons";
 
 export default {
   name: "gCTable",
+
+  setup(){
+    return{
+      Search,
+    }
+  },
 
   data() {
     return {
       user:{},
       checkAll:true,
+
+      showPoints:[],
+      showPointsCopy:[],
+      otherClassPoint:{},
+      searchInfo:'',
+      choosedClass:'',
+      //分页数据
+      currentPage: 1,
+      pageSize:20,
+      total:0,
+
+      filterTerms:[],
 
       DTClassList:[],
       EthnicClassList:[],
@@ -63,6 +287,9 @@ export default {
       EthnicMsg:[],
       DemotedMsg:[],
 
+      DTChart:null,
+      EthnicChart:null,
+      DemotedChart:null,
       option : {
         series: [
           {
@@ -142,7 +369,13 @@ export default {
         },
       },
 
+      volunteerData:[],
+      volunteerDataCopy:[],
+      timeLimit:null,
 
+      showChartInfoList:[],
+      InfoListShow:false,
+      InfoName:'',
     };
   },
 
@@ -159,6 +392,76 @@ export default {
 
 
   methods: {
+    genderFormatter(row, column){
+      if(row.stu_gender=== 0){
+        return '女'
+      } else{
+        return '男'
+      }
+    },
+    macauFormatter(row, column){
+      if(row.stu_ismacau=== 0){
+        return '否'
+      } else{
+        return '是'
+      }
+    },
+
+    //学期筛选
+    filterTermsHandler(value, row, column){
+      const property = column['property']
+      return row[property] === value
+    },
+
+    //班级选择
+    changeClass(val){
+      this.showPoints=JSON.parse(JSON.stringify(this.otherClassPoint[val]))
+      this.total=this.showPoints.length
+      this.showPointsCopy=this.otherClassPoint[val]
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
+    },
+
+    //搜索
+    searchFun(){
+      let fuzzy=this.searchInfo
+      if(fuzzy){
+        this.showPoints=this.showPointsCopy.filter((value)=>{
+          return value.final_Information_stu_name.includes(fuzzy)||value.final_Information_no_coursename.includes(fuzzy)
+        })
+      }else{
+        this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
+      }
+    },
+    //清空搜索
+    clearSearch(){
+      this.showDataChange()
+    },
+    handleSizeChange(pageSize){//改变每页数量触发
+      this.searchInfo=null
+      this.pageSize=pageSize
+      this.showDataChange()
+    },
+    handleCurrentChange(currentPage){//改变页码触发
+      this.searchInfo=null
+      this.currentPage=currentPage
+      this.showDataChange()
+    },
+    showDataChange(){
+      this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
+      this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
+    },
+
+    //志愿时长筛选
+    timeChange(){
+      let fuzzy=this.timeLimit
+      if(fuzzy){
+        this.volunteerData=this.volunteerDataCopy.filter((value)=>{
+          return value.time>=fuzzy
+        })
+      }else{
+        this.volunteerData=JSON.parse(JSON.stringify(this.volunteerDataCopy))
+      }
+    },
     //党团班级全选按钮
     CheckAllChange(){
       if(this.checkAll===true){
@@ -216,18 +519,81 @@ export default {
     },
     //重新画党团图
     init(){
-      var myChart = echarts.init(document.getElementById("chartDT"));
-      myChart.setOption(this.option);
+      this.DTChart = echarts.init(document.getElementById("chartDT"));
+      this.DTChart.setOption(this.option);
+      this.DTChart.off('click')
+      let that=this
+      this.DTChart.on('click',function (param){
+        if(param.name==='党员'){
+          request.post('/findDangYuan',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }else if(param.name==='团员'){
+          request.post('/findTuanYuan',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }else if(param.name==='群众'){
+          request.post('/findQunzhong',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }
+      })
     },
 
     initEthnic(){
-      var myChart = echarts.init(document.getElementById("chartEthnic"));
-      myChart.setOption(this.optionEthnic);
+      this.EthnicChart = echarts.init(document.getElementById("chartEthnic"));
+      this.EthnicChart.setOption(this.optionEthnic);
+      this.EthnicChart.off('click')
+      let that=this
+      this.EthnicChart.on('click',function (param){
+        if(param.name==='汉族'){
+          request.post('/findbigethnic',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }else if(param.name==='少数民族'){
+          request.post('/findsmallethnic',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }
+      })
     },
 
     initDemoted(){
-      var myChart = echarts.init(document.getElementById("chartDemoted"));
-      myChart.setOption(this.optionDemoted);
+      this.DemotedChart = echarts.init(document.getElementById("chartDemoted"));
+      this.DemotedChart.setOption(this.optionDemoted);
+      this.DemotedChart.off('click')
+      let that=this
+      this.DemotedChart.on('click',function (param){
+        if(param.name==='降级生'){
+          request.post('/findJiangji',that.user).then(res=>{
+            that.InfoListShow=true
+            that.InfoName=param.name
+            that.showChartInfoList=res.data
+          }).catch(err=>{
+            that.$message.error("访问失败")
+          })
+        }
+      })
     },
 
 
@@ -261,7 +627,28 @@ export default {
       }).catch(err=>{
         this.$message.error("获取信息失败")
       })
+
+      request.post('/findVolunteer_Hours',this.user).then(res=>{
+        this.volunteerData=res.data
+        this.volunteerDataCopy=JSON.parse(JSON.stringify(this.volunteerData))
+      }).catch(err=>{
+        this.$message.error("获取信息失败")
+      })
+
+      request.post('/findFailedstudent',this.user).then(res=>{
+        this.otherClassPoint=res.data
+        for(let item in this.otherClassPoint){
+          for(let m in this.otherClassPoint[item]){
+            if(this.filterTerms.findIndex(t=>t.value===this.otherClassPoint[item][m].final_Information_year)===-1){
+              this.filterTerms.push({text:this.otherClassPoint[item][m].final_Information_year,value:this.otherClassPoint[item][m].final_Information_year})
+            }
+          }
+        }
+        console.log("terms")
+        console.log(this.filterTerms)
+      })
     },
+
 
   },
 }

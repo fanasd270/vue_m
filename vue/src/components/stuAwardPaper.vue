@@ -148,6 +148,7 @@ export default {
       this.submitUpload()
     },
     //刷新组件
+
     refreshComponent(){
       this.fresh=false
       this.getData()

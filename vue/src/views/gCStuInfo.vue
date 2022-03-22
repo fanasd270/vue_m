@@ -42,14 +42,14 @@
         <el-table-column
             prop="stu_no"
             label="学号"
-            width="100"
+            width="130"
             sortable
         />
         <el-table-column
             prop="stu_class"
             label="班级"
             v-if="isShow[0]"
-            width="100"
+            width="130"
             :filters="this.filterClass"
             :filter-method="filterClassHandler"
         />
@@ -57,7 +57,6 @@
             prop="stu_gender"
             label="性别"
             v-if="isShow[1]"
-            width="100"
             :filters="this.filterGender"
             :filter-method="filterGenderHandler"
             :formatter="genderFormatter"
@@ -94,7 +93,7 @@
         <el-table-column prop="stu_address" label="常驻地址" v-if="isShow[9]" width="180"/>
         <el-table-column prop="stu_telephone" label="电话" v-if="isShow[10]" width="120"/>
         <el-table-column prop="stu_qq" label="QQ" v-if="isShow[11]" width="120"/>
-        <el-table-column prop="stu_email" label="邮箱" v-if="isShow[12]" width="120"/>
+        <el-table-column prop="stu_email" label="邮箱" v-if="isShow[12]" width="220"/>
       </el-table>
     </div>
 

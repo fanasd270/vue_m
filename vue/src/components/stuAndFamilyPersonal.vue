@@ -88,13 +88,13 @@
                   <el-option label="中共党员" value="中共党员"></el-option>
                 </el-select>
               </el-form-item>
-
               <el-form-item label="党团时间" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
                 <el-col :span="11">
                   <el-date-picker
                       v-model="form.stu_caucus_time"
                       :disabled="Edit[0]"
                       type="date"
+                      value-format="YYYY-MM-DD"
                       style="width: 220%"
                   ></el-date-picker>
                 </el-col>
