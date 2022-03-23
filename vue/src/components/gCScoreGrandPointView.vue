@@ -9,6 +9,15 @@
       </el-option>
     </el-select>
 
+    <el-select v-model="choosedClassList" placeholder="请选择" @change="changeClassList" multiple collapse-tags clearable>
+      <el-option
+          v-for="(item,key,index) in filterClass"
+          :key="item.value"
+          :label="item.value"
+          :value="item.value">
+      </el-option>
+    </el-select>
+
     <el-table
         @sort-change="sortChange"
         :data="showPoints"
@@ -102,6 +111,8 @@ export default {
       showPoints:[],
       showPointsCopy:[],
       choosedTerm:'',
+      choosedClassList:[],
+      filterClass:[],
 
       currentPage: 1,
       pageSize:10,
@@ -114,6 +125,19 @@ export default {
     this.getData()
   },
   methods:{
+    changeClassList(){
+      this.showPoints=[]
+      let tempList=[]
+      console.log(this.showPointsCopy)
+      console.log(this.choosedClassList)
+      for(let index in this.choosedClassList){
+        tempList=this.showPointsCopy.filter((value)=>{
+          return value.grade_point_stu_class===this.choosedClassList[index]
+        })
+        console.log(tempList)
+        this.showPoints=this.showPoints.concat(tempList)
+      }
+    },
     sortChange(val){
       console.log(val)
       if(val.order==='descending'){
@@ -145,6 +169,7 @@ export default {
       this.showDataChange()
     },
     showDataChange(){
+      this.choosedClassList=[]
       this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
       this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
@@ -161,7 +186,15 @@ export default {
         request.post('/findallGradePointByyear',this.user).then(res=>{
           console.log(res)
           this.otherTermsPoint=res.data
+          for(let item in this.otherTermsPoint){
+            for(let m in this.otherTermsPoint[item]){
+              if(this.filterClass.findIndex(t=>t.value===this.otherTermsPoint[item][m].grade_point_stu_class)===-1){
+                this.filterClass.push({text:this.otherTermsPoint[item][m].grade_point_stu_class,value:this.otherTermsPoint[item][m].grade_point_stu_class})
+              }
+            }
+          }
           this.loading=false
+
           // if(this.otherTermsPoint["总绩点"]){
           //   this.choosedTerm="总绩点"
           //   this.choosedTerm(this.choosedTerm)

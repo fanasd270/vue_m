@@ -97,6 +97,15 @@
           </el-option>
         </el-select>
 
+        <el-select v-model="choosedFilterTerms" placeholder="请选择学期" @change="changeTerms" style="margin-right: 10px" multiple collapse-tags clearable>
+          <el-option
+              v-for="(item,key,index) in filterTerms"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value">
+          </el-option>
+        </el-select>
+
         <el-input
             v-model="searchInfo"
             placeholder="搜索学生或课程"
@@ -198,7 +207,7 @@
       :title="InfoName"
       width="60%"
   >
-    <el-table :data="showChartInfoList">
+    <el-table :data="showChartInfoList" class="detailChartInfo">
       <el-table-column prop="stu_name" label="姓名" width="100" fixed/>
       <el-table-column
           prop="stu_no"
@@ -243,6 +252,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="InfoListShow = false">关闭</el-button>
+        <el-button @click="exportExcel">导出</el-button>
       </span>
     </template>
   </el-dialog>
@@ -252,7 +262,8 @@
 import * as echarts from "echarts";
 import request from "@/utils/request";
 import {Search} from "@element-plus/icons";
-
+import FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 export default {
   name: "gCTable",
 
@@ -278,6 +289,7 @@ export default {
       total:0,
 
       filterTerms:[],
+      choosedFilterTerms:[],
 
       DTClassList:[],
       EthnicClassList:[],
@@ -408,10 +420,18 @@ export default {
     },
 
     //学期筛选
-    filterTermsHandler(value, row, column){
-      const property = column['property']
-      return row[property] === value
+    changeTerms(){
+      this.showPoints=[]
+      let tempList=[]
+      for(let index in this.choosedFilterTerms){
+        tempList=this.showPointsCopy.filter((value)=>{
+          return value.final_Information_year===this.choosedFilterTerms[index]
+        })
+        console.log(tempList)
+        this.showPoints=this.showPoints.concat(tempList)
+      }
     },
+
 
     //班级选择
     changeClass(val){
@@ -447,6 +467,7 @@ export default {
       this.showDataChange()
     },
     showDataChange(){
+      this.choosedFilterTerms=[]
       this.showPoints=JSON.parse(JSON.stringify(this.showPointsCopy))
       this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
@@ -528,7 +549,14 @@ export default {
           request.post('/findDangYuan',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                return value.stu_class===that.checkedClassList[index]
+              })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -536,7 +564,14 @@ export default {
           request.post('/findTuanYuan',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                return value.stu_class===that.checkedClassList[index]
+              })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -544,7 +579,14 @@ export default {
           request.post('/findQunzhong',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                return value.stu_class===that.checkedClassList[index]
+              })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -562,7 +604,15 @@ export default {
           request.post('/findbigethnic',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                  return value.stu_class===that.checkedClassList[index]
+                })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -570,7 +620,15 @@ export default {
           request.post('/findsmallethnic',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                return value.stu_class===that.checkedClassList[index]
+              })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
+            console.log(res)
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -588,7 +646,14 @@ export default {
           request.post('/findJiangji',that.user).then(res=>{
             that.InfoListShow=true
             that.InfoName=param.name
-            that.showChartInfoList=res.data
+            that.showChartInfoList=[]
+            let tempList=[]
+            for(let index in that.checkedClassList){
+              tempList=res.data.filter((value)=>{
+                return value.stu_class===that.checkedClassList[index]
+              })
+              that.showChartInfoList=that.showChartInfoList.concat(tempList)
+            }
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -649,7 +714,34 @@ export default {
       })
     },
 
-
+    exportExcel() {
+      // 设置当前日期
+      let time = new Date();
+      let year = time.getFullYear();
+      let month = time.getMonth() + 1;
+      let day = time.getDate();
+      let name = year + "" + month + "" + day;
+      // console.log(name)
+      /* generate workbook object from table */
+      //  .table要导出的是哪一个表格
+      var wb = XLSX.utils.table_to_book(document.querySelector(".detailChartInfo"));
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        //  name+'.xlsx'表示导出的excel表格名字
+        FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            name + ".xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    },
   },
 }
 </script>
