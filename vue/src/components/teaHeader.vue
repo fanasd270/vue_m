@@ -29,7 +29,7 @@
         <el-image
             style="width: 50px; height: 50px; border-radius: 50%;"
             :src="require('../assets/logo-xiaohui.png')"
-            :fit="fill"
+            fit="fill"
         ></el-image>
       </span>
           <template #dropdown>
@@ -39,9 +39,9 @@
                   action="http://10.236.11.12:8080/Stu/upLoadPicture"
                   on-success="headUpdate"
               >
-                <el-dropdown-item>更改头像</el-dropdown-item>
+                <el-dropdown-item :disabled="power.type===1">更改头像</el-dropdown-item>
               </el-upload>
-              <el-dropdown-item @click="dialogVisible=true">更改密码</el-dropdown-item>
+              <el-dropdown-item @click="dialogShow" :disabled="power.type===1">更改密码</el-dropdown-item>
               <el-dropdown-item @click="loginOut">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -54,7 +54,7 @@
 
       <el-form :model="form" label-width="120px">
         <el-form-item label="账号">
-          <el-input v-model="form.no" :prefix-icon="Avatar"></el-input>
+          <el-input v-model="form.no" :prefix-icon="Avatar" disabled></el-input>
         </el-form-item>
         <el-form-item label="密码">
           <el-input v-model="form.old_password" show-password :prefix-icon="Lock"></el-input>
@@ -102,13 +102,22 @@ export default {
       form:{},
       user:{},
       dialogVisible:false,
-
+      power:{},
     }
   },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===2){
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }
   },
   methods: {
+    dialogShow(){
+      this.form.no=this.user.t_no
+      this.dialogVisible=true
+    },
     changeP(){
       if(this.form.new_password===this.form.stu_confirmNew)
       {

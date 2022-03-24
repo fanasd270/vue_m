@@ -94,6 +94,7 @@ export default {
   data(){
     return{
       user:{},
+      power:{},
       Fapi:'',
       dialogVisible:false,
       upForm:{
@@ -114,7 +115,12 @@ export default {
   },
   created() {
     this.Fapi=fileApi.fileApi;
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     if(this.user.t_no){
       this.upForm.download_user_type='t'
       this.upForm.download_center_user_name=this.user.t_name

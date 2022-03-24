@@ -103,6 +103,7 @@ export default {
   },
   data(){
     return{
+      power:{},
       user:{},
       otherTermsPoint:{},
       showPoints:[],
@@ -117,7 +118,12 @@ export default {
     }
   },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData()
   },
   methods:{

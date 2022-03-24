@@ -68,6 +68,8 @@ export default {
   props:["Data"],
   data(){
     return{
+      user:{},
+      power:{},
       numShow:false,//是否显示红点
       toDoNum:0,//红点数
       noInfo:false,
@@ -82,6 +84,12 @@ export default {
 
   created() {
     this.Fapi=fileApi.fileApi
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData();
   },
 
@@ -136,9 +144,7 @@ export default {
       this.$emit('paperKey',this.toDoNum,this.numShow)
     },
     getData(){
-      let user=JSON.parse(sessionStorage.getItem('user'))
-
-      request.post('/find_all_paper_info_new',user).then(res=>{
+      request.post('/find_all_paper_info_new',this.user).then(res=>{
         this.paperToDo=res
         for(let i=0;i<this.paperToDo.length;i++){
           this.toDoShow[i]=true
@@ -156,7 +162,7 @@ export default {
         this.$emit('paperKey',this.toDoNum,this.numShow)
       })
 
-      request.post('/find_all_paper_info_old',user).then(res=>{
+      request.post('/find_all_paper_info_old',this.user).then(res=>{
         this.paperDid=res
         for(let i=0;i<this.paperDid.length;i++){
           this.didShow[i]=true

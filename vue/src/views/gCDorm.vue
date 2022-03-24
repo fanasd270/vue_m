@@ -12,7 +12,7 @@
                 <span>{{key1}}</span>
               </div>
             </template>
-            <el-table :data="room" stripe style="width: 100%">
+            <el-table :data="room" stripe style="width: 100%" @row-click="stuInfoDetail">
               <el-table-column prop="accommodation_information_no" label="姓名" width="70"/>
               <el-table-column prop="accommodation_information_stu_no" label="学号" width="90" />
               <el-table-column prop="accommodation_information_bed" label="床号" width="55"/>
@@ -33,7 +33,7 @@
                 <span>{{key1}}</span>
               </div>
             </template>
-            <el-table :data="room" stripe style="width: 100%">
+            <el-table :data="room" stripe style="width: 100%" @row-click="stuInfoDetail">
               <el-table-column prop="accommodation_information_no" label="姓名" width="70"/>
               <el-table-column prop="accommodation_information_stu_no" label="学号" width="90" />
               <el-table-column prop="accommodation_information_bed" label="床号" width="55"/>
@@ -54,7 +54,7 @@
                 <span>{{key1}}</span>
               </div>
             </template>
-            <el-table :data="room" stripe style="width: 100%">
+            <el-table :data="room" stripe style="width: 100%" @row-click="stuInfoDetail">
               <el-table-column prop="accommodation_information_no" label="姓名" width="70"/>
               <el-table-column prop="accommodation_information_stu_no" label="学号" width="90" />
               <el-table-column prop="accommodation_information_bed" label="床号" width="55"/>
@@ -75,7 +75,7 @@
                 <span>{{key1}}</span>
               </div>
             </template>
-            <el-table :data="room" stripe style="width: 100%">
+            <el-table :data="room" stripe style="width: 100%" @row-click="stuInfoDetail">
               <el-table-column prop="accommodation_information_no" label="姓名" width="70"/>
               <el-table-column prop="accommodation_information_stu_no" label="学号" width="90" />
               <el-table-column prop="accommodation_information_bed" label="床号" width="55"/>
@@ -96,7 +96,7 @@
                 <span>{{key1}}</span>
               </div>
             </template>
-            <el-table :data="room" stripe style="width: 100%">
+            <el-table :data="room" stripe style="width: 100%" @row-click="stuInfoDetail">
               <el-table-column prop="accommodation_information_no" label="姓名" width="70"/>
               <el-table-column prop="accommodation_information_stu_no" label="学号" width="90" />
               <el-table-column prop="accommodation_information_bed" label="床号" width="55"/>
@@ -109,6 +109,7 @@
   </el-tabs>
 </div>
 
+
 </template>
 
 <script>
@@ -116,6 +117,7 @@
 
 
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 
 export default {
   name: "gCDorm",
@@ -131,6 +133,7 @@ export default {
       activeNameJ:'',
       countPlace:[0,0,0,0,0],
       user:{},
+      power:{},
       bedRoomList:{},
       buildingSong:[],
       buildingZhu:[],
@@ -140,10 +143,42 @@ export default {
     };
   },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData()
   },
   methods: {
+    // stuInfoDetail(row){
+    //   console.log(row)
+    //   request.post('/Stu/findallinfoforone',row).then(res=>{
+    //     console.log(res)
+    //     this.detailInfo=res.data
+    //     this.headUrl=fileApi.fileApi+'/Pictures/'+res.data.stu_photourl
+    //     this.infoDialog=true
+    //     this.activeName1='0'
+    //     this.activeName2='0'
+    //
+    //     let year
+    //     this.developmentPlanYears=[]
+    //     this.developmentPlan={}
+    //     for(let i=0;i<this.detailInfo.developmentPlannings.length;i++){
+    //       year=this.detailInfo.developmentPlannings[i].year+this.detailInfo.developmentPlannings[i].year2
+    //       this.developmentPlanYears.push(JSON.parse(JSON.stringify(year)))
+    //     }
+    //     if(this.developmentPlanYears.length!==0){
+    //       this.selectYear=this.developmentPlanYears[0]
+    //       this.developmentPlan=this.detailInfo.developmentPlannings[0]
+    //     }
+    //
+    //   }).catch(err=>{
+    //     this.$message.error("获取失败")
+    //   })
+    // },
+
     getData(){
       request.post("/bedRoomList",this.user).then(res=>{
         console.log(res.data)

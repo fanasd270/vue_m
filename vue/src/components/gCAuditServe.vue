@@ -61,6 +61,8 @@ export default {
   name: "gCAuditServe",
   data(){
     return{
+      user:{},
+      power:{},
       numShow:false,//是否显示红点
       toDoNum:0,//红点数
       noInfo:false,
@@ -127,9 +129,7 @@ export default {
     },
 
     getData() {
-      let user = JSON.parse(sessionStorage.getItem('user'))
-
-      request.post('/find_all_activity_new', user).then(res => {
+      request.post('/find_all_activity_new', this.user).then(res => {
         this.serveToDo = res
         for (let i = 0; i < this.serveToDo.length; i++) {
           this.serveToDoShow[i] = true
@@ -146,7 +146,7 @@ export default {
         this.$emit('serveKey', this.toDoNum, this.numShow)
       })
 
-      request.post('/find_all_activity_old', user).then(res => {
+      request.post('/find_all_activity_old', this.user).then(res => {
         console.log("serve记录:" + res)
         this.serveDid = res
         for (let i = 0; i < this.serveDid.length; i++) {

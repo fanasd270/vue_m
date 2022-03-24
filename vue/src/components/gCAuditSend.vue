@@ -87,6 +87,8 @@ export default {
   name: "gCAuditSend",
   data(){
     return{
+      user:{},
+      power:{},
       numShow:false,//是否显示红点
       toDoNum:0,//红点数
       noInfo:false,
@@ -150,6 +152,12 @@ export default {
   },
   created() {
     this.Fapi=fileApi.fileApi
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData();
   },
 
@@ -204,9 +212,7 @@ export default {
     },
 
     getData() {
-      let user = JSON.parse(sessionStorage.getItem('user'))
-
-      request.post('/find_all_dispatch_new', user).then(res => {
+      request.post('/find_all_dispatch_new', this.user).then(res => {
         this.sendToDo = res
         for (let i = 0; i < this.sendToDo.length; i++) {
           this.sendToDoShow[i] = true
@@ -223,7 +229,7 @@ export default {
         this.$emit('sendKey', this.toDoNum, this.numShow)
       })
 
-      request.post('/find_all_dispatch_old', user).then(res => {
+      request.post('/find_all_dispatch_old', this.user).then(res => {
         console.log("dispatch记录:" + res)
         this.sendDid = res
         for (let i = 0; i < this.sendDid.length; i++) {

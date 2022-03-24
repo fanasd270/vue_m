@@ -62,13 +62,13 @@
             <div style="clear: both"></div>
           </div>
 
-          <p style="font-weight: bold; margin:30px 0 20px 0; color: #cccccc; cursor: default">交流服务</p>
+<!--          <p style="font-weight: bold; margin:30px 0 20px 0; color: #cccccc; cursor: default">交流服务</p>-->
           <div style="font-weight: 550; opacity: 0.9">
-            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToStuChat">
+            <el-col v-if="power.type===1"  :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="changePage">
               <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">
                 <div class="ecard">
                   <el-icon :size="30"><chat-dot-round /></el-icon>
-                  <span style="position: absolute; top: 35%">师生交流</span>
+                  <span style="position: absolute; top: 35%">管理页面</span>
                 </div>
                 </el-card>
             </el-col>
@@ -94,6 +94,7 @@ import school from "@element-plus/icons/lib/School";
 import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
 import bicycle from "@element-plus/icons/lib/Bicycle";
 import promotion from "@element-plus/icons/lib/Promotion";
+import request from "@/utils/request";
 
 export default {
   name: "stuHome",
@@ -118,7 +119,11 @@ export default {
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
+      power:{},
     }
+  },
+  created() {
+    this.power=JSON.parse(sessionStorage.getItem('power'))
   },
   methods:{
     jumpToStuPersonal(){
@@ -141,6 +146,21 @@ export default {
     },
     jumpToStuChat(){
       this.$router.push("/stuLayout/stuChat")//跳转至交流页面
+    },
+    changePage(){
+      let data={student:{},teacher:{}}
+      data.teacher=JSON.parse(sessionStorage.getItem('user_t'))
+      data.student=JSON.parse(sessionStorage.getItem('user'))
+
+      request.post('/loginwithAuthorize',data).then(res=>{
+        if(res.code===1){
+          this.$router.push("/gCHome")
+        }else{
+          this.$message.error("非法访问！")
+        }
+      }).catch(err=>{
+        this.$message.error("连接错误")
+      })
     },
   },
 }

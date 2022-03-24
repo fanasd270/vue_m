@@ -72,6 +72,8 @@ export default {
 
   data(){
     return{
+      user:{},
+      power:{},
       numShow:false,//是否显示红点
       toDoNum:0,//红点数
       noInfo:false,
@@ -85,6 +87,12 @@ export default {
   },
   created() {
     this.Fapi=fileApi.fileApi
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData();
   },
 
@@ -138,9 +146,7 @@ export default {
     },
 
     getData(){
-      let user=JSON.parse(sessionStorage.getItem('user'))
-
-      request.post('/find_all_project_info_new',user).then(res=>{
+      request.post('/find_all_project_info_new',this.user).then(res=>{
         this.projectToDo=res
         for(let i=0;i<this.projectToDo.length;i++){
           this.projectToDoShow[i]=true
@@ -158,7 +164,7 @@ export default {
         this.$emit('projectKey',this.toDoNum,this.numShow)
       })
 
-      request.post('/find_all_project_info_old',user).then(res=>{
+      request.post('/find_all_project_info_old',this.user).then(res=>{
         console.log("project记录:"+res)
         this.projectDid=res
         for(let i=0;i<this.projectDid.length;i++){

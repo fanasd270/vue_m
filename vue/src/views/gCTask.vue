@@ -206,6 +206,7 @@ export default {
       drawer1: false,
       editCardShow: false,
       show: [],
+      power:{},
       user: {},
       tableData:[],
       filterClass:[],
@@ -261,7 +262,13 @@ export default {
   },
 
   created() {
+    this.power=JSON.parse(sessionStorage.getItem('power'))
     this.user=JSON.parse(sessionStorage.getItem('user'));
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     //this.readData()
     setInterval(() => {
       this.getResidueDate();

@@ -490,6 +490,10 @@ export default {
 
   data(){
     return{
+
+      user:{},
+      power:{},
+
       activeName1:'0',
       activeName2:'0',
       filterClass:[],
@@ -571,6 +575,12 @@ export default {
   },
   created() {
     this.Fapi=fileApi.fileApi
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData()
   },
 
@@ -695,14 +705,13 @@ export default {
 
 
     getData(){
-      let user=JSON.parse(sessionStorage.getItem('user'))
-      request.post('/Stu/stuList', user).then(res=>{
+      request.post('/Stu/stuList', this.user).then(res=>{
         this.tableData=res
       }).catch(err=>{
         this.$message.error("学生信息请求错误")
       })
 
-      request.post('/classList', user).then(res=>{
+      request.post('/classList', this.user).then(res=>{
         for(let i=0; i<res.length; i++){
           this.filterClass.push({text:res[i].class_name, value: res[i].class_name})
         }

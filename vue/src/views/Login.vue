@@ -264,15 +264,29 @@ export default {
               type:"success",
               message:"登录成功"
             })
-            sessionStorage.setItem("user",JSON.stringify(res.data))
-            console.log(res.data)
+
 
             if(this.form.user_type===1){
               let family={type:'stu'}
               sessionStorage.setItem("family",JSON.stringify(family))
+              if(res.code===3){
+                let temp={type:1}
+                sessionStorage.setItem('power',JSON.stringify(temp))
+                sessionStorage.setItem('user',JSON.stringify(res.data.student))
+                sessionStorage.setItem('user_t',JSON.stringify(res.data.teacher))
+                sessionStorage.setItem('authors',JSON.stringify(res.data.authors))
+              }else{
+                let temp={type:0}
+                sessionStorage.setItem('power',JSON.stringify(temp))
+                sessionStorage.setItem("user",JSON.stringify(res.data))
+              }
               this.$router.push("/stuHome")//跳转至主页
             }
             else if(this.form.user_type===0){
+              let temp={type:2}
+              sessionStorage.setItem('power',JSON.stringify(temp))
+              sessionStorage.setItem("user",JSON.stringify(res.data))
+              console.log(res.data)
               this.$router.push("/tealayout")//跳转至主页
             }
 

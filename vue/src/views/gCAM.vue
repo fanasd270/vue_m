@@ -91,6 +91,19 @@
       <div style="clear: both"></div>
     </div>
 
+    <div style="margin-top: 10px">
+      <span>已授权对象</span>
+      <div style="margin-top: 5px">
+        <el-tag type="success" size="large"
+                v-if="whoHasauthorize.length!==0"
+                v-for="(item) in whoHasauthorize"
+                style="margin-right: 5px;cursor: default"
+                @click="showPower(item)">
+          {{item.stu_name}}
+        </el-tag>
+      </div>
+    </div>
+
   <el-drawer
       title="学生列表"
       v-model="drawer"
@@ -124,6 +137,28 @@
     </el-table>
   </el-drawer>
 </div>
+
+  <el-dialog
+      v-model="showOnesAuthors"
+      title="详细权限"
+      width="30%"
+  >
+    <el-tag v-if="onesAuthors[0]" style="margin-right: 20px" size="large">信息管理</el-tag>
+    <el-tag v-if="onesAuthors[1]" style="margin-right: 20px" size="large">发布任务</el-tag>
+    <el-tag v-if="onesAuthors[2]" style="margin-right: 20px" size="large">报表查看</el-tag>
+    <el-tag v-if="onesAuthors[3]" style="margin-right: 20px" size="large">年鉴导出</el-tag>
+
+    <el-tag v-if="onesAuthors[4]" style="margin: 5px 20px 0 0" size="large">查看成绩</el-tag>
+    <el-tag v-if="onesAuthors[5]" style="margin: 5px 20px 0 0" size="large">下载中心</el-tag>
+    <el-tag v-if="onesAuthors[6]" style="margin: 5px 20px 0 0" size="large">审核表单</el-tag>
+    <el-tag v-if="onesAuthors[7]" style="margin: 5px 20px 0 0" size="large">宿舍管理</el-tag>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="cancelOnesAuthors">撤销权限</el-button>
+        <el-button @click="showOnesAuthors = false">关闭</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -144,6 +179,7 @@ import timer from "@element-plus/icons/lib/Timer";
 
 export default {
   name: "gCAM",
+  inject:['reload'],
   data(){
     return{
       user:'',
@@ -157,6 +193,10 @@ export default {
         student:{},
         authors:[false,false,false,false,false,false,false,false],
       },
+      whoHasauthorize:[],
+      singleMan:{},
+      onesAuthors:[],
+      showOnesAuthors:false,
     }
   },
   setup(){
@@ -185,9 +225,32 @@ export default {
     this.getData()
   },
   methods:{
+    reflesh(){
+      this.reload()
+    },
+    showPower(item){
+      this.singleMan=item
+      request.post('/Tea/haswhatAuthorize',item).then(res=>{
+        console.log(res)
+        this.onesAuthors=res.data
+        this.showOnesAuthors=true
+      }).catch(err=>{
+        this.$message.error("连接错误")
+      })
+    },
+    cancelOnesAuthors(){
+      request.post('/Tea/unauthorize',this.singleMan).then(res=>{
+        this.$message.success("撤销成功")
+        this.reflesh()
+        this.showOnesAuthors=false
+      }).catch(err=>{
+        this.$message.error("连接错误")
+      })
+    },
     confirmTo(){
       request.post('/Tea/authorize',this.confirmToForm).then(res=>{
         this.$message.success("授权成功")
+        this.reflesh()
       }).catch(err=>{
         this.$message.error("连接错误")
       })
@@ -218,6 +281,13 @@ export default {
         this.tableDataCopy=JSON.parse(JSON.stringify(this.tableData))
       }).catch(err=>{
         this.$message.error("学生信息请求错误")
+      })
+
+      request.post('/Tea/whoHasauthorize',this.user).then(res=>{
+        console.log(res)
+        this.whoHasauthorize=res.data
+      }).catch(err=>{
+        this.$message.error("连接错误")
       })
     },
   },

@@ -74,6 +74,8 @@ export default {
 
   data(){
     return{
+      user:{},
+      power:{},
       numShow:false,//是否显示红点
       toDoNum:0,//红点数
       noInfo:false,
@@ -88,6 +90,12 @@ export default {
 
   created() {
     this.Fapi=fileApi.fileApi
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData();
   },
 
@@ -141,9 +149,7 @@ export default {
     },
 
     getData(){
-      let user=JSON.parse(sessionStorage.getItem('user'))
-
-      request.post('/find_all_contest_info_new',user).then(res=>{
+      request.post('/find_all_contest_info_new',this.user).then(res=>{
         this.contestToDo=res
         for(let i=0;i<this.contestToDo.length;i++){
           this.contestToDoShow[i]=true
@@ -161,7 +167,7 @@ export default {
         this.$emit('contestKey',this.toDoNum,this.numShow)
       })
 
-      request.post('/find_all_contest_info_old',user).then(res=>{
+      request.post('/find_all_contest_info_old',this.user).then(res=>{
         console.log("竞赛记录:"+res)
         this.contestDid=res
         for(let i=0;i<this.contestDid.length;i++){

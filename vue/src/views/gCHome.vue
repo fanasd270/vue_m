@@ -11,7 +11,7 @@
       <div style="margin-top: 30px;">
         <div style="margin-bottom: 20px; font-weight: bold; cursor: default">我的应用</div>
         <div style="font-weight: 550; opacity: 0.9">
-          <el-col :span="16" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[0]" :span="16" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default;" @click="jumpTogCStuInfo" >
               <div class="ecard">
                 <el-icon :size="30"><edit /></el-icon>
@@ -19,7 +19,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[1]" :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToTask">
               <div class="ecard">
                 <el-icon :size="30"><timer /></el-icon>
@@ -27,7 +27,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[2]" :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToTable">
               <div class="ecard">
                 <el-icon :size="30"><data-analysis /></el-icon>
@@ -35,7 +35,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[3]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAlmanac">
               <div class="ecard">
                 <el-icon :size="30"><reading /></el-icon>
@@ -43,7 +43,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[4]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuScore">
               <div class="ecard">
                 <el-icon :size="30"><trophy /></el-icon>
@@ -51,7 +51,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[5]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToSign">
               <div class="ecard">
                 <el-icon :size="30"><promotion /></el-icon>
@@ -59,7 +59,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[6]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAudit">
               <div class="ecard">
                 <el-icon :size="30"><finished /></el-icon>
@@ -67,7 +67,7 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+          <el-col v-if="authors[7]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToDorm">
               <div class="ecard">
                 <el-icon :size="30"><school /></el-icon>
@@ -88,11 +88,19 @@
               </div>
             </el-card>
           </el-col>
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToAM">
+          <el-col v-if="power.type===2&&user.t_identity!==2" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToAM">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">
               <div class="ecard">
                 <el-icon :size="30"><bell /></el-icon>
-                <span style="position: absolute; top: 35%">发布公告</span>
+                <span style="position: absolute; top: 35%">权限管理</span>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col v-if="power.type===1" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="backToStu">
+            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">
+              <div class="ecard">
+                <el-icon :size="30"><bell /></el-icon>
+                <span style="position: absolute; top: 35%">返回个人主页</span>
               </div>
             </el-card>
           </el-col>
@@ -119,6 +127,7 @@ import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
 import promotion from "@element-plus/icons/lib/Promotion";
 import dataAnalysis from "@element-plus/icons/lib/DataAnalysis";
 import timer from "@element-plus/icons/lib/Timer";
+import router from "@/router";
 
 export default {
   name: "gCHome",
@@ -144,6 +153,18 @@ export default {
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
+      power:{},
+      user:{},
+      authors:[true,true,true,true,true,true,true,true],
+    }
+  },
+  created() {
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.authors=JSON.parse(sessionStorage.getItem('authors'))
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
     }
   },
   methods:{
@@ -176,6 +197,9 @@ export default {
     },
     jumpToAM(){
       this.$router.push("/teaLayout/gCAM")//跳转至图书管理页面
+    },
+    backToStu(){
+      this.$router.push("/stuHome")
     },
   },
 }

@@ -276,6 +276,7 @@ export default {
   data() {
     return {
       user:{},
+      power:{},
       checkAll:true,
 
       showPoints:[],
@@ -398,7 +399,12 @@ export default {
   },
 
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
     this.getData()
   },
 
@@ -689,29 +695,30 @@ export default {
           this.$message.error("获取信息失败")
         })
 
-      }).catch(err=>{
-        this.$message.error("获取信息失败")
-      })
+        request.post('/findVolunteer_Hours',this.user).then(res=>{
+          this.volunteerData=res.data
+          this.volunteerDataCopy=JSON.parse(JSON.stringify(this.volunteerData))
+        }).catch(err=>{
+          this.$message.error("获取信息失败")
+        })
 
-      request.post('/findVolunteer_Hours',this.user).then(res=>{
-        this.volunteerData=res.data
-        this.volunteerDataCopy=JSON.parse(JSON.stringify(this.volunteerData))
-      }).catch(err=>{
-        this.$message.error("获取信息失败")
-      })
-
-      request.post('/findFailedstudent',this.user).then(res=>{
-        this.otherClassPoint=res.data
-        for(let item in this.otherClassPoint){
-          for(let m in this.otherClassPoint[item]){
-            if(this.filterTerms.findIndex(t=>t.value===this.otherClassPoint[item][m].final_Information_year)===-1){
-              this.filterTerms.push({text:this.otherClassPoint[item][m].final_Information_year,value:this.otherClassPoint[item][m].final_Information_year})
+        request.post('/findFailedstudent',this.user).then(res=>{
+          this.otherClassPoint=res.data
+          for(let item in this.otherClassPoint){
+            for(let m in this.otherClassPoint[item]){
+              if(this.filterTerms.findIndex(t=>t.value===this.otherClassPoint[item][m].final_Information_year)===-1){
+                this.filterTerms.push({text:this.otherClassPoint[item][m].final_Information_year,value:this.otherClassPoint[item][m].final_Information_year})
+              }
             }
           }
-        }
-        console.log("terms")
-        console.log(this.filterTerms)
+          console.log("terms")
+          console.log(this.filterTerms)
+        })
+
+      }).catch(err=>{
+        this.$message.error("获取信息失败")
       })
+
     },
 
     exportExcel() {

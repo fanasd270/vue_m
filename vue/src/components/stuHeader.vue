@@ -160,8 +160,7 @@ export default {
       this.form={};
     },
     loginOut(){
-      sessionStorage.removeItem("user")
-      sessionStorage.removeItem("family")
+      sessionStorage.clear()
       this.$router.push("/Login")
     },
     backHome(){
