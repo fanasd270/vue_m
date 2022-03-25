@@ -87,6 +87,7 @@ import UserFilled from "@element-plus/icons";
 import {Avatar, Lock} from "@element-plus/icons-vue";
 import request from "@/utils/request";
 import {ElMessage} from "element-plus/es/components";
+import router from "@/router";
 
 export default {
   name: "gCHeader",
@@ -106,6 +107,10 @@ export default {
     }
   },
   created() {
+    let userjson=sessionStorage.getItem("user")
+    if(!userjson) {
+      router.push("/Login")
+    }
     this.power=JSON.parse(sessionStorage.getItem('power'))
     if(this.power.type===2){
       this.user=JSON.parse(sessionStorage.getItem('user'))
