@@ -25,6 +25,9 @@
         <el-tab-pane label="综合测评" name="third">
           <g-c-score-grade-point/>
         </el-tab-pane>
+        <el-tab-pane label="学生课表" name="fourth">
+          <g-c-stu-schedule/>
+        </el-tab-pane>
       </el-tabs>
 
     </el-tab-pane>
@@ -39,9 +42,11 @@ import GCScoreCourseView from "@/components/gCScoreCourseView";
 import GCScoreCourse from "@/components/gCScoreCourse";
 import GCScoreGradePoint from "@/components/gCScoreGradePoint";
 import GCScoreGradePointView from "@/components/gCScoreGradePointView";
+import GCStuSchedule from "@/views/gCStuSchedule";
 export default {
   name: "gCStuScore",
   components:{
+    GCStuSchedule,
     GCScoreGradePointView,
     GCScoreGradePoint,
     GCScoreCourse,

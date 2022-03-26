@@ -10,9 +10,6 @@
     </div>
     <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
       <el-tabs v-model="activeName" style="margin:0 1% 0 1%;">
-        <el-tab-pane label="计划/进行中" name="seventh">
-          <stu-pro-plan/>
-        </el-tab-pane>
         <el-tab-pane label="论文" name="first">
           <stuAwardPaper/>
         </el-tab-pane>
@@ -25,14 +22,8 @@
         <el-tab-pane label="项目" name="fourth">
           <stu-award-project></stu-award-project>
         </el-tab-pane>
-        <el-tab-pane label="志愿服务" name="fifth">
-          <stu-vol-serve/>
-        </el-tab-pane>
-        <el-tab-pane label="社会工作" name="sixth">
-          <stu-social-work/>
-        </el-tab-pane>
-        <el-tab-pane label="外派" name="eighth">
-          <stu-vol-send/>
+        <el-tab-pane label="评优存档" name="fifth">
+
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -56,14 +47,10 @@ export default {
     stuAwardPatent,
     stuAwardPaper,
     stuAwardContest,
-    stuVolServe,
-    stuVolSend,
-    stuProPlan,
-    stuSocialWork,
   },
   data(){
     return{
-      activeName: 'seventh',
+      activeName: 'first',
     }
   },
 }

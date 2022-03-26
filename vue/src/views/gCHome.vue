@@ -15,7 +15,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default;" @click="jumpTogCStuInfo" >
               <div class="ecard">
                 <el-icon :size="30"><edit /></el-icon>
-                <span style="position: absolute; top: 35%">学生信息管理</span>
+                <span style="position: absolute; top: 35%">信息管理</span>
               </div>
             </el-card>
           </el-col>
@@ -39,7 +39,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAlmanac">
               <div class="ecard">
                 <el-icon :size="30"><reading /></el-icon>
-                <span style="position: absolute; top: 35%">年鉴导出</span>
+                <span style="position: absolute; top: 35%">信息下载</span>
               </div>
             </el-card>
           </el-col>
@@ -47,7 +47,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuScore">
               <div class="ecard">
                 <el-icon :size="30"><trophy /></el-icon>
-                <span style="position: absolute; top: 35%">查看学生成绩</span>
+                <span style="position: absolute; top: 35%">学生成绩</span>
               </div>
             </el-card>
           </el-col>
@@ -63,7 +63,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAudit">
               <div class="ecard">
                 <el-icon :size="30"><finished /></el-icon>
-                <span style="position: absolute; top: 35%">审核学生提交表单</span>
+                <span style="position: absolute; top: 35%">审核表单</span>
               </div>
             </el-card>
           </el-col>
@@ -78,16 +78,16 @@
           <div style="clear: both"></div>
         </div>
 
-        <p style="font-weight: bold; margin:30px 0 20px 0; color: #cccccc; cursor: default">交流服务</p>
+<!--        <p style="font-weight: bold; margin:30px 0 20px 0; color: #cccccc; cursor: default">交流服务</p>-->
         <div style="font-weight: 550; opacity: 0.9">
-          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToChat">
-            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">
-              <div class="ecard">
-                <el-icon :size="30"><chat-dot-round /></el-icon>
-                <span style="position: absolute; top: 35%">师生交流</span>
-              </div>
-            </el-card>
-          </el-col>
+<!--          <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToChat">-->
+<!--            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">-->
+<!--              <div class="ecard">-->
+<!--                <el-icon :size="30"><chat-dot-round /></el-icon>-->
+<!--                <span style="position: absolute; top: 35%">师生交流</span>-->
+<!--              </div>-->
+<!--            </el-card>-->
+<!--          </el-col>-->
           <el-col v-if="power.type===2&&user.t_identity!==2" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative" @click="jumpToAM">
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default">
               <div class="ecard">

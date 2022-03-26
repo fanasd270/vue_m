@@ -50,6 +50,13 @@
     </div>
 
     <div style="border-radius: 2px;border: solid #9AFF9A">
+      <div class="echarts" style="display: inline-block">
+        <div>班级绩点统计</div>
+        <div id="chartClass" :style="{ width: '500px', height: '380px' }"></div>
+      </div>
+    </div>
+
+    <div style="border-radius: 2px;border: solid #9AFF9A">
       <div>
         <!--      <span style="position: absolute; top: 20px">党团统计</span>-->
         <el-dropdown split-button type="primary" style="margin-bottom: 20px;">
@@ -303,6 +310,7 @@ export default {
       DTChart:null,
       EthnicChart:null,
       DemotedChart:null,
+      ClassChart:null,
       option : {
         series: [
           {
@@ -382,6 +390,40 @@ export default {
         },
       },
 
+      optionClass:{
+        legend:{
+          orient:'horizontal',
+          x:'right',
+          y:'top',
+          data:[],
+        },
+        tooltip:{
+          trigger:'axis',
+          show:true,
+          axisPointer:{
+            type:'shadow'
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+
+        xAxis: {
+          data: []
+        },
+        yAxis: {
+          name:'平均GPA',
+          type:'value',
+          min:2,
+          max:4,
+          splitNumber:8,
+        },
+        series: []
+      },
+
       volunteerData:[],
       volunteerDataCopy:[],
       timeLimit:null,
@@ -396,6 +438,7 @@ export default {
     this.init()
     this.initEthnic()
     this.initDemoted()
+    this.initClass()
   },
 
   created() {
@@ -543,6 +586,7 @@ export default {
       this.init()
       this.initEthnic()
       this.initDemoted()
+      this.initClass()
     },
     //重新画党团图
     init(){
@@ -666,6 +710,10 @@ export default {
         }
       })
     },
+    initClass(){
+      this.ClassChart = echarts.init(document.getElementById("chartClass"));
+      this.ClassChart.setOption(this.optionClass);
+    },
 
 
     getData(){
@@ -718,7 +766,51 @@ export default {
       }).catch(err=>{
         this.$message.error("获取信息失败")
       })
-
+      request.post('/findGradePointGroupByclass',this.user).then(res=>{
+        console.log(11111111111111111111111)
+        console.log(res)
+        // optionClass:{
+        //   xAxis: {
+        //     data: []
+        //   },
+        //   yAxis: {},
+        //   series: [
+        //     {
+        //       name:'',
+        //       data: [10, 22, 28, 43, 49],
+        //       type: 'line',
+        //       stack: 'x'
+        //     },
+        //     {
+        //       name:'',
+        //       data: [5, 4, 3, 5, 10],
+        //       type: 'line',
+        //       stack: 'x'
+        //     }
+        //   ]
+        // },grade_point_gpa
+        let tempClass
+        for(let Cla in res.data){
+          tempClass={name:'',data:[],type:'line'}
+          tempClass.name=Cla
+          for(let year in res.data[Cla]){
+            let tempGPA=0
+            if(this.optionClass.xAxis.data.indexOf(year)===-1){
+              this.optionClass.xAxis.data.push(year)
+            }
+            for(let i in res.data[Cla][year]){
+              tempGPA+=res.data[Cla][year][i].grade_point_gpa-0
+            }
+            tempClass.data.push(parseFloat(tempGPA/res.data[Cla][year].length).toFixed(3))
+          }
+          this.optionClass.series.push(JSON.parse(JSON.stringify(tempClass)))
+          this.optionClass.legend.data.push(tempClass.name)
+        }
+        console.log(222222222222222222222)
+        console.log(this.optionClass)
+      }).catch(err=>{
+        this.$message.error("连接失败")
+      })
     },
 
     exportExcel() {
