@@ -273,7 +273,6 @@ import FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 export default {
   name: "gCTable",
-
   setup(){
     return{
       Search,
@@ -396,6 +395,9 @@ export default {
           x:'right',
           y:'top',
           data:[],
+          textStyle:{
+            fontsize:6
+          },
         },
         tooltip:{
           trigger:'axis',
@@ -762,54 +764,31 @@ export default {
           console.log("terms")
           console.log(this.filterTerms)
         })
+        request.post('/findGradePointGroupByclass',this.user).then(res=>{
+          let tempClass
+          for(let Cla in res.data){
+            tempClass={name:'',data:[],type:'line'}
+            tempClass.name=Cla
+            for(let year in res.data[Cla]){
+              let tempGPA=0
+              if(this.optionClass.xAxis.data.indexOf(year)===-1){
+                this.optionClass.xAxis.data.push(year)
+              }
+              for(let i in res.data[Cla][year]){
+                tempGPA+=res.data[Cla][year][i].grade_point_gpa-0
+              }
+              tempClass.data.push(parseFloat(tempGPA/res.data[Cla][year].length).toFixed(3))
+            }
+            this.optionClass.series.push(JSON.parse(JSON.stringify(tempClass)))
+            this.optionClass.legend.data.push(tempClass.name)
+          }
+          this.initClass()
+        }).catch(err=>{
+          this.$message.error("连接失败")
+        })
 
       }).catch(err=>{
         this.$message.error("获取信息失败")
-      })
-      request.post('/findGradePointGroupByclass',this.user).then(res=>{
-        console.log(11111111111111111111111)
-        console.log(res)
-        // optionClass:{
-        //   xAxis: {
-        //     data: []
-        //   },
-        //   yAxis: {},
-        //   series: [
-        //     {
-        //       name:'',
-        //       data: [10, 22, 28, 43, 49],
-        //       type: 'line',
-        //       stack: 'x'
-        //     },
-        //     {
-        //       name:'',
-        //       data: [5, 4, 3, 5, 10],
-        //       type: 'line',
-        //       stack: 'x'
-        //     }
-        //   ]
-        // },grade_point_gpa
-        let tempClass
-        for(let Cla in res.data){
-          tempClass={name:'',data:[],type:'line'}
-          tempClass.name=Cla
-          for(let year in res.data[Cla]){
-            let tempGPA=0
-            if(this.optionClass.xAxis.data.indexOf(year)===-1){
-              this.optionClass.xAxis.data.push(year)
-            }
-            for(let i in res.data[Cla][year]){
-              tempGPA+=res.data[Cla][year][i].grade_point_gpa-0
-            }
-            tempClass.data.push(parseFloat(tempGPA/res.data[Cla][year].length).toFixed(3))
-          }
-          this.optionClass.series.push(JSON.parse(JSON.stringify(tempClass)))
-          this.optionClass.legend.data.push(tempClass.name)
-        }
-        console.log(222222222222222222222)
-        console.log(this.optionClass)
-      }).catch(err=>{
-        this.$message.error("连接失败")
       })
     },
 

@@ -36,7 +36,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-          <el-date-picker v-model="projectForm.project_year" type="year" placeholder="上报学院年份"></el-date-picker>
+          <el-date-picker v-model="projectForm.project_year" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
         </el-form-item>
 
         <el-form-item label="成果证明材料" style="margin-bottom: 70px;">

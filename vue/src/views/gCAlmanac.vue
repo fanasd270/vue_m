@@ -111,16 +111,53 @@
       </el-card>
     </el-col>
     <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
-      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToLib">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadPaperPatentInfo(1)">
         <div class="ecard">
-          <el-icon :size="30"><school /></el-icon>
-          <span style="position: absolute; top: 35%">图书管理</span>
+          <svg t="1648645441649" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2146" width="30" height="30"><path d="M330 222h170c16.3 0 29.5 13.2 29.5 29.5S516.3 281 500 281h-170c-16.3 0-29.5-13.2-29.5-29.5s13.2-29.5 29.5-29.5z" fill="" p-id="2147"></path><path d="M446 254v119c0 16.3-13.2 29.5-29.5 29.5s-29.5-13.2-29.5-29.5V254c0-16.3 13.2-29.5 29.5-29.5s29.5 13.2 29.5 29.5zM323.5 502h387c12.7 0 23 10.3 23 23s-10.3 23-23 23H323.5c-12.7 0-23-10.3-23-23s10.3-23 23-23zM526.5 380h183c12.7 0 23 10.3 23 23s-10.3 23-23 23H526.5c-12.7 0-23-10.3-23-23s10.3-23 23-23zM323.5 631h387c12.7 0 23 10.3 23 23s-10.3 23-23 23H323.5c-12.7 0-23-10.3-23-23s10.3-23 23-23zM323.5 759h276c12.7 0 23 10.3 23 23s-10.3 23-23 23H323.5c-12.7 0-23-10.3-23-23s10.3-23 23-23zM848.5 301.6H648.5c-28.7 0-52-23.3-52-52V68h46v181.6c0 3.3 2.7 6 6 6h200v46z" fill="" p-id="2148"></path><path d="M811.5 952H222.5c-29.2 0-53-23.8-53-53V105c0-29.2 23.8-53 53-53h41c12.7 0 23 10.3 23 23s-10.3 23-23 23h-41c-3.9 0-7 3.1-7 7v794c0 3.9 3.1 7 7 7h589c3.9 0 7-3.1 7-7V274.5L616.8 98H433.5c-12.7 0-23-10.3-23-23s10.3-23 23-23h192c5.6 0 11 2 15.1 5.7l216 189c5 4.4 7.9 10.7 7.9 17.3v635c0 29.2-23.8 53-53 53zM372.4 98h-39c-12.7 0-23-10.3-23-23s10.3-23 23-23h39c12.7 0 23 10.3 23 23s-10.3 23-23 23z" fill="" p-id="2149"></path></svg>
+          <span style="position: absolute; top: 35%">论文统计</span>
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadPaperPatentInfo(2)">
+        <div class="ecard">
+          <svg t="1648645534466" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3956" width="30" height="30"><path d="M391.605 898.713l44.608-747.552 37.532 2.24-44.608 747.552zM882.6 276.6c-39-77.8-138-113.5-255.2-103.7 1.2 6.4 1.8 13 1.8 19.6 74 11.3 132.7 45.4 160.6 101 55.5 110.5-29.6 267.1-191.7 368.3L536.2 122l-37.4 4.3 88.9 775.6 37.4-4.3-23.6-206c12.7-5.3 25.4-10.9 38.1-17.3 195.2-97.9 304.1-276 243-397.7zM236 407.7l10.1-11.7-15.5-1-8-13.2-5.6 14.4-15.1 3.6 12 9.8-1.3 15.4 13-8.3 14.3 6zM343.7 277.9l-6.9 17.5-18.2 4.3 14.5 11.9-1.6 18.7 15.8-10.1 17.3 7.3-4.7-18.2 12.2-14.2-18.7-1.1zM310.2 452.8l-13.6 34.7-36.3 8.5 28.8 23.7-3.1 37.2 31.4-20.2 34.4 14.5-9.5-36.1 24.4-28.2-37.2-2.2zM179.8 583.3l-15.5-25.5-10.8 27.8-29.1 6.8 23.1 18.9-2.5 29.8 25.1-16.1 27.5 11.5-7.5-28.8 19.5-22.6zM315.5 706.1l-22.2-36.6-15.6 39.9-41.6 9.7 33.1 27.2-3.6 42.6 36-23.1 39.5 16.6-10.9-41.4 28-32.4z" fill="#999999" p-id="3957"></path></svg>
+          <span style="position: absolute; top: 35%">专利统计</span>
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadPaperPatentInfo(3)">
+        <div class="ecard">
+          <svg t="1648645465809" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="30" height="30"><path d="M681.4 786H149.8s-53.2-1.1-53.2-86.2h637.9c0.1 85.1-53.1 86.2-53.1 86.2z" fill="#42A5F5" p-id="2402"></path><path d="M132.1 97.3h567v602.5h-567V97.3z" fill="#90CAF9" p-id="2403"></path><path d="M601.2 230H230v52.1h371.2V230z m0 104.8H230v53.5h371.2v-53.5zM494.8 442.3H230v52.2h264.8v-52.2z m0.1 105.2H230v53.4h264.9v-53.4z" fill="#FFFFFF" p-id="2404"></path><path d="M927.1 606c0-5.1-3.9-9.2-8.8-9.2H867v-1c0.1-3.2 0.1-6.4 0.1-9.5 0-9.8-0.4-20.1-1.2-31.5-0.4-4.8-4.2-8.5-8.7-8.5H581.5c-4.6 0-8.4 3.8-8.7 8.5-0.8 9.9-1.2 21.5-1.2 33.2 0 0.9 0 3.4 0.1 6l0.1 2.8h-50.4c-4.8 0-8.8 4.1-8.8 9.3-3.2 67.5 24.4 141.6 93.4 155.1 0.5 0.1 1 0.2 1.6 0.2 0.9 0 1.9-0.2 2.7-0.5l0.6-0.2 0.4 0.7c10.8 19.9 23.3 36.6 37.2 49.5 17.5 16.3 36.4 26.1 56.5 29.3l5.5 1v67.1H642c-4.8 0-8.8 4.1-8.8 9.2 0 4.9 3.7 8.9 8.3 9.2h155.1c4.8 0 8.8-4.1 8.8-9.2s-3.9-9.2-8.8-9.2h-68.5v-59.7-7.5l5.6-1c20.1-3.2 39.1-13.1 56.5-29.3 14-13 26.6-29.8 37.4-49.9l0.4-0.8 0.8 0.3c1 0.5 2.1 0.8 3.3 0.8 0.6 0 1.1-0.1 1.7-0.2 68.9-13.4 96.5-87.5 93.3-155zM599.7 740.9c-34.3-9.7-70.6-52.8-69.5-124.7v-1h42.3l0.1 0.9c3.3 45.5 12.8 87 28.2 123.4l0.8 1.9-1.9-0.5z m309.6-124.7c1.2 72.7-35.7 115.7-70.4 124.9l-2 0.5 0.8-1.9c10.3-24.1 18-50.7 22.9-78.9l0.9-5.4c1.7-10.4 3-21.2 3.9-32l0.3-3.8 0.3-4.4h43.2l0.1 1z" fill="#FFCC80" p-id="2405"></path><path d="M719.8 616.5l19.4 39.3 43.3 6.3-31.3 30.6 7.4 43.1-38.8-20.4-38.8 20.4 7.4-43.1-31.4-30.6 43.4-6.3z" fill="#F44336" p-id="2406"></path></svg>
+          <span style="position: absolute; top: 35%">竞赛统计</span>
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+      <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="downloadPaperPatentInfo(4)">
+        <div class="ecard">
+          <svg t="1648645502520" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3285" width="30" height="30"><path d="M348.494367 94.040816H219.428571A73.142857 73.142857 0 0 0 146.285714 167.183673v208.979592A31.346939 31.346939 0 0 0 177.632653 407.510204h668.734694a31.346939 31.346939 0 0 0 31.346939-31.346939v-93.246694a73.142857 73.142857 0 0 0-73.142857-73.142857H487.068735a10.44898 10.44898 0 0 1-7.878531-3.594449l-75.441633-86.93551A73.142857 73.142857 0 0 0 348.473469 94.040816zM219.428571 156.734694h129.065796a10.44898 10.44898 0 0 1 7.878531 3.594449l75.441633 86.93551a73.142857 73.142857 0 0 0 55.254204 25.202939H804.571429l1.880816 0.188081a10.44898 10.44898 0 0 1 8.568163 10.260898V344.816327h-606.040816V167.183673a10.44898 10.44898 0 0 1 10.448979-10.448979z" fill="#666666" p-id="3286"></path><path d="M950.857143 344.816327H73.142857a31.346939 31.346939 0 0 0-31.096163 35.359346l60.186122 465.125878A73.142857 73.142857 0 0 0 174.769633 909.061224h674.460734a73.142857 73.142857 0 0 0 72.515919-63.738775l60.186122-465.146776A31.346939 31.346939 0 0 0 950.857143 344.816327z m-842.062367 62.693877h806.389551l-55.588572 429.745633a10.44898 10.44898 0 0 1-10.365388 9.11151H174.769633l-1.713633-0.146286a10.44898 10.44898 0 0 1-8.651755-8.965224L108.794776 407.510204z" fill="#666666" p-id="3287"></path><path d="M637.387755 480.653061a31.346939 31.346939 0 0 1 3.009306 62.547592L637.387755 543.346939H386.612245a31.346939 31.346939 0 0 1-3.009306-62.547592L386.612245 480.653061h250.77551z" fill="#666666" p-id="3288"></path></svg>
+          <span style="position: absolute; top: 35%">项目统计</span>
         </div>
       </el-card>
     </el-col>
     <div style="clear: both"></div>
   </div>
 </div>
+  <el-dialog
+      v-model="dialogVisible"
+      title="选择年份"
+      width="30%"
+  >
+    <el-date-picker style="margin-left: 20%" v-model="downLoadTea.year" type="year" placeholder="选择年份" value-format="YYYY"></el-date-picker>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="confirmDownloadPaperPaten">确定</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -131,7 +168,13 @@ export default {
   name: "gCAlmanac",
   data(){
     return{
-
+      Fapi:'',
+      dialogVisible:false,
+      paperPaten:0,
+      downLoadTea:{
+        teacher:{},
+        year:"",
+      },
       drawer: false,
       user:{},
       power:{},
@@ -153,9 +196,39 @@ export default {
       this.user=JSON.parse(sessionStorage.getItem('user'))
     }
     this.teaAndStu.teacherId=this.user.t_no
+    this.downLoadTea.teacher=this.user
+    this.Fapi=fileApi.fileApi
   },
   methods:{
-
+    confirmDownloadPaperPaten(){
+      let requestUrl=""
+      switch (this.paperPaten) {
+        case 1:
+          requestUrl="/downLoadPaperByYear"
+          break
+        case 2:
+          requestUrl="/downLoadPatentByYear"
+          break
+        case 3:
+          requestUrl="/downloadcontestByYear"
+          break
+        case 4:
+          requestUrl="/downloadProjectByYear"
+          break
+      }
+      console.log(this.downLoadTea)
+      request.post(requestUrl,this.downLoadTea).then(res=>{
+        console.log(res)
+        window.location.href=this.Fapi+"/excel/"+res.data
+        this.dialogVisible=false
+      }).catch(err=>{
+        this.$message.error("下载失败")
+      })
+    },
+    downloadPaperPatentInfo(num){
+      this.dialogVisible=true
+      this.paperPaten=num
+    },
     downloadAllStu(){
       request.post('/getStudentExcelInfoByGuidanceCounselor',this.user).then(res=>{
         this.downloadFile(res.data)

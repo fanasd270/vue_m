@@ -71,6 +71,9 @@
                 :value="key">
             </el-option>
           </el-select>
+
+          <el-button type="text" @click="downloadPDF">下载成绩PDF</el-button>
+
           <el-descriptions v-if="showPointsForGrand.length!==0" class="margin-top" :column="5" size="small" border direction="vertical">
             <el-descriptions-item>
               <template #label>
@@ -216,6 +219,7 @@
 <script>
 import {Search} from "@element-plus/icons";
 import request from "@/utils/request";
+import fileApi from "@/components/Store";
 export default {
   name: "stuAndFamilyScoreView",
   setup(){
@@ -230,6 +234,7 @@ export default {
     return{
       user:{},
 
+      Fapi:'',
       otherTermsPointForCourse:{},
       showPointsForCourse:[],
       choosedTermForCourse:'',
@@ -247,10 +252,19 @@ export default {
     }
   },
   created() {
+    this.Fapi=fileApi.fileApi
     this.user=JSON.parse(sessionStorage.getItem('user'))
     this.getData()
   },
   methods:{
+    downloadPDF(){
+      request.post('/findStudentScorePDF',this.user).then(res=>{
+        console.log(res)
+        window.location.href=this.Fapi+"/excel/UploadPDF/"+res.data[0].score_pdf_url
+      }).catch(err=>{
+        this.$message.error("下载失败")
+      })
+    },
     searchFun(){
       let fuzzy=this.searchInfo
       if(fuzzy){

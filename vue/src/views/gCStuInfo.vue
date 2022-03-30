@@ -23,9 +23,9 @@
       style="width: 20%; margin-bottom: 5px"
       @keyup.enter="searchFun"
       clearable
+      @clear="deleteSearch"
   />
   <el-button :icon="Search" circle size="small" @click="searchFun" style="margin-left: 5px"></el-button>
-  <el-button :icon="Delete" circle size="small" @click="deleteSearch" style="margin-left: 5px"></el-button>
   <el-button @click="exportExcel">
     导出
   </el-button>
@@ -115,9 +115,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 姓名
               </div>
             </template>
@@ -126,9 +123,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 学号
               </div>
             </template>
@@ -137,9 +131,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 专业
               </div>
             </template>
@@ -148,9 +139,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 性别
               </div>
             </template>
@@ -160,9 +148,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 出生日期
               </div>
             </template>
@@ -171,9 +156,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 电话
               </div>
             </template>
@@ -182,9 +164,6 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
-                <el-icon :style="iconStyle">
-                  <user />
-                </el-icon>
                 地址
               </div>
             </template>
