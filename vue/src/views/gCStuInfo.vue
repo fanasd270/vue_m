@@ -216,6 +216,26 @@
               <el-descriptions-item label="是否第一监护人">{{detailInfo.stu_family[1].family_ismain}}</el-descriptions-item>
             </el-descriptions>
           </el-collapse-item>
+          <el-collapse-item title="成绩" name="6">
+            <div class="echarts" style="display: inline-block">
+              <div>绩点统计</div>
+              <div id="chartScore" :style="{ width: '500px', height: '200px' }"></div>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item title="综合能力" name="7">
+            <el-collapse v-model="activeName3" style="margin-left: 3%">
+              <el-collapse-item title="计划/进行中" name="1">
+                <el-descriptions v-if="detailInfo.is_doing!=null" border :column="5">
+                  <el-descriptions-item label="类别">{{detailInfo.is_doing.is_doing_category}}</el-descriptions-item>
+                  <el-descriptions-item label="项目名称">{{detailInfo.is_doing.is_doing_name}}</el-descriptions-item>
+                  <el-descriptions-item label="完成期限">{{detailInfo.is_doing.is_doing_end}}</el-descriptions-item>
+                  <el-descriptions-item label="指导老师">{{detailInfo.is_doing.is_doing_guide_teacher}}</el-descriptions-item>
+                  <el-descriptions-item label="项目成员" v-for="index in detailInfo.is_doing.is_doing_member">{{detailInfo.is_doing.is_doing_member[index]}}</el-descriptions-item>
+                </el-descriptions>
+
+              </el-collapse-item>
+            </el-collapse>
+          </el-collapse-item>
           <el-collapse-item title="成长档案" name="4">
             <el-collapse v-model="activeName2" style="margin-left: 3%">
               <el-collapse-item title="社会工作" name="5">
@@ -457,6 +477,7 @@ import request from "@/utils/request";
 import {Search} from '@element-plus/icons-vue'
 import {Delete} from "@element-plus/icons";
 import fileApi from "@/components/Store";
+import * as echarts from "echarts";
 
 export default {
   name: "gCStuInfo",
@@ -475,6 +496,7 @@ export default {
 
       activeName1:'0',
       activeName2:'0',
+      activeName3:'0',
       filterClass:[],
       filterGender:[
         {text: '男', value: 1},
@@ -550,7 +572,50 @@ export default {
         year:'',
         year2:'',
       },
+
+      scoreChart:null,
+      optionScore:{
+        legend:{
+          orient:'horizontal',
+          x:'right',
+          y:'top',
+          data:[],
+          textStyle:{
+            fontsize:6
+          },
+        },
+        tooltip:{
+          trigger:'axis',
+          show:true,
+          axisPointer:{
+            type:'shadow'
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+
+        xAxis: {
+          data: []
+        },
+        yAxis: {
+          name:'GPA',
+          type:'value',
+          min:0,
+          max:4,
+          splitNumber:8,
+        },
+        series: []
+      },
     }
+  },
+  mounted() {
+    // this.$nextTick(()=>{
+    //   this.initScore()
+    // })
   },
   created() {
     this.Fapi=fileApi.fileApi
@@ -564,6 +629,12 @@ export default {
   },
 
   methods:{
+
+    initScore(){
+      this.scoreChart = echarts.init(document.getElementById("chartScore"));
+      this.scoreChart.setOption(this.optionScore);
+    },
+
     //详细信息页面函数
     selectYearChanged(val){
       for(let i=0;i<this.developmentPlanYears.length;i++){
@@ -644,12 +715,29 @@ export default {
     stuInfoDetail(row){
       console.log(row)
       request.post('/Stu/findallinfoforone',row).then(res=>{
+        console.log(111111111111111111111111111111111)
         console.log(res)
         this.detailInfo=res.data
         this.headUrl=fileApi.fileApi+'/Pictures/'+res.data.stu_photourl
         this.infoDialog=true
+        //折线图
+        this.optionScore.series=[]
+        this.optionScore.xAxis.data=[]
+        let tempScore={name:row.stu_name,data:[],type:'line',itemStyle:{normal:{label:{show:true}}}}
+        for(let year in this.detailInfo.gradePointMap){
+          this.optionScore.xAxis.data.push(year)
+          tempScore.data.push(parseFloat(this.detailInfo.gradePointMap[year][0].grade_point_gpa).toFixed(3))
+
+        }
+        this.optionScore.series.push(tempScore)
+        console.log("option")
+        console.log(this.optionScore)
+        this.$nextTick(()=>{
+          this.initScore()
+        })
         this.activeName1='0'
         this.activeName2='0'
+        this.activeName3='0'
 
         let year
         this.developmentPlanYears=[]

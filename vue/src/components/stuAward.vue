@@ -22,8 +22,11 @@
         <el-tab-pane label="项目" name="fourth">
           <stu-award-project></stu-award-project>
         </el-tab-pane>
-        <el-tab-pane label="评优存档" name="fifth">
-
+        <el-tab-pane label="获奖上报" name="fifth">
+          <stu-award-up/>
+        </el-tab-pane>
+        <el-tab-pane label="奖学金" name="sixth">
+          <stu-award-scholarship/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -39,10 +42,14 @@ import stuVolServe from "@/components/stuVolServe";
 import stuVolSend from "@/components/stuVolSend";
 import stuProPlan from "@/components/stuProPlan";
 import stuSocialWork from "@/components/stuSocialWork";
+import StuAwardUp from "@/components/stuAwardUp";
+import StuAwardScholarship from "@/components/stuAwardScholarship";
 
 export default {
   name: "stuAward",
   components:{
+    StuAwardScholarship,
+    StuAwardUp,
     StuAwardProject,
     stuAwardPatent,
     stuAwardPaper,

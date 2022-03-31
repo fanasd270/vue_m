@@ -5,8 +5,10 @@
     <el-badge :value="toDoNum[1]" :max="99" v-show="numShow[1]" style="position: absolute; left:7%"></el-badge>
     <el-badge :value="toDoNum[2]" :max="99" v-show="numShow[2]" style="position: absolute; left:12%"></el-badge>
     <el-badge :value="toDoNum[3]" :max="99" v-show="numShow[3]" style="position: absolute; left:17%"></el-badge>
-    <el-badge :value="toDoNum[4]" :max="99" v-show="numShow[4]" style="position: absolute; left:24%"></el-badge>
+    <el-badge :value="toDoNum[4]" :max="99" v-show="numShow[4]" style="position: absolute; left:23%"></el-badge>
     <el-badge :value="toDoNum[5]" :max="99" v-show="numShow[5]" style="position: absolute; left:30%"></el-badge>
+    <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:36%"></el-badge>
+    <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:42%"></el-badge>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">
@@ -21,11 +23,17 @@
       <el-tab-pane label="项目" name="fourth">
         <g-c-audit-project v-on:projectKey="projectCom"></g-c-audit-project>
       </el-tab-pane>
+      <el-tab-pane label="获奖" name="seventh">
+        <g-c-audit-award v-on:awardKey="awardCom"></g-c-audit-award>
+      </el-tab-pane>
       <el-tab-pane label="志愿服务" name="fifth">
         <g-c-audit-serve v-on:serveKey="serveCom"></g-c-audit-serve>
       </el-tab-pane>
       <el-tab-pane label="外派" name="sixth">
         <g-c-audit-send v-on:sendKey="sendCom"></g-c-audit-send>
+      </el-tab-pane>
+      <el-tab-pane label="奖学金" name="eighth">
+        <g-c-audit-scholarship v-on:scholarshipKey="scholarshipCom"></g-c-audit-scholarship>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -39,10 +47,14 @@ import GCAuditPatent from "@/components/gCAuditPatent";
 import GCAuditProject from "@/components/gCAuditProject";
 import gCAuditServe from "@/components/gCAuditServe";
 import gCAuditSend from "@/components/gCAuditSend";
+import GCAuditAward from "@/components/gCAuditAward";
+import GCAuditScholarship from "@/components/gCAuditScholarship";
 
 export default {
   name: "gCAudit",
   components:{
+    GCAuditScholarship,
+    GCAuditAward,
     GCAuditProject,
     GCAuditPatent,
     gCAuditPaper,
@@ -53,8 +65,8 @@ export default {
   data(){
     return{
       activeName: 'first',
-      numShow:[false, false, false, false, false, false],//统计数字是否显示
-      toDoNum:[0, 0, 0, 0, 0, 0],//四类统计数字
+      numShow:[false, false, false, false, false, false,false,false],//统计数字是否显示
+      toDoNum:[0, 0, 0, 0, 0, 0,0,0],//四类统计数字
     }
   },
 
@@ -85,13 +97,21 @@ export default {
       this.numShow[3]=numShow
       this.toDoNum[3]=toDoNum
     },
-    serveCom(toDoNum, numShow){
+    awardCom(toDoNum, numShow){
       this.numShow[4]=numShow
       this.toDoNum[4]=toDoNum
     },
-    sendCom(toDoNum, numShow){
+    serveCom(toDoNum, numShow){
       this.numShow[5]=numShow
       this.toDoNum[5]=toDoNum
+    },
+    sendCom(toDoNum, numShow){
+      this.numShow[6]=numShow
+      this.toDoNum[6]=toDoNum
+    },
+    scholarshipCom(toDoNum, numShow){
+      this.numShow[7]=numShow
+      this.toDoNum[7]=toDoNum
     },
   },
 }

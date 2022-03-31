@@ -12,9 +12,6 @@
     <el-tab-pane label="社会工作">
       <stu-work-and-vol/>
     </el-tab-pane>
-    <el-tab-pane>
-
-    </el-tab-pane>
   </el-tabs>
 </template>
 
