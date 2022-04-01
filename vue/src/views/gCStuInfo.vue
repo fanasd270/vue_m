@@ -102,7 +102,7 @@
   <el-dialog
       v-model="infoDialog"
       title="详细信息"
-      width="700px"
+      width="900px"
   >
     <div>
       <div>
@@ -111,7 +111,7 @@
             :src="headUrl"
         ></el-image>
 
-        <el-descriptions :column="3" size="small" border style="display: inline-block; width: 564px">
+        <el-descriptions :column="3" size="small" border style="display: inline-block; width: 764px">
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">

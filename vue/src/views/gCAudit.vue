@@ -9,6 +9,7 @@
     <el-badge :value="toDoNum[5]" :max="99" v-show="numShow[5]" style="position: absolute; left:30%"></el-badge>
     <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:36%"></el-badge>
     <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:42%"></el-badge>
+    <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:48%"></el-badge>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">
@@ -35,6 +36,9 @@
       <el-tab-pane label="奖学金" name="eighth">
         <g-c-audit-scholarship v-on:scholarshipKey="scholarshipCom"></g-c-audit-scholarship>
       </el-tab-pane>
+      <el-tab-pane label="留校申请" name="ninth">
+        <g-c-audit-application v-on:applicationKey="applicationCom"></g-c-audit-application>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </div>
@@ -49,10 +53,12 @@ import gCAuditServe from "@/components/gCAuditServe";
 import gCAuditSend from "@/components/gCAuditSend";
 import GCAuditAward from "@/components/gCAuditAward";
 import GCAuditScholarship from "@/components/gCAuditScholarship";
+import GCAuditApplication from "@/components/gCAuditApplication";
 
 export default {
   name: "gCAudit",
   components:{
+    GCAuditApplication,
     GCAuditScholarship,
     GCAuditAward,
     GCAuditProject,
@@ -65,8 +71,8 @@ export default {
   data(){
     return{
       activeName: 'first',
-      numShow:[false, false, false, false, false, false,false,false],//统计数字是否显示
-      toDoNum:[0, 0, 0, 0, 0, 0,0,0],//四类统计数字
+      numShow:[false, false, false, false, false, false,false,false,false],//统计数字是否显示
+      toDoNum:[0, 0, 0, 0, 0, 0,0,0,0],//四类统计数字
     }
   },
 
@@ -112,6 +118,10 @@ export default {
     scholarshipCom(toDoNum, numShow){
       this.numShow[7]=numShow
       this.toDoNum[7]=toDoNum
+    },
+    applicationCom(toDoNum, numShow){
+      this.numShow[8]=numShow
+      this.toDoNum[8]=toDoNum
     },
   },
 }

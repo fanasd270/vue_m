@@ -112,7 +112,7 @@ export default {
           request.post('/readExcelforCE',read).then(res=>{
             console.log(res.data)
             this.loading=false
-            this.$message.success("操作成功，请在确认信息无误后点击确认上传，此操作请在五分钟内完成，之后将自动取消")
+            this.$message.success("操作成功，请在确认信息无误后点击确认上传，此操作请在一分钟内完成，之后将自动取消")
             this.coursePointTable=res.data
           }).catch(err=>{
             this.loading=false

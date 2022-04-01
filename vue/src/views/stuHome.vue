@@ -59,6 +59,14 @@
                 </div>
               </el-card>
             </el-col>
+            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuApplication">
+                <div class="ecard">
+                  <el-icon :size="30"><document-checked /></el-icon>
+                  <span style="position: absolute; top: 35%">申请</span>
+                </div>
+              </el-card>
+            </el-col>
             <div style="clear: both"></div>
           </div>
 
@@ -95,6 +103,7 @@ import chatDotRound from "@element-plus/icons/lib/ChatDotRound";
 import bicycle from "@element-plus/icons/lib/Bicycle";
 import promotion from "@element-plus/icons/lib/Promotion";
 import request from "@/utils/request";
+import documentChecked from "@element-plus/icons/lib/DocumentChecked";
 
 export default {
   name: "stuHome",
@@ -111,6 +120,7 @@ export default {
     chatDotRound,
     bicycle,
     promotion,
+    documentChecked,
   },
   data(){
     return{
@@ -146,6 +156,9 @@ export default {
     },
     jumpToStuChat(){
       this.$router.push("/stuLayout/stuChat")//跳转至交流页面
+    },
+    jumpToStuApplication(){
+      this.$router.push("/stuLayout/stuApplication")
     },
     changePage(){
       let data={student:{},teacher:{}}

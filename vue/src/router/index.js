@@ -86,6 +86,11 @@ const routes = [
         name: 'stuChat',
         component: ()=>import("@/views/stuChat"),
       },
+      {
+        path: 'stuApplication',
+        name: 'stuApplication',
+        component: ()=>import("@/views/stuApplication"),
+      },
     ]
   },
 //教师路由
