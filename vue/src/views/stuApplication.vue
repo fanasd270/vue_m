@@ -100,9 +100,7 @@ export default {
     },
     onSubmit(){
       this.stayApplication.stay_school_info_time=this.year+this.year2
-      console.log(this.year)
-      console.log(this.year2)
-      console.log(this.stayApplication)
+      this.stayApplication.stay_school_info_status='0'
       request.post('/upload_stayschool_info',this.stayApplication).then(res=>{
         this.$message.success(res.msg)
         this.getData()
