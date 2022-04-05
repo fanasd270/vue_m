@@ -16,23 +16,23 @@
     </div>
     <div style="margin-top: 10px">
       <div style="width: 5%;height: 90vh;display: inline-block; vertical-align: top">
-        <div style="height: 7%"></div>
-        <div style="height: 7%">1</div>
-        <div style="height: 7%">2</div>
-        <div style="height: 7%">3</div>
-        <div style="height: 7%">4</div>
-        <div style="height: 7%">5</div>
-        <div style="height: 7%">6</div>
-        <div style="height: 7%">7</div>
-        <div style="height: 7%">8</div>
-        <div style="height: 7%">9</div>
-        <div style="height: 7%">10</div>
-        <div style="height: 7%">11</div>
-        <div style="height: 7%">12</div>
-        <div style="height: 7%">13</div>
+        <div style="height: 7.6%"></div>
+        <div style="height: 7.6%">1</div>
+        <div style="height: 7.6%">2</div>
+        <div style="height: 7.6%">3</div>
+        <div style="height: 7.6%">4</div>
+        <div style="height: 7.6%">5</div>
+        <div style="height: 7.6%">6</div>
+        <div style="height: 7.6%">7</div>
+        <div style="height: 7.6%">8</div>
+        <div style="height: 7.6%">9</div>
+        <div style="height: 7.6%">10</div>
+        <div style="height: 7.6%">11</div>
+        <div style="height: 7.6%">12</div>
+        <div style="height: 7.6%">13</div>
       </div>
-      <div style="width: 95%; height: 90vh; display: inline-block; vertical-align: top">
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+      <div style="width: 60%; height: 90vh; display: inline-block; vertical-align: top">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周一
           <div v-for="(item,key) in scheduleStyle['星期一']" :style="item" @click="showCourse(schedule['星期一'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -42,7 +42,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周二
           <div v-for="(item,key) in scheduleStyle['星期二']" :style="item" @click="showCourse(schedule['星期二'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -52,7 +52,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周三
           <div v-for="(item,key) in scheduleStyle['星期三']" :style="item" @click="showCourse(schedule['星期三'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -62,7 +62,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周四
           <div v-for="(item,key) in scheduleStyle['星期四']" :style="item" @click="showCourse(schedule['星期四'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -72,7 +72,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周五
           <div v-for="(item,key) in scheduleStyle['星期五']" :style="item" @click="showCourse(schedule['星期五'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -82,7 +82,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周六
           <div v-for="(item,key) in scheduleStyle['星期六']" :style="item" @click="showCourse(schedule['星期六'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -92,7 +92,7 @@
           </span>
           </div>
         </div>
-        <div style="width: 14%; height: 95%; display: inline-block; position:relative">
+        <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周日
           <div v-for="(item,key) in scheduleStyle['星期日']" :style="item" @click="showCourse(schedule['星期日'][key][0])">
           <span style="display: table-cell; vertical-align: middle;">
@@ -102,6 +102,13 @@
           </span>
           </div>
         </div>
+      </div>
+      <div v-if="unArranged.length!==0" style="width: 30%; height: 90vh; display: inline-block; vertical-align: top">
+        <span>本周未安排时间课程</span>
+        <el-table :data="unArranged" style="width: 100%">
+          <el-table-column prop="coursename" label="课程名称" width="180" />
+          <el-table-column prop="teacher" label="授课教师" width="180" />
+        </el-table>
       </div>
     </div>
 
@@ -193,6 +200,8 @@ export default {
           '#7272E6',
           '#BDE672',
       ],
+
+      unArranged:[],
     }
   },
   computed:{
@@ -208,7 +217,6 @@ export default {
     this.askForm.stu_no=this.user.stu_no+''
     this.askSchedule()
     let aDate=new Date()
-    console.log(aDate)
   },
   methods:{
     refreshWeek(){
@@ -231,7 +239,6 @@ export default {
     askSchedule(){
       let that=this
       request.post("/findStudentCourseByStudent",this.askForm).then(res=>{
-        console.log(res)
         this.schedule=res.data
         this.scheduleStyle={
           '星期一':{},
@@ -260,16 +267,23 @@ export default {
               color=Math.floor(Math.random()*(max-min))+min
             }
             lastColor=color
-            console.log(color)
-            let tempStyle={height:50+'%' ,width:'50%', position:'absolute', top:20+'%', backgroundColor:'#008c8c',
+            let tempStyle={height:50+'%' ,width:'70%', position:'absolute', top:20+'%', backgroundColor:'#008c8c',
               borderRadius:10+'px', display:'table', textAlign:'center', textOverflow:'ellipsis', overflow:'hidden'}
 
-            tempStyle.height=7.5*times.length+0.1*(times.length-1)+'%'
-            tempStyle.top=7.6*times[0]+'%'
+            tempStyle.height=7.5*times.length+0.1923*(times.length-1)+'%'
+            //tempStyle.height=100*times.length/13+'%'
+            tempStyle.top=100*times[0]/13+'%'
             tempStyle.backgroundColor=this.scheduleColor[color]
             this.scheduleStyle[item][time]=JSON.parse(JSON.stringify(tempStyle))
 
           }
+        }
+      })
+
+      request.post('findStudentCourseNullByStudent',this.askForm).then(res=>{
+        this.unArranged=[]
+        if(res.code!==0){
+          this.unArranged=res.data['未安排']['未安排']
         }
       })
     },
