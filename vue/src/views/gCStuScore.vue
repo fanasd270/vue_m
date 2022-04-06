@@ -70,7 +70,14 @@ export default {
 
   },
   methods:{
-
+    // callView(tab,event){
+    //   console.log(2222222222222)
+    //   this.$refs.courseChild.getData()
+    //   if(tab.name==='second'){
+    //     console.log(2222222222222)
+    //     this.$refs.courseChild.getData()
+    //   }
+    // },
   },
 }
 </script>

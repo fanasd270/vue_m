@@ -39,7 +39,7 @@
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAlmanac">
               <div class="ecard">
                 <el-icon :size="30"><reading /></el-icon>
-                <span style="position: absolute; top: 35%">信息下载</span>
+                <span style="position: absolute; top: 35%">信息统计</span>
               </div>
             </el-card>
           </el-col>
