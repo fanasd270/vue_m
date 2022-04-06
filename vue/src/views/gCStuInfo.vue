@@ -218,7 +218,7 @@
           </el-collapse-item>
           <el-collapse-item title="成绩" name="6">
             <div class="echarts" style="display: inline-block">
-              <div>绩点统计</div>
+              <div>绩点趋势</div>
               <div id="chartScore" :style="{ width: '500px', height: '200px' }"></div>
             </div>
           </el-collapse-item>
