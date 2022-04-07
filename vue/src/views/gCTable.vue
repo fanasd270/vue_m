@@ -8,11 +8,50 @@
     </p>
     <br>
 
-    <div style="width: 40%; height: 400px;border-radius: 2px;border: solid #9AFF9A; margin-bottom: 5px; display: inline-block;
+    <div style="width: 59%; height: 400px;border-radius: 2px;border: solid #9AFF9A; margin-bottom: 5px; display: inline-block;
     vertical-align: top">
+      <el-scrollbar height="400px" style="display: inline-block; width: 50%">
+        <el-table :data="sortClass" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleClass">
+          <el-table-column
+              type="index"
+              width="50">
+          </el-table-column>
+          <el-table-column
+              prop="class_name"
+              label="班级"
+              width="150">
+          </el-table-column>
+          <el-table-column
+              prop="score"
+              label="分数"
+              width="100"
+              sortable>
+          </el-table-column>
+        </el-table>
+      </el-scrollbar>
+
+      <el-scrollbar height="400px" style="display: inline-block; width: 50%">
+        <el-table :data="sortDorm" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleDorm">
+          <el-table-column
+              type="index"
+              width="50">
+          </el-table-column>
+          <el-table-column
+              prop="room"
+              label="宿舍"
+              width="150">
+          </el-table-column>
+          <el-table-column
+              prop="score"
+              label="分数"
+              width="100"
+              sortable>
+          </el-table-column>
+        </el-table>
+      </el-scrollbar>
 
     </div>
-    <div style="display: inline-block; width: 40%; height: 400px; margin-left: 20%;border-radius: 2px;border: solid #9AFF9A;
+    <div style="display: inline-block; width: 40%; height: 400px; margin-left: 1%;border-radius: 2px;border: solid #9AFF9A;
     margin-bottom: 5px;
     vertical-align: top">
       <div style="display: inline-block; margin-left: 40%">志愿时长</div>
@@ -263,6 +302,45 @@
       </span>
     </template>
   </el-dialog>
+
+<!--  班级宿舍排名详细-->
+  <el-dialog
+      v-model="classShow"
+      width="60%"
+  >
+    <el-descriptions
+        direction="vertical"
+        :column="7"
+        border
+    >
+      <el-descriptions-item label="班级">{{singleClass.class_name}}</el-descriptions-item>
+      <el-descriptions-item label="分数">{{singleClass.score}}</el-descriptions-item>
+      <el-descriptions-item label="平均绩点">{{singleClass.GPA}}</el-descriptions-item>
+      <el-descriptions-item label="论文数">{{singleClass.paper_num}}</el-descriptions-item>
+      <el-descriptions-item label="专利数">{{singleClass.patent_num}}</el-descriptions-item>
+      <el-descriptions-item label="竞赛数">{{singleClass.contest_num}}</el-descriptions-item>
+      <el-descriptions-item label="项目数">{{singleClass.project_num}}</el-descriptions-item>
+    </el-descriptions>
+  </el-dialog>
+
+  <el-dialog
+      v-model="dormShow"
+      width="60%"
+  >
+    <el-descriptions
+        direction="vertical"
+        :column="7"
+        border
+    >
+      <el-descriptions-item label="宿舍">{{singleDorm.room}}</el-descriptions-item>
+      <el-descriptions-item label="分数">{{singleDorm.score}}</el-descriptions-item>
+      <el-descriptions-item label="平均绩点">{{singleDorm.GPA}}</el-descriptions-item>
+      <el-descriptions-item label="论文数">{{singleDorm.paper_num}}</el-descriptions-item>
+      <el-descriptions-item label="专利数">{{singleDorm.patent_num}}</el-descriptions-item>
+      <el-descriptions-item label="竞赛数">{{singleDorm.contest_num}}</el-descriptions-item>
+      <el-descriptions-item label="项目数">{{singleDorm.project_num}}</el-descriptions-item>
+    </el-descriptions>
+  </el-dialog>
 </template>
 
 <script>
@@ -281,6 +359,15 @@ export default {
 
   data() {
     return {
+
+      classShow:false,
+      singleClass:{},
+      dormShow:false,
+      singleDorm:{},
+
+      sortClass:[],
+      sortDorm:[],
+
       user:{},
       power:{},
       checkAll:true,
@@ -455,6 +542,14 @@ export default {
 
 
   methods: {
+    showSingleClass(row){
+      this.classShow=true
+      this.singleClass=row
+    },
+    showSingleDorm(row){
+      this.dormShow=true
+      this.singleDorm=row
+    },
     genderFormatter(row, column){
       if(row.stu_gender=== 0){
         return '女'
@@ -727,11 +822,9 @@ export default {
         }
         this.checkedClassList=this.DTClassList
         this.changeOption()
-        console.log(this.DTMsg)
 
         request.post('/ethnic_minority',this.user).then(res=>{
           this.EthnicMsg=res.data
-          console.log(res.data)
           this.changeOption()
         }).catch(err=>{
           this.$message.error("获取信息失败")
@@ -739,7 +832,6 @@ export default {
 
         request.post('/findDemoted_student',this.user).then(res=>{
           this.DemotedMsg=res.data
-          console.log(res.data)
           this.changeOption()
         }).catch(err=>{
           this.$message.error("获取信息失败")
@@ -761,8 +853,6 @@ export default {
               }
             }
           }
-          console.log("terms")
-          console.log(this.filterTerms)
         })
         request.post('/findGradePointGroupByclass',this.user).then(res=>{
           let tempClass
@@ -782,6 +872,7 @@ export default {
             this.optionClass.series.push(JSON.parse(JSON.stringify(tempClass)))
             this.optionClass.legend.data.push(tempClass.name)
           }
+          this.sortTerm()
           this.initClass()
         }).catch(err=>{
           this.$message.error("连接失败")
@@ -790,6 +881,60 @@ export default {
       }).catch(err=>{
         this.$message.error("获取信息失败")
       })
+
+      request.post('/findScoreByClass',this.user).then(res=>{
+        console.log(res)
+        let tempClass={class_name:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
+        for(let index in res.data){
+          tempClass.class_name=res.data[index].class_name
+          tempClass.paper_num=res.data[index].paper_num
+          tempClass.patent_num=res.data[index].patent_num
+          tempClass.project_num=res.data[index].project_num
+          tempClass.contest_num=res.data[index].contest_num
+          for(let j in res.data[index].alltotalGradePoint){
+            tempClass.GPA+=res.data[index].alltotalGradePoint[j]
+          }
+          tempClass.GPA=tempClass.GPA/res.data[index].alltotalGradePoint.length
+          tempClass.score=parseFloat(tempClass.GPA*10+tempClass.paper_num+tempClass.patent_num+tempClass.project_num+tempClass.contest_num).toFixed(3)
+          this.sortClass.push(JSON.parse(JSON.stringify(tempClass)))
+        }
+      })
+
+      request.post('/findScoreByBedRoom',this.user).then(res=>{
+        console.log(res)
+        let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
+        for(let index in res.data){
+          tempDorm.room=res.data[index].room
+          tempDorm.paper_num=res.data[index].paper_num
+          tempDorm.patent_num=res.data[index].patent_num
+          tempDorm.project_num=res.data[index].project_num
+          tempDorm.contest_num=res.data[index].contest_num
+          for(let j in res.data[index].score){
+            tempDorm.GPA+=res.data[index].score[j]
+          }
+          tempDorm.GPA=tempDorm.GPA/res.data[index].score.length
+          tempDorm.score=parseFloat(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
+          this.sortDorm.push(JSON.parse(JSON.stringify(tempDorm)))
+        }
+      })
+
+    },
+    sortTerm(){
+      let tempData=this.optionClass.xAxis.data
+      for(let i=0;i<tempData.length;i++){
+        for(let j=i+1;j<tempData.length;j++){
+          if((tempData[i].substring(0,4)>tempData[j].substring(0,4))||(tempData[i].substring(0,4)===tempData[j].substring(0,4)&&tempData[i].substring(5,6)==='秋')){
+            let temp=tempData[i]
+            tempData[i]=tempData[j]
+            tempData[j]=temp
+            for(let t=0;t<this.optionClass.series.length;t++){
+              let temp2=this.optionClass.series[t].data[i]
+              this.optionClass.series[t].data[i]=this.optionClass.series[t].data[j]
+              this.optionClass.series[t].data[j]=temp2
+            }
+          }
+        }
+      }
     },
 
     exportExcel() {

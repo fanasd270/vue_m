@@ -178,6 +178,7 @@ export default {
       user:{},
       askForm:{
         stu_no:'',
+        year:'',
         week:'1',
       },
       schedule:{},
@@ -215,8 +216,15 @@ export default {
   created() {
     this.user=JSON.parse(sessionStorage.getItem('user'));
     this.askForm.stu_no=this.user.stu_no+''
-    this.askSchedule()
     let aDate=new Date()
+    let y=aDate.getFullYear()
+    let m=aDate.getMonth()+1;
+    if(m>9||m<3){
+      this.askForm.year=y+'秋'
+    }else{
+      this.askForm.year=y+'春'
+    }
+    this.askSchedule()
   },
   methods:{
     refreshWeek(){
@@ -238,6 +246,7 @@ export default {
     },
     askSchedule(){
       let that=this
+      console.log(this.askForm)
       request.post("/findStudentCourseByStudent",this.askForm).then(res=>{
         this.schedule=res.data
         this.scheduleStyle={
