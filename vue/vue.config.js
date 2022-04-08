@@ -1,5 +1,16 @@
+const CopressionPlugin = require('compression-webpack-plugin')
 //跨域配置
 module.exports = {
+
+    configureWebpack: config => {
+        if (process.env.NODE_ENV === 'production') {
+            //GZIP压缩
+            return {
+                plugins: [new CopressionPlugin({test: /\.(js|css)(\?.*)?$/i, //需要压缩的文件正则
+                    threshold: 10240,//文件大小大于这个值时启用压缩
+                    deleteOriginalAssets: false//压缩后保留原文件
+                })]};}},
+
     devServer: {                //记住，别写错了devServer//设置本地默认端口  选填
         port: 9876,
         // port:8080,

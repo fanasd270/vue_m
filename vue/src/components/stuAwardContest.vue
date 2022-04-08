@@ -154,6 +154,18 @@ export default {
       window.location.href=this.Fapi+"/Contests/"+m
     },
     submitUpload() {
+      if(this.contestForm.contest_year===''){
+        this.$message.warning('认定时间不能为空')
+        return
+      }
+      if(this.contestForm.contest_name===''){
+        this.$message.warning('竞赛名不能为空')
+        return
+      }
+      if(this.$refs.upload.uploadFiles.length===0){
+        this.$message.warning('请选择证明材料')
+        return
+      }
       this.$refs.upload.submit();
     },
     fileUploadError(){

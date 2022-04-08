@@ -149,6 +149,18 @@ export default {
       this.$message.error('文件上传失败')
     },
     onSubmit(){
+      if(this.patentForm.patent_year===''){
+        this.$message.warning('认定时间不能为空')
+        return
+      }
+      if(this.patentForm.patent_name===''){
+        this.$message.warning('专利名不能为空')
+        return
+      }
+      if(this.$refs.upload.uploadFiles.length===0){
+        this.$message.warning('请选择证明材料')
+        return
+      }
       this.submitUpload()
     },
     //刷新组件

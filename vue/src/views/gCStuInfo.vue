@@ -57,6 +57,7 @@
             prop="stu_gender"
             label="性别"
             v-if="isShow[1]"
+            width="80"
             :filters="this.filterGender"
             :filter-method="filterGenderHandler"
             :formatter="genderFormatter"

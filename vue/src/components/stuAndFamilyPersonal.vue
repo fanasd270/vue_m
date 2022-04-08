@@ -17,7 +17,7 @@
             <!--            <p style="margin-left: 30px; font-weight: bold; margin-bottom: 20px;">-->
             <!--              基本信息-->
             <!--            </p>-->
-            <el-form  :model="form" label-width="34%" :inline="true">
+            <el-form  :model="form" label-width="34%" :inline="true" :rules="rules" ref="form">
               <el-form-item label="姓名" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
                 <el-input v-model="form.stu_name" disabled></el-input>
               </el-form-item>
@@ -100,7 +100,7 @@
                 </el-col>
               </el-form-item>
 
-              <el-form-item label="身份证号" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
+              <el-form-item label="身份证号" style="margin-bottom: 40px; margin-right: 2%; width: 23%" prop="stu_id">
                 <el-input v-model="form.stu_id" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
@@ -115,15 +115,15 @@
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item label="电话" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
+              <el-form-item label="电话" style="margin-bottom: 40px; margin-right: 2%; width: 23%" prop="stu_telephone">
                 <el-input v-model="form.stu_telephone" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
-              <el-form-item label="QQ" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
+              <el-form-item label="QQ" style="margin-bottom: 40px; margin-right: 2%; width: 23%" prop="stu_qq">
                 <el-input v-model="form.stu_qq" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
-              <el-form-item label="E-mail" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
+              <el-form-item label="E-mail" style="margin-bottom: 40px; margin-right: 2%; width: 23%" prop="stu_email">
                 <el-input v-model="form.stu_email" :disabled="Edit[0]"></el-input>
               </el-form-item>
 
@@ -155,7 +155,7 @@
 
         <div style="border: dimgray solid">
           <div style="width: 88%; margin-top: 30px; position: relative">
-            <el-form  :model="Accommodation" label-width="34%">
+            <el-form  :model="Accommodation" label-width="34%" :rules="rules" ref="Accommodation">
               <el-form-item label="楼栋" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
                 <el-select v-model="stu_building[0]" :disabled="Edit[1]" style="width: 49%;" placeholder=" ">
                   <el-option
@@ -175,11 +175,11 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="门牌号" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
+              <el-form-item label="门牌号" style="margin-bottom: 40px; width: 23%; margin-right: 2%;" prop="accommodation_information_room_no">
                 <el-input v-model="Accommodation.accommodation_information_room_no" :disabled="Edit[1]"></el-input>
               </el-form-item>
 
-              <el-form-item label="床号" style="margin-bottom: 40px; width: 23%; margin-right: 2%">
+              <el-form-item label="床号" style="margin-bottom: 40px; width: 23%; margin-right: 2%" prop="accommodation_information_bed">
                 <el-input v-model="Accommodation.accommodation_information_bed" :disabled="Edit[1]"></el-input>
               </el-form-item>
 
@@ -376,7 +376,7 @@
         </div>
       </div>
     </el-tab-pane>
-    <el-tab-pane label="个人规划">
+    <el-tab-pane label="个人规划" v-if="refreshPlan">
 
 
       <el-dialog
@@ -774,7 +774,85 @@ export default {
   },
 
   data(){
+    let isMobileNumber= (rule, value, callback) => {
+      if (!value) {
+        //return new Error("请输入电话号码");
+        callback();
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        const isPhone = reg.test(value);
+        value = Number(value); //转换为数字
+        if (typeof value === "number") {//判断是否为数字
+          value = value.toString(); //转换成字符串
+          if (value.length < 0 || value.length > 12 || !isPhone) { //判断是否为11位手机号
+            callback(new Error("手机号码格式如:138xxxx8754"));
+          } else {
+            callback();
+          }
+        } else {
+          callback(new Error("请输入电话号码"));
+        }
+      }
+    };
+
+    let isEmail = (rule, value, callback) => {
+      if (!value) {
+        callback();
+      } else {
+        const reg = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+        const email = reg.test(value);
+        if (!email) {
+          callback(new Error("邮箱格式如:admin@163.com"));
+        } else {
+          callback();
+        }
+      }
+    };
+
+    let isCardId = (rule, value, callback) => {
+      if (!value) {
+        return new Error("请输入身份证号");
+      } else {
+        const reg = /^\d{6}(18|19|20)?\d{2}(0[1-9]|1[0-2])(([0-2][1-9])|10|20|30|31)\d{3}(\d|X|x)$/;
+        const card = reg.test(value);
+        if (!card) {
+
+          callback(new Error("身份证格式如:423024xxxx0216xxxx"));
+        } else {
+          callback();
+        }
+      }
+    };
+
+    let isRoomNo=(rule, value, callback)=>{
+      if(!value){
+        return new error("请输入门牌号")
+      } else {
+        const reg=/^\d{3}/
+        const card=reg.test(value)
+        if(!card||value.length!==3){
+          callback(new Error("门牌号格式错误"));
+        } else {
+          callback();
+        }
+      }
+    };
+
+    let isBedNo=(rule, value, callback)=>{
+      if(!value){
+        return new error("请输入床号")
+      } else {
+        const reg=/^\d/
+        const card=reg.test(value)
+        if(!card||value.length!==1){
+          callback(new Error("床号格式错误"));
+        } else {
+          callback();
+        }
+      }
+    };
     return{
+      refreshPlan:true,
       Edit:[true, true,true, true, true, true],
       isShow1:[true, true,true, true, true, true],
       isShow2:[false,false,false,false, false, false],
@@ -910,6 +988,29 @@ export default {
 
       newDlmplan:false,
 
+
+      rules: {
+        stu_telephone: [
+          { required: false, message: "请输入手机号码", trigger: "blur" },
+          { validator: isMobileNumber, trigger: "blur" }
+        ],
+        stu_email: [
+          { required: false, message: "请输入邮箱", trigger: "blur" },
+          { validator: isEmail, trigger: "blur" }
+        ],
+        stu_id: [
+          { required: false, message: "请输入身份证号", trigger: "blur" },
+          { validator: isCardId, trigger: "blur" }
+        ],
+        accommodation_information_room_no:[
+            {required: true, message:"请输入门牌号", trigger: "blur"},
+            {validator:isRoomNo, trigger: "blur"}
+        ],
+        accommodation_information_bed:[
+          {required: true, message:"请输入床号", trigger: "blur"},
+          {validator:isBedNo, trigger: "blur"}
+        ],
+      },
     }
   },
 
@@ -921,6 +1022,15 @@ export default {
   },
 
   methods:{
+
+    //刷新组件
+    refreshComponent(){
+      this.fresh=false
+      this.getPlanData()
+      this.$nextTick(()=>{
+        this.fresh=true
+      })
+    },
 
     setANewPlan(){
       this.newDlmplan=true
@@ -996,6 +1106,11 @@ export default {
         this.classType=res.data
       })
 
+      this.getPlanData()
+    },
+
+    getPlanData(){
+      let formstring=JSON.stringify(this.form);
       request.post('/findDevelopments', formstring).then(res=>{
         if(res.data!=null){
           this.dlmPlans=res.data
@@ -1018,7 +1133,6 @@ export default {
           message:"个人规划书请求失败"
         })
       })
-
     },
 
     changeData(){
@@ -1057,6 +1171,7 @@ export default {
     },
 
     Cancel(){
+      this.$refs['form'].clearValidate()
       this.Edit[0]= true;
       this.isShow1[0]=true;
       this.isShow2[0]=false;
@@ -1065,6 +1180,7 @@ export default {
     },
 
     CancelAccommodation(){
+      this.$refs['Accommodation'].clearValidate()
       this.Edit[1]=true;
       this.isShow1[1]=true;
       this.isShow2[1]=false;
@@ -1232,6 +1348,7 @@ export default {
 
       request.post('/Stu/uploadPlan',this.newDevelopmentPlan).then(res=>{
         this.$message.success("上传成功")
+        this.refreshComponent()
         this.CancelNewDevelopmentPlan()
       }).catch(err=>{
         this.$message.error("上传失败")

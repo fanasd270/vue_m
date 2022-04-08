@@ -91,10 +91,14 @@
 <script>
 import request from "@/utils/request";
 import fileApi from "@/components/Store";
+import uploadFilled from "@element-plus/icons/lib/UploadFilled";
 
 export default {
   name: "stuVolServe",
 
+  components:{
+    uploadFilled,
+  },
   data(){
     return{
       serveForm:{
@@ -149,6 +153,10 @@ export default {
       this.$message.error('文件上传失败')
     },
     onSubmit(){
+      if(this.$refs.upload.uploadFiles.length===0){
+        this.$message.warning('请选择证明材料')
+        return
+      }
       this.submitUpload()
     },
     //刷新组件
@@ -173,6 +181,7 @@ export default {
       formData.append('file', param.file)
       let that=this
       request.post('/upload_activity_info2', formData).then(res=>{
+        this.fileList=[]
         this.serveForm.voluntary_activities_url=res.data
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.serveForm.voluntary_activities_stu_no=user.stu_no//
