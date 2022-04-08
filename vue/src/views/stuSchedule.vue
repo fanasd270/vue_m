@@ -245,8 +245,6 @@ export default {
       this.singleCourse=course
     },
     askSchedule(){
-      let that=this
-      console.log(this.askForm)
       request.post("/findStudentCourseByStudent",this.askForm).then(res=>{
         this.schedule=res.data
         this.scheduleStyle={

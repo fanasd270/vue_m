@@ -197,8 +197,6 @@ export default {
     handleSelectionChange(val){
       this.multipleSelection = val;
       request.post('/findallExaminationByyear',val).then(res=>{
-        console.log("course")
-        console.log(res)
         this.otherTermsPoint=res.data
         for(let item in this.otherTermsPoint){
           this.choosedTerm=item
@@ -206,7 +204,6 @@ export default {
           break
         }
       })
-      // console.log(this.multipleSelection)
     },
     filterClassHandler(value, row, column){
       const property = column['property']
@@ -245,8 +242,6 @@ export default {
     searchFun(){
 
       request.post('/findallExaminationByyear',this.user).then(res=>{
-        console.log("course")
-        console.log(res)
         this.otherTermsPoint=res.data
       })
 
@@ -284,13 +279,6 @@ export default {
       this.showPointsCopy=this.otherTermsPoint[val]
       this.showPoints=this.showPoints.splice((this.currentPage-1)*this.pageSize, this.pageSize)
     },
-    // getData(){
-    //   request.post('/findallExaminationByyear',this.user).then(res=>{
-    //     console.log("course")
-    //     console.log(res)
-    //     this.otherTermsPoint=res.data
-    //   })
-    // },
   },
 }
 </script>

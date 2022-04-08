@@ -10,18 +10,13 @@ const routes = [
     component: Layout,
     redirect:"/login",
     children:[
+      //登录路由
       {
-        path: '/StudentHome',
-        name: 'StudentHome',
-        component: ()=>import("@/views/StudentHome")
+        path: '/Login',
+        name: 'Login',
+        component: ()=>import("@/views/Login")
       },
     ]
-  },
-    //登录路由
-  {
-    path: '/Login',
-    name: 'Login',
-    component: ()=>import("@/views/Login")
   },
     //家长路由
   {

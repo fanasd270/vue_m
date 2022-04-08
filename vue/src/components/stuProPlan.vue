@@ -149,7 +149,6 @@ export default {
         if(res.data!==null){
           this.doing=res.data
         }
-        console.log(res.data)
       }).catch(err=>{
         this.$message.error("访问错误")
       })
@@ -176,7 +175,6 @@ export default {
     },
     onSubmit(i){
       if(i===0){
-        console.log(this.plan)
         request.post('/upload_plan',this.plan).then(res=>{
 
           this.Edit[i]=true
@@ -189,7 +187,6 @@ export default {
       }else{
         request.post('/upload_is_doing',this.doing).then(res=>{
 
-          console.log(this.doing)
           this.Edit[i]=true
           this.isShow1[i]=true
           this.isShow2[i]=false

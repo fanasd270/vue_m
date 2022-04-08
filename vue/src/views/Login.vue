@@ -148,7 +148,7 @@ export default {
       },
 
       note:{
-        backgroundImage:"url("+require("../assets/background.png")+")",
+        backgroundImage:"url("+require("../assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
@@ -240,7 +240,6 @@ export default {
             sessionStorage.setItem("user",JSON.stringify(res.data))
             let family={type:'fam'}
             sessionStorage.setItem("family",JSON.stringify(family))
-            console.log(res.data)
             this.$router.push("/familyHome")
           }
           else{
@@ -252,7 +251,6 @@ export default {
         this.form.user_id=this.form.user_id-0
         let formstring=JSON.stringify(this.form)
         request.post("/login", formstring).then(res=>{
-          console.log(res)
           if(res.data===null){
             this.$message({
               type:"error",
@@ -286,7 +284,6 @@ export default {
               let temp={type:2}
               sessionStorage.setItem('power',JSON.stringify(temp))
               sessionStorage.setItem("user",JSON.stringify(res.data))
-              console.log(res.data)
               this.$router.push("/tealayout")//跳转至主页
             }
 
@@ -302,7 +299,6 @@ export default {
     numLogin(){
       request.post('/count').then(res=>{
         this.numCount=res.data
-        console.log(this.numCount)
       })
     },
   }

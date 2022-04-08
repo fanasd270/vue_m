@@ -188,7 +188,6 @@ export default {
         this.projectForm.project_student_name=user.stu_name//
 
         request.post("/upload_project_info", that.projectForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
@@ -203,7 +202,6 @@ export default {
 
       //请求专利
       request.post('find_my_project_info',user).then(res=>{
-        console.log(res)
         this.projectDid=res
         if(this.projectDid.length===0){
           this.didHistory=true
@@ -218,7 +216,6 @@ export default {
 
       // 判断是否有正在审核的信息
       request.post('/project_isexamineing',user).then(res=>{
-        console.log("项目审核："+res)
         if(res===1){
           this.newButtons=true
         }
@@ -237,7 +234,6 @@ export default {
       let project=JSON.stringify(this.projectDid[index])
       let that=this
       request.post('/delete_project', project).then(res=>{
-        console.log(res)
         this.projectShow[index]=false
         that.refreshComponent()
       })

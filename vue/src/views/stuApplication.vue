@@ -86,7 +86,6 @@ export default {
   methods:{
     getData(){
       request.post('/find_stayschool_byStudent',this.user).then(res=>{
-        console.log(res)
         if(res.code===1){
           this.everApp=false
           this.stayApplication=res.data[0]

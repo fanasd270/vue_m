@@ -174,13 +174,11 @@ export default {
       let that=this
       request.post('/upload_activity_info2', formData).then(res=>{
         this.serveForm.voluntary_activities_url=res.data
-        console.log(res)
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.serveForm.voluntary_activities_stu_no=user.stu_no//
         this.serveForm.voluntary_activities_stu_name=user.stu_name//
 
         request.post("/upload_activity_info", that.serveForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
@@ -195,7 +193,6 @@ export default {
 
       //请求记录
       request.post('/find_my_activity_info',user).then(res=>{
-        console.log(res)
         this.serveDid=res
         if(this.serveDid.length===0){
           this.didHistory=true
@@ -219,7 +216,6 @@ export default {
       let serve=JSON.stringify(this.serveDid[index])
       let that=this
       request.post('/delete_activity', serve).then(res=>{
-        console.log(res)
         this.toDoShow[index]=false
         that.refreshComponent()
       })

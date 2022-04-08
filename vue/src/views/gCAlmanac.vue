@@ -258,9 +258,7 @@ export default {
           requestUrl="/downloadProjectByYear"
           break
       }
-      console.log(this.downLoadTea)
       request.post(requestUrl,this.downLoadTea).then(res=>{
-        console.log(res)
         window.location.href=this.Fapi+"/excel/"+res.data
         this.dialogVisible=false
       }).catch(err=>{

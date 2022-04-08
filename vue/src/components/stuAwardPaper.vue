@@ -174,13 +174,11 @@ export default {
       let that=this
       request.post('/upload_paper_info2', formData).then(res=>{
         this.paperForm.paper_supporting_materials=res.data
-        console.log(res)
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.paperForm.paper_stuno=user.stu_no//
         this.paperForm.paper_stuname=user.stu_name//以上三句可在getData实现后删除
 
         request.post("/upload_paper_info", that.paperForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
@@ -195,7 +193,6 @@ export default {
 
       //请求论文
       request.post('/find_my_paper_info',user).then(res=>{
-        console.log(res)
         this.paperDid=res
         if(this.paperDid.length===0){
           this.didHistory=true
@@ -210,7 +207,6 @@ export default {
 
       // 判断是否有正在审核的信息
       request.post('/paper_isexamineing',user).then(res=>{
-        console.log("论文审核："+res)
         if(res===1){
           this.newButtons=true
         }
@@ -230,7 +226,6 @@ export default {
       let paper=JSON.stringify(this.paperDid[index])
       let that=this
       request.post('/delete_paper', paper).then(res=>{
-        console.log(res)
         this.toDoShow[index]=false
         that.refreshComponent()
       })

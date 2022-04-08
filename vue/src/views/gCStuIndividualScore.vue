@@ -101,7 +101,6 @@ export default {
         this.stu.score_pdf_url=res.data
         request.post('/uploadPDF_DB', this.stu).then(res=>{
           this.$message.success("上传成功")
-          console.log(this.stu)
         })
       }).catch(err=>{
         this.$message.error("连接错误")

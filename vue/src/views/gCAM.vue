@@ -231,7 +231,6 @@ export default {
     showPower(item){
       this.singleMan=item
       request.post('/Tea/haswhatAuthorize',item).then(res=>{
-        console.log(res)
         this.onesAuthors=res.data
         this.showOnesAuthors=true
       }).catch(err=>{
@@ -277,14 +276,12 @@ export default {
     getData(){
       request.post('/Stu/stuList', this.user).then(res=>{
         this.tableData=res
-        console.log(res)
         this.tableDataCopy=JSON.parse(JSON.stringify(this.tableData))
       }).catch(err=>{
         this.$message.error("学生信息请求错误")
       })
 
       request.post('/Tea/whoHasauthorize',this.user).then(res=>{
-        console.log(res)
         this.whoHasauthorize=res.data
       }).catch(err=>{
         this.$message.error("连接错误")

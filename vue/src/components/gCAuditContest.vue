@@ -114,7 +114,6 @@ export default {
     },
     passContest(index){
       request.post('/pass_contest',this.contestToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.contestToDoShow[index]=false
         delete this.contestToDo[index]
         if(this.toDoNum-1===0){
@@ -127,7 +126,6 @@ export default {
     },
     rejectContest(index){
       request.post('/refuse_contest',this.contestToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.contestToDoShow[index]=false
         delete this.contestToDo[index]
         if(this.toDoNum-1===0){
@@ -168,7 +166,6 @@ export default {
       })
 
       request.post('/find_all_contest_info_old',this.user).then(res=>{
-        console.log("竞赛记录:"+res)
         this.contestDid=res
         for(let i=0;i<this.contestDid.length;i++){
           this.contestDidShow[i]=true

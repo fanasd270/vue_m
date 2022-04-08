@@ -177,7 +177,6 @@ export default {
 
     passSend(index) {
       request.post('/pass_dispatch', this.sendToDo[index]).then(res => {
-        // console.log(res.msg)
         this.sendToDoShow[index] = false
         delete this.sendToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -190,7 +189,6 @@ export default {
     },
     rejectSend(index) {
       request.post('/refuse_dispatch', this.sendToDo[index]).then(res => {
-        // console.log(res.msg)
         this.sendToDoShow[index] = false
         delete this.sendToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -230,7 +228,6 @@ export default {
       })
 
       request.post('/find_all_dispatch_old', this.user).then(res => {
-        console.log("dispatch记录:" + res)
         this.sendDid = res
         for (let i = 0; i < this.sendDid.length; i++) {
           this.sendDidShow[i] = true

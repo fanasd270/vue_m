@@ -176,7 +176,6 @@ export default {
       })
     },
     confirmUpload(){
-      console.log(this.user)
       request.post('/submitStudentCourses',this.user).then(res=>{
         this.$message.success("成功")
         this.schedule=[]

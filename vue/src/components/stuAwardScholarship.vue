@@ -122,7 +122,6 @@ export default {
   },
   methods:{
     downloadPaper(m){
-      console.log("点击下载")
       window.location.href=this.Fapi+"/ScholarshipInfo/"+m
     },
     submitUpload() {
@@ -158,13 +157,10 @@ export default {
       let that=this
       request.post('/upload_scholarship_info2', formData).then(res=>{
         this.awardForm.scholarship_info_supporting_materials=res.data
-        console.log(res)
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.awardForm.scholarship_info_stu_no=user.stu_no+''//
         this.awardForm.scholarship_info_stu_name=user.stu_name//
-        console.log(this.awardForm)
         request.post("/upload_scholarship", that.awardForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
@@ -179,8 +175,6 @@ export default {
 
       //请求
       request.post('/find_my_scholarship',user).then(res=>{
-        console.log("我的获奖")
-        console.log(res)
         this.paperDid=res
         if(this.paperDid.length===0){
           this.didHistory=true
@@ -195,7 +189,6 @@ export default {
 
       // 判断是否有正在审核的信息
       request.post('/scholarship_isExamining',user).then(res=>{
-        console.log("获奖审核："+res)
         if(res===1){
           this.newButtons=true
         }
@@ -215,7 +208,6 @@ export default {
       let paper=JSON.stringify(this.paperDid[index])
       let that=this
       request.post('/delete_scholarship', paper).then(res=>{
-        console.log(res)
         this.toDoShow[index]=false
         that.refreshComponent()
       })

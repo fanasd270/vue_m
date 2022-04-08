@@ -10,7 +10,7 @@
     <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:36%"></el-badge>
     <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:42%"></el-badge>
     <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:48%"></el-badge>
-    <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:0 1% 0 1%">
+    <el-tabs v-model="activeName" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">
         <gCAuditPaper v-on:paperKey="paperCom"></gCAuditPaper>
@@ -84,9 +84,6 @@ export default {
   },
 
   methods:{
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
     paperCom(toDoNum, numShow){
       this.numShow[0]=numShow
       this.toDoNum[0]=toDoNum

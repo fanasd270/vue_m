@@ -133,8 +133,6 @@ export default {
       formData.append('file', param.file)
 
       request.post('/issubmiting').then(res=>{
-        console.log("状态")
-        console.log(res.data)
         if(res.code===0){
           this.$message.warning('服务器正忙，请稍等')
           return
@@ -143,7 +141,6 @@ export default {
         request.post('/uploadExcelforGradePoint', formData).then(res=>{
           let read={path:res.data}
           request.post('/readExcelforGradepoint',read).then(res=>{
-            console.log(res.data)
             this.loading=false
             this.$message.success("操作成功，请在确认信息无误后点击确认上传，此操作请在五分钟内完成，之后将自动取消")
             this.grandPointTable=res.data
@@ -156,7 +153,6 @@ export default {
     },
     downloadGrandPoint(){
       request.post('/downloadExcelforGradepoint').then(res=>{
-        console.log(res)
         window.location.href=this.Fapi+'/excel/Uploadexcel/'+res.data
       })
     },

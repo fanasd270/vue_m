@@ -110,7 +110,6 @@ export default {
 
     passPatent(index){
       request.post('/pass_patent',this.patentToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.patentToDoShow[index]=false
         delete this.patentToDo[index]
         if(this.toDoNum-1===0){
@@ -123,7 +122,6 @@ export default {
     },
     rejectPatent(index){
       request.post('/refuse_patent',this.patentToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.patentToDoShow[index]=false
         delete this.patentToDo[index]
         if(this.toDoNum-1===0){
@@ -164,7 +162,6 @@ export default {
       })
 
       request.post('/find_all_patent_info_old',this.user).then(res=>{
-        console.log("patent记录:"+res)
         this.patentDid=res
         for(let i=0;i<this.patentDid.length;i++){
           this.patentDidShow[i]=true

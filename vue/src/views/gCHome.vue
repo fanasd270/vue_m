@@ -149,7 +149,7 @@ export default {
   data(){
     return{
       note:{
-        backgroundImage:"url("+require("../assets/background.png")+")",
+        backgroundImage:"url("+require("../assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },

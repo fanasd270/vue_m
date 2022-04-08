@@ -104,13 +104,11 @@ export default {
     },
 
     downloadPaper(m){
-      console.log("点击下载")
       window.location.href=this.Fapi+"/Papers/"+m
     },
 
     passPaper(index){
       request.post('/pass_paper',this.paperToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.toDoShow[index]=false
         delete this.paperToDo[index]
         if(this.toDoNum-1===0){
@@ -123,7 +121,6 @@ export default {
     },
     rejectPaper(index){
       request.post('/refuse_paper',this.paperToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.toDoShow[index]=false
         delete this.paperToDo[index]
         if(this.toDoNum-1===0){

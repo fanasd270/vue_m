@@ -259,7 +259,6 @@ export default {
   methods:{
     downloadPDF(){
       request.post('/findStudentScorePDF',this.user).then(res=>{
-        console.log(res)
         window.location.href=this.Fapi+"/excel/UploadPDF/"+res.data[0].score_pdf_url
       }).catch(err=>{
         this.$message.error("下载失败")
@@ -288,12 +287,10 @@ export default {
 
     getData(){
       request.post('/finStuExamnation',this.user).then(res=>{
-        console.log(res)
         this.otherTermsPointForCourse=res.data
       })
 
       request.post('/findStuGradepoint',this.user).then(res=>{
-        console.log(res)
         this.otherTermsPointForGrand=res.data
         if(this.otherTermsPointForGrand["总绩点"]){
           this.choosedTermForGrand="总绩点"
@@ -302,7 +299,6 @@ export default {
       })
 
       request.post('/findStuCE',this.user).then(res=>{
-        console.log(res)
         this.otherTermsPointForGrade=res.data
       })
 

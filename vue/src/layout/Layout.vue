@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--    头部-->
-    <Header />
+<!--    <Header />-->
 
     <!--    主体-->
     <div style="display: flex">
@@ -13,13 +13,9 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
 
 export default {
   name: "Layout",
-  components:{
-    Header,
-  }
 }
 </script>
 

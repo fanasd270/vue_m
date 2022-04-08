@@ -89,7 +89,6 @@ export default {
 
     passProject(index){
       request.post('/passStaySchool',this.projectToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.projectToDoShow[index]=false
         delete this.projectToDo[index]
         if(this.toDoNum-1===0){
@@ -132,8 +131,6 @@ export default {
       })
 
       request.post('/find_all_stay_school_old2',usertemp).then(res=>{
-        console.log("application记录:"+res)
-        console.log(res)
         this.projectDid=res
         for(let i=0;i<this.projectDid.length;i++){
           this.projectDidShow[i]=true

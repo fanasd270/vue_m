@@ -573,7 +573,6 @@ export default {
         tempList=this.showPointsCopy.filter((value)=>{
           return value.final_Information_year===this.choosedFilterTerms[index]
         })
-        console.log(tempList)
         this.showPoints=this.showPoints.concat(tempList)
       }
     },
@@ -775,7 +774,6 @@ export default {
               })
               that.showChartInfoList=that.showChartInfoList.concat(tempList)
             }
-            console.log(res)
           }).catch(err=>{
             that.$message.error("访问失败")
           })
@@ -883,7 +881,6 @@ export default {
       })
 
       request.post('/findScoreByClass',this.user).then(res=>{
-        console.log(res)
         let tempClass={class_name:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
         for(let index in res.data){
           tempClass.class_name=res.data[index].class_name
@@ -901,7 +898,6 @@ export default {
       })
 
       request.post('/findScoreByBedRoom',this.user).then(res=>{
-        console.log(res)
         let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
         for(let index in res.data){
           tempDorm.room=res.data[index].room
@@ -944,7 +940,6 @@ export default {
       let month = time.getMonth() + 1;
       let day = time.getDate();
       let name = year + "" + month + "" + day;
-      // console.log(name)
       /* generate workbook object from table */
       //  .table要导出的是哪一个表格
       var wb = XLSX.utils.table_to_book(document.querySelector(".detailChartInfo"));

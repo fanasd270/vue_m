@@ -191,13 +191,11 @@ export default {
       let that=this
       request.post('/upload_contest_info2', formData).then(res=>{
         this.contestForm.contest_supporting_materials=res.data
-        console.log(res)
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.contestForm.contest_stuno=user.stu_no//
         this.contestForm.contest_stuname=user.stu_name//
 
         request.post("/upload_contest_info", that.contestForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
            // that.reload()
@@ -213,7 +211,6 @@ export default {
 
       //请求竞赛
       request.post('/find_my_contest_info',user).then(res=>{
-        console.log(res)
         this.contestDid=res
         if(this.contestDid.length===0){
           this.didHistory=true
@@ -228,7 +225,6 @@ export default {
 
       // 判断是否有正在审核的信息
       request.post('/contest_isexamineing',user).then(res=>{
-        console.log("竞赛审核："+res)
         if(res===1){
           this.newButtons=true
         }
@@ -248,7 +244,6 @@ export default {
       let contest=JSON.stringify(this.contestDid[index])
       let that=this
       request.post('/delete_contest', contest).then(res=>{
-        console.log(res)
         this.contestShow[index]=false
         that.refreshComponent()
       })

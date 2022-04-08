@@ -111,7 +111,6 @@ export default {
     },
     passProject(index){
       request.post('/pass_project',this.projectToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.projectToDoShow[index]=false
         delete this.projectToDo[index]
         if(this.toDoNum-1===0){
@@ -124,7 +123,6 @@ export default {
     },
     rejectProject(index){
       request.post('/refuse_project',this.projectToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.projectToDoShow[index]=false
         delete this.projectToDo[index]
         if(this.toDoNum-1===0){
@@ -165,7 +163,6 @@ export default {
       })
 
       request.post('/find_all_project_info_old',this.user).then(res=>{
-        console.log("project记录:"+res)
         this.projectDid=res
         for(let i=0;i<this.projectDid.length;i++){
           this.projectDidShow[i]=true

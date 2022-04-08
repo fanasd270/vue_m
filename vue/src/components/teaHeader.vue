@@ -128,9 +128,7 @@ export default {
       {
         this.form.no=this.form.no-0;
         let formstring=JSON.stringify(this.form);
-        console.log(formstring)
         request.post("/Stu/upDatePassword", formstring).then(res=>{
-          console.log(res)
           if(res.data===null)
           {
             ElMessage.error('密码错误')

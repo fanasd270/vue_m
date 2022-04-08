@@ -285,9 +285,6 @@ export default {
 
     readData(){
       request.post('/Tea/findAllStatus', this.user).then(res=>{
-        console.log("readdata")
-        console.log(res.data)
-        console.log(this.oldMsg)
         if(res.data===null){
           return
         }
@@ -304,16 +301,12 @@ export default {
           m.all=res.data[i].all
           this.oldMsg.push(m)
         }
-        console.log(this.oldMsg)
-
       })
     },
 
 
     stuStatus(j){
       request.post('Tea/findWhoReadOneMsg', this.oldMsg[j]).then(res=>{
-        console.log("oldMsg")
-        console.log(res)
         this.stulist=res.data
       })
       this.drawer1=true
@@ -434,8 +427,6 @@ export default {
         this.mess.stuList.push(this.multipleSelection[i].stu_no)
       }
       this.mess.msg_releasetime=this.getTime()
-      console.log("send")
-      console.log(this.mess)
       request.post('/Tea/send_msg',this.mess).then(res=>{
         this.$message({
           type:"success",

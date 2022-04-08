@@ -997,8 +997,6 @@ export default {
       })
 
       request.post('/findDevelopments', formstring).then(res=>{
-        console.log("developments")
-        console.log(res)
         if(res.data!=null){
           this.dlmPlans=res.data
           //this.developmentPlan=res.data
@@ -1105,11 +1103,7 @@ export default {
       this.form.stu_ismacau=this.form.stu_ismacau-0;
       this.form.stu_gender=this.form.stu_gender-0;
       let formstring=JSON.stringify(this.form);
-      console.log("提交")
-      console.log(formstring)
       request.post('/Stu/upDateStudent',formstring).then(res=>{
-        console.log("结果")
-        console.log(res);
         if(res.data===null){
           this.$message({
             type:"error",
@@ -1137,8 +1131,6 @@ export default {
       this.Accommodation.accommodation_information_building=this.stu_building[0]+this.stu_building[1]
       // this.Accommodation.accommodation_information_ismain=this.Accommodation.accommodation_information_ismain.toString()
       let form=JSON.stringify(this.Accommodation)
-      console.log("提交信息：")
-      console.log(form)
       request.post('/Stu/updateDormitoryInfo',form).then(res=>{
         this.$message({
           type:"success",
@@ -1159,8 +1151,6 @@ export default {
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.examination.college_entrance_examination_stu_no=user.stu_no.toString()
       let form=JSON.stringify(this.examination)
-      console.log("提交信息：")
-      console.log(form)
       request.post('/Stu/updateEntranceInfo',form).then(res=>{
         this.$message({
           type:"success",
@@ -1211,7 +1201,6 @@ export default {
       let user=JSON.parse(sessionStorage.getItem('user'))
       this.developmentPlan.development_planning_stu_no=user.stu_no.toString()
       let form=JSON.stringify(this.developmentPlan)
-      console.log(this.developmentPlan)
       request.post('/Stu/uploadPlan',form).then(res=>{
         this.$message({
           type:"success",
@@ -1230,7 +1219,6 @@ export default {
     },
 
     onSubmitNewDevelopmentPlan(){
-      console.log(this.newDevelopmentPlan)
       if(this.newDevelopmentPlan.year===null||this.newDevelopmentPlan.year2===null||!this.newDevelopmentPlan.year||!this.newDevelopmentPlan.year2){
         this.$message.error("请选择学期")
         return
@@ -1242,8 +1230,6 @@ export default {
         }
       }
 
-      console.log("新上传")
-      console.log(this.newDevelopmentPlan)
       request.post('/Stu/uploadPlan',this.newDevelopmentPlan).then(res=>{
         this.$message.success("上传成功")
         this.CancelNewDevelopmentPlan()

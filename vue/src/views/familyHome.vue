@@ -31,8 +31,6 @@ export default {
   },
   created() {
   let family=sessionStorage.getItem("family")
-    console.log("family")
-    console.log(family)
   },
   methods:{
 

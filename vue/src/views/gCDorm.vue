@@ -616,7 +616,6 @@ export default {
       window.location.href=this.Fapi+"/Patents/"+m
     },
     downloadPaper(m){
-      console.log("点击下载")
       window.location.href=this.Fapi+"/Papers/"+m
     },
     initScore(){
@@ -624,12 +623,9 @@ export default {
       this.scoreChart.setOption(this.optionScore);
     },
     stuInfoDetail(row){
-      console.log(row)
       let stu={stu_no:row.accommodation_information_stu_no,stu_name:row.accommodation_information_stu_name}
 
       request.post('/Stu/findallinfoforone',stu).then(res=>{
-        console.log(111111111111111111111111111111111)
-        console.log(res)
         this.detailInfo=res.data
         this.headUrl=fileApi.fileApi+'/Pictures/'+res.data.stu_photourl
         this.infoDialog=true
@@ -643,8 +639,6 @@ export default {
 
         }
         this.optionScore.series.push(tempScore)
-        console.log("option")
-        console.log(this.optionScore)
         this.$nextTick(()=>{
           this.initScore()
         })
@@ -671,7 +665,6 @@ export default {
 
     getData(){
       request.post("/bedRoomList",this.user).then(res=>{
-        console.log(res.data)
         this.bedRoomList=res.data
         let temp={key:'',value:[]}
         let tempCopy={key:'',value:[]}

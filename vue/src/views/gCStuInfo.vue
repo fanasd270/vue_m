@@ -660,7 +660,6 @@ export default {
       window.location.href=this.Fapi+"/Patents/"+m
     },
     downloadPaper(m){
-      console.log("点击下载")
       window.location.href=this.Fapi+"/Papers/"+m
     },
     filterClassHandler(value, row, column){
@@ -713,10 +712,7 @@ export default {
       }
     },
     stuInfoDetail(row){
-      console.log(row)
       request.post('/Stu/findallinfoforone',row).then(res=>{
-        console.log(111111111111111111111111111111111)
-        console.log(res)
         this.detailInfo=res.data
         this.headUrl=fileApi.fileApi+'/Pictures/'+res.data.stu_photourl
         this.infoDialog=true
@@ -730,8 +726,6 @@ export default {
 
         }
         this.optionScore.series.push(tempScore)
-        console.log("option")
-        console.log(this.optionScore)
         this.$nextTick(()=>{
           this.initScore()
         })

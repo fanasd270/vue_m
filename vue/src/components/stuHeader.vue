@@ -139,9 +139,7 @@ export default {
       {
         this.form.no=this.form.no-0;
         let formstring=JSON.stringify(this.form);
-        console.log(formstring)
         request.post("/Stu/upDatePassword", formstring).then(res=>{
-          console.log(res)
           if(res.data===null)
           {
             ElMessage.error('密码错误')
@@ -179,17 +177,12 @@ export default {
       const formData=new FormData()
       formData.append('file', param.file)
       request.post('/Stu/upLoadPicture', formData).then(res=>{
-        console.log(res)
         this.user.stu_photourl=res.data
         this.user.stu_no=this.user.stu_no-0;
         this.user.stu_ismacau=this.user.stu_ismacau-0;
         this.user.stu_gender=this.user.stu_gender-0;
         let formstring=JSON.stringify(this.user);
-        console.log("提交")
-        console.log(formstring)
         request.post('/Stu/upDateStudent',formstring).then(res=>{
-          console.log("结果")
-          console.log(res);
           if(res.data===null){
             this.$message({
               type:"error",
@@ -211,7 +204,6 @@ export default {
     },
     updateUrl(){
       this.headUrl=fileApi.fileApi+'/Pictures/'+this.user.stu_photourl
-      console.log(this.headUrl)
     },
   },
 }

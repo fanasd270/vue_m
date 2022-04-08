@@ -74,7 +74,6 @@ export default {
     },
     getData(){
       request.post('/findCEByyear',this.user).then(res=>{
-        console.log(res)
         this.otherTermsPoint=res.data
       })
     },

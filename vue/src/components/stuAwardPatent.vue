@@ -182,7 +182,6 @@ export default {
         this.patentForm.patent_stu_name=user.stu_name//
 
         request.post("/upload_patent_info", that.patentForm).then(res=>{
-          console.log(res)
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
           that.refreshComponent()
@@ -197,7 +196,6 @@ export default {
 
       //请求专利
       request.post('find_my_patent_info',user).then(res=>{
-        console.log(res)
         this.patentDid=res
         if(this.patentDid.length===0){
           this.didHistory=true
@@ -212,7 +210,6 @@ export default {
 
       // 判断是否有正在审核的信息
       request.post('/patent_isexamineing',user).then(res=>{
-        console.log("专利审核："+res)
         if(res===1){
           this.newButtons=true
         }
@@ -232,7 +229,6 @@ export default {
       let patent=JSON.stringify(this.patentDid[index])
       let that=this
       request.post('/delete_patent', patent).then(res=>{
-        console.log(res)
         this.patentShow[index]=false
         that.refreshComponent()
       })

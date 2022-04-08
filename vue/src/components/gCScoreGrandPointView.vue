@@ -134,18 +134,14 @@ export default {
     changeClassList(){
       this.showPoints=[]
       let tempList=[]
-      console.log(this.showPointsCopy)
-      console.log(this.choosedClassList)
       for(let index in this.choosedClassList){
         tempList=this.showPointsCopy.filter((value)=>{
           return value.grade_point_stu_class===this.choosedClassList[index]
         })
-        console.log(tempList)
         this.showPoints=this.showPoints.concat(tempList)
       }
     },
     sortChange(val){
-      console.log(val)
       if(val.order==='descending'){
         this.showPointsCopy.sort(function (a,b){
           let x=a[val.prop]
@@ -159,8 +155,6 @@ export default {
           return((x<=y)?-1:((x>y)?1:0))
         })
       }
-
-      console.log(this.showPointsCopy)
       this.showDataChange()
     },
 
@@ -190,7 +184,6 @@ export default {
       this.loading=true
       request.post('/findAllGradePiontTatol',this.user).then(res=>{
         request.post('/findallGradePointByyear',this.user).then(res=>{
-          console.log(res)
           this.otherTermsPoint=res.data
           for(let item in this.otherTermsPoint){
             for(let m in this.otherTermsPoint[item]){

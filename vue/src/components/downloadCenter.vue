@@ -159,11 +159,9 @@ export default {
 
     getData(){
       request.post('/findAllTeacherDownCenter').then(res=>{
-        console.log(res)
         this.dataTea=res.data
       })
       request.post('/findAllStudentrDownCenter').then(res=>{
-        console.log(res.data)
         this.dataStu=res.data
       })
     },
@@ -188,7 +186,6 @@ export default {
       if(this.upForm.download_user_type==='t'){
         request.post('/Tea/uploadFile', formData).then(res=>{
           this.upForm.download_center_url=res.data
-          console.log(this.upForm)
           request.post("/Tea/uploadFileDB",this.upForm).then(res=>{
             that.$message.success(res.msg)
             this.dialogVisible=false

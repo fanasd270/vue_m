@@ -106,7 +106,6 @@ export default {
       this.temp.social_activity_name=''
     },
     onsubmitWorks(){
-      console.log(this.temp)
       request.post('/uploadSocialActivity',this.temp).then(res=>{
         this.socialWords.push(JSON.parse(JSON.stringify(this.temp)))
         this.dialogVisible=false
@@ -129,8 +128,6 @@ export default {
     },
     getData(){
       request.post('/find_my_social_activity_info',this.user).then(res=>{
-        console.log("社会工作")
-        console.log(res)
         this.socialWords=res
       }).catch(err=>{
         this.$message.error("请求错误")

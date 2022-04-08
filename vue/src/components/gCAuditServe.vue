@@ -100,7 +100,6 @@ export default {
     },
     passServe(index) {
       request.post('/pass_activity', this.serveToDo[index]).then(res => {
-        // console.log(res.msg)
         this.serveToDoShow[index] = false
         delete this.serveToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -113,7 +112,6 @@ export default {
     },
     rejectServe(index) {
       request.post('/refuse_activity', this.serveToDo[index]).then(res => {
-        // console.log(res.msg)
         this.serveToDoShow[index] = false
         delete this.serveToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -153,7 +151,6 @@ export default {
       })
 
       request.post('/find_all_activity_old', this.user).then(res => {
-        console.log("serve记录:" + res)
         this.serveDid = res
         for (let i = 0; i < this.serveDid.length; i++) {
           this.serveDidShow[i] = true

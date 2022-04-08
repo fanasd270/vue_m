@@ -100,7 +100,6 @@ export default {
     },
     passProject(index){
       request.post('/pass_scholarship',this.projectToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.projectToDoShow[index]=false
         delete this.projectToDo[index]
         if(this.toDoNum-1===0){
@@ -113,7 +112,6 @@ export default {
     },
     rejectProject(index){
       request.post('/refuse_scholarship',this.projectToDo[index]).then(res=>{
-        // console.log(res.msg)
         this.projectToDoShow[index]=false
         delete this.projectToDo[index]
         if(this.toDoNum-1===0){
@@ -140,8 +138,6 @@ export default {
         for(let i=0;i<this.projectToDo.length;i++){
           this.projectToDoShow[i]=true
         }
-        console.log("11111111111111111111111111")
-        console.log(this.projectToDo)
         //原numcount函数内容
         this.toDoNum=this.projectToDo.length
         if(this.toDoNum===0){
@@ -152,13 +148,10 @@ export default {
           this.numShow=true
           this.noInfo=false
         }
-        console.log("number")
-        console.log(this.toDoNum)
         this.$emit('scholarshipKey',this.toDoNum,this.numShow)
       })
 
       request.post('/find_all_scholarship_old',this.user).then(res=>{
-        console.log("award记录:"+res)
         this.projectDid=res
         for(let i=0;i<this.projectDid.length;i++){
           this.projectDidShow[i]=true

@@ -97,24 +97,7 @@ export default {
         residue: 0,
       },
       mess:{
-        toDoMsg:[
-          // {all: null,
-          //   done: null,
-          //   msg_content: "1233",
-          //   msg_deadline: "2022-03-01 00:00:00",
-          //   msg_no: "10000-2022-02-28 21:13:00",
-          //   msg_releasetime: "2022-02-28 21:13:02",
-          //   msg_sender: 10000,
-          //   read: null,
-          //   status: 0,
-          //   teacherName: "周巍",
-          //   days: 0,
-          //   hours: 0,
-          //   minutes: 0,
-          //   seconds: 0,
-          //   residue: 0,
-          // },
-        ],
+        toDoMsg:[],
         didMsg:[],
       },
       operationMess:{
@@ -129,10 +112,6 @@ export default {
     this.stu=JSON.parse(sessionStorage.getItem('user'));
     this.operationMess.receiver=this.stu.stu_no-0
     this.readData()
-    //计算时间
-    // setInterval(() => {
-    //   this.getResidueDate();
-    // }, 1000);
   },
 
 
@@ -143,7 +122,6 @@ export default {
     },
     ReadMsg(i){
       this.operationMess.msg_no2=this.mess.toDoMsg[i].msg_no
-      console.log(this.operationMess.msg_no2)
       request.post('/read_msg',this.operationMess).then(res=>{
         this.mess.toDoMsg[i].status=1
       }).catch(err=>{
@@ -186,7 +164,6 @@ export default {
             this.show.push(true)
           }
         }
-        console.log(res.data)
       })
     },
 
