@@ -5,7 +5,7 @@
         <span style="opacity: 0">1</span>
       </i>
       <p style="font-weight: bolder; font-size: large ;display: inline">
-        综合能力
+        近期计划
       </p>
     </div>
     <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">

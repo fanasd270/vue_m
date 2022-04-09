@@ -8,8 +8,10 @@
       <el-tab-pane label="查看成绩">
         <stu-and-family-score-view/>
       </el-tab-pane>
+      <el-tab-pane label="查看课表">
+        <stu-and-family-schedule/>
+      </el-tab-pane>
       <el-tab-pane label="个人成长规划">
-
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -19,9 +21,11 @@
 import StuAndFamilyScoreView from "@/components/stuAndFamilyScoreView";
 import StuHeader from "@/components/stuHeader";
 import StuAndFamilyPersonal from "@/components/stuAndFamilyPersonal";
+import StuAndFamilySchedule from "@/components/stuAndFamilySchedule";
 export default {
   name: "familyHome",
   components: {
+    StuAndFamilySchedule,
     StuAndFamilyPersonal, StuHeader, StuAndFamilyScoreView
   },
   data(){

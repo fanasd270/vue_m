@@ -876,42 +876,42 @@ export default {
           this.$message.error("连接失败")
         })
 
+        request.post('/findScoreByClass',this.user).then(res=>{
+          let tempClass={class_name:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
+          for(let index in res.data){
+            tempClass.class_name=res.data[index].class_name
+            tempClass.paper_num=res.data[index].paper_num
+            tempClass.patent_num=res.data[index].patent_num
+            tempClass.project_num=res.data[index].project_num
+            tempClass.contest_num=res.data[index].contest_num
+            for(let j in res.data[index].alltotalGradePoint){
+              tempClass.GPA+=res.data[index].alltotalGradePoint[j]
+            }
+            tempClass.GPA=tempClass.GPA/res.data[index].alltotalGradePoint.length
+            tempClass.score=parseFloat(tempClass.GPA*10+tempClass.paper_num+tempClass.patent_num+tempClass.project_num+tempClass.contest_num).toFixed(3)
+            this.sortClass.push(JSON.parse(JSON.stringify(tempClass)))
+          }
+        })
+
+        request.post('/findScoreByBedRoom',this.user).then(res=>{
+          let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
+          for(let index in res.data){
+            tempDorm.room=res.data[index].room
+            tempDorm.paper_num=res.data[index].paper_num
+            tempDorm.patent_num=res.data[index].patent_num
+            tempDorm.project_num=res.data[index].project_num
+            tempDorm.contest_num=res.data[index].contest_num
+            for(let j in res.data[index].score){
+              tempDorm.GPA+=res.data[index].score[j]
+            }
+            tempDorm.GPA=tempDorm.GPA/res.data[index].score.length
+            tempDorm.score=parseFloat(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
+            this.sortDorm.push(JSON.parse(JSON.stringify(tempDorm)))
+          }
+        })
+
       }).catch(err=>{
         this.$message.error("获取信息失败")
-      })
-
-      request.post('/findScoreByClass',this.user).then(res=>{
-        let tempClass={class_name:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
-        for(let index in res.data){
-          tempClass.class_name=res.data[index].class_name
-          tempClass.paper_num=res.data[index].paper_num
-          tempClass.patent_num=res.data[index].patent_num
-          tempClass.project_num=res.data[index].project_num
-          tempClass.contest_num=res.data[index].contest_num
-          for(let j in res.data[index].alltotalGradePoint){
-            tempClass.GPA+=res.data[index].alltotalGradePoint[j]
-          }
-          tempClass.GPA=tempClass.GPA/res.data[index].alltotalGradePoint.length
-          tempClass.score=parseFloat(tempClass.GPA*10+tempClass.paper_num+tempClass.patent_num+tempClass.project_num+tempClass.contest_num).toFixed(3)
-          this.sortClass.push(JSON.parse(JSON.stringify(tempClass)))
-        }
-      })
-
-      request.post('/findScoreByBedRoom',this.user).then(res=>{
-        let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
-        for(let index in res.data){
-          tempDorm.room=res.data[index].room
-          tempDorm.paper_num=res.data[index].paper_num
-          tempDorm.patent_num=res.data[index].patent_num
-          tempDorm.project_num=res.data[index].project_num
-          tempDorm.contest_num=res.data[index].contest_num
-          for(let j in res.data[index].score){
-            tempDorm.GPA+=res.data[index].score[j]
-          }
-          tempDorm.GPA=tempDorm.GPA/res.data[index].score.length
-          tempDorm.score=parseFloat(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
-          this.sortDorm.push(JSON.parse(JSON.stringify(tempDorm)))
-        }
       })
 
     },

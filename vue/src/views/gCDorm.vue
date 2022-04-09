@@ -231,20 +231,20 @@
               <div id="chartScore" :style="{ width: '500px', height: '200px' }"></div>
             </div>
           </el-collapse-item>
-          <el-collapse-item title="综合能力" name="7">
-            <el-collapse v-model="activeName3" style="margin-left: 3%">
-              <el-collapse-item title="计划/进行中" name="1">
-                <el-descriptions v-if="detailInfo.is_doing!=null" border :column="5">
-                  <el-descriptions-item label="类别">{{detailInfo.is_doing.is_doing_category}}</el-descriptions-item>
-                  <el-descriptions-item label="项目名称">{{detailInfo.is_doing.is_doing_name}}</el-descriptions-item>
-                  <el-descriptions-item label="完成期限">{{detailInfo.is_doing.is_doing_end}}</el-descriptions-item>
-                  <el-descriptions-item label="指导老师">{{detailInfo.is_doing.is_doing_guide_teacher}}</el-descriptions-item>
-                  <el-descriptions-item label="项目成员" v-for="index in detailInfo.is_doing.is_doing_member">{{detailInfo.is_doing.is_doing_member[index]}}</el-descriptions-item>
-                </el-descriptions>
+<!--          <el-collapse-item title="综合能力" name="7">-->
+<!--            <el-collapse v-model="activeName3" style="margin-left: 3%">-->
+<!--              <el-collapse-item title="计划/进行中" name="1">-->
+<!--                <el-descriptions v-if="detailInfo.is_doing!=null" border :column="5">-->
+<!--                  <el-descriptions-item label="类别">{{detailInfo.is_doing.is_doing_category}}</el-descriptions-item>-->
+<!--                  <el-descriptions-item label="项目名称">{{detailInfo.is_doing.is_doing_name}}</el-descriptions-item>-->
+<!--                  <el-descriptions-item label="完成期限">{{detailInfo.is_doing.is_doing_end}}</el-descriptions-item>-->
+<!--                  <el-descriptions-item label="指导老师">{{detailInfo.is_doing.is_doing_guide_teacher}}</el-descriptions-item>-->
+<!--                  <el-descriptions-item label="项目成员" v-for="index in detailInfo.is_doing.is_doing_member">{{detailInfo.is_doing.is_doing_member[index]}}</el-descriptions-item>-->
+<!--                </el-descriptions>-->
 
-              </el-collapse-item>
-            </el-collapse>
-          </el-collapse-item>
+<!--              </el-collapse-item>-->
+<!--            </el-collapse>-->
+<!--          </el-collapse-item>-->
           <el-collapse-item title="成长档案" name="4">
             <el-collapse v-model="activeName2" style="margin-left: 3%">
               <el-collapse-item title="社会工作" name="5">
@@ -323,6 +323,41 @@
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
                 </div>
+              </el-collapse-item>
+              <el-collapse-item title="获奖/荣誉信息" name="7">
+                <div v-for="(m,index) in detailInfo.awardInfos">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>
+                    <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>
+                    <el-descriptions-item label="认定时间:">{{m.award_info_year}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadAward(m.award_info_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+
+              <el-collapse-item title="奖学金" name="8">
+                <div v-for="(m,index) in detailInfo.scholarshipInfoList">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="奖学金名称:">{{m.scholarship_info_name}}</el-descriptions-item>
+                    <el-descriptions-item label="颁发单位:">{{m.scholarship_info_unit}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖时间:">{{m.scholarship_info_time}}</el-descriptions-item>
+                    <el-descriptions-item label="排名:">{{m.scholarship_info_rank}}</el-descriptions-item>
+                    <el-descriptions-item label="认定时间:">{{m.scholarship_info_year}}</el-descriptions-item>
+                    <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadScholarship(m.scholarship_info_supporting_materials)">点击下载</span></el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item title="计划/进行中" name="6">
+                <el-descriptions v-if="detailInfo.is_doing!=null" border :column="5">
+                  <el-descriptions-item label="类别">{{detailInfo.is_doing.is_doing_category}}</el-descriptions-item>
+                  <el-descriptions-item label="项目名称">{{detailInfo.is_doing.is_doing_name}}</el-descriptions-item>
+                  <el-descriptions-item label="完成期限">{{detailInfo.is_doing.is_doing_end}}</el-descriptions-item>
+                  <el-descriptions-item label="指导老师">{{detailInfo.is_doing.is_doing_guide_teacher}}</el-descriptions-item>
+                  <el-descriptions-item label="项目成员" v-for="index in detailInfo.is_doing.is_doing_member">{{detailInfo.is_doing.is_doing_member[index]}}</el-descriptions-item>
+                </el-descriptions>
+
               </el-collapse-item>
             </el-collapse>
           </el-collapse-item>
@@ -605,6 +640,12 @@ export default {
       request.post('/Tea/writeplanning',this.developmentPlan).then(res=>{
         window.location.href=this.Fapi+"/Word/"+res.data
       })
+    },
+    downloadScholarship(m){
+      window.location.href=this.Fapi+"/ScholarshipInfo/"+m
+    },
+    downloadAward(m){
+      window.location.href=this.Fapi+"/Award/"+m
     },
     downloadProject(m){
       window.location.href=this.Fapi+"/Projects/"+m

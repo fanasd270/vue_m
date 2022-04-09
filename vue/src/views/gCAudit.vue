@@ -1,15 +1,15 @@
 <template>
 <div style="padding: 0 6% 0 6%">
   <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
-    <el-badge :value="toDoNum[0]" :max="99" v-show="numShow[0]" style="position: absolute; left:2%"></el-badge>
-    <el-badge :value="toDoNum[1]" :max="99" v-show="numShow[1]" style="position: absolute; left:7%"></el-badge>
-    <el-badge :value="toDoNum[2]" :max="99" v-show="numShow[2]" style="position: absolute; left:12%"></el-badge>
-    <el-badge :value="toDoNum[3]" :max="99" v-show="numShow[3]" style="position: absolute; left:17%"></el-badge>
-    <el-badge :value="toDoNum[4]" :max="99" v-show="numShow[4]" style="position: absolute; left:25%"></el-badge>
-    <el-badge :value="toDoNum[5]" :max="99" v-show="numShow[5]" style="position: absolute; left:32%"></el-badge>
-    <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:38%"></el-badge>
-    <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:43%"></el-badge>
-    <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:51%"></el-badge>
+    <el-badge :value="toDoNum[0]" :max="99" v-show="numShow[0]" style="position: absolute; left:40px"></el-badge>
+    <el-badge :value="toDoNum[1]" :max="99" v-show="numShow[1]" style="position: absolute; left:100px"></el-badge>
+    <el-badge :value="toDoNum[2]" :max="99" v-show="numShow[2]" style="position: absolute; left:168px"></el-badge>
+    <el-badge :value="toDoNum[3]" :max="99" v-show="numShow[3]" style="position: absolute; left:236px"></el-badge>
+    <el-badge :value="toDoNum[4]" :max="99" v-show="numShow[4]" style="position: absolute; left:336px"></el-badge>
+    <el-badge :value="toDoNum[5]" :max="99" v-show="numShow[5]" style="position: absolute; left:436px"></el-badge>
+    <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:504px"></el-badge>
+    <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:582px"></el-badge>
+    <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:682px"></el-badge>
     <el-tabs v-model="activeName" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">

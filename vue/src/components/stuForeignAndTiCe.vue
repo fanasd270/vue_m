@@ -5,7 +5,7 @@
         <span style="opacity: 0">1</span>
       </i>
       <p style="font-weight: bolder; font-size: large ;display: inline">
-        教育经历
+        外语/体测
       </p>
     </div>
     <div style="border: dimgray solid; margin-top: 20px; height: 100%; position: relative">
@@ -22,10 +22,11 @@
 </template>
 
 <script>
-import StuForeign from "@/components/stuForeign";
 import StuTiCe from "@/components/stuTiCe";
+import StuForeign from "@/components/stuForeign";
+
 export default {
-  name: "stuEduExp",
+  name: "stuForeignAndTiCe",
   components: {StuTiCe, StuForeign},
   data(){
     return{

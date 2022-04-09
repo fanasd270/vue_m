@@ -34,7 +34,7 @@
       <div style="width: 60%; height: 90vh; display: inline-block; vertical-align: top">
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周一
-          <div v-for="(item,key) in scheduleStyle['星期一']" :style="item" @click="showCourse(schedule['星期一'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期一']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期一'][key][0].room}}
             <br>
@@ -44,7 +44,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周二
-          <div v-for="(item,key) in scheduleStyle['星期二']" :style="item" @click="showCourse(schedule['星期二'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期二']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期二'][key][0].room}}
             <br>
@@ -54,7 +54,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周三
-          <div v-for="(item,key) in scheduleStyle['星期三']" :style="item" @click="showCourse(schedule['星期三'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期三']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期三'][key][0].room}}
             <br>
@@ -64,7 +64,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周四
-          <div v-for="(item,key) in scheduleStyle['星期四']" :style="item" @click="showCourse(schedule['星期四'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期四']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期四'][key][0].room}}
             <br>
@@ -74,7 +74,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周五
-          <div v-for="(item,key) in scheduleStyle['星期五']" :style="item" @click="showCourse(schedule['星期五'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期五']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期五'][key][0].room}}
             <br>
@@ -84,7 +84,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周六
-          <div v-for="(item,key) in scheduleStyle['星期六']" :style="item" @click="showCourse(schedule['星期六'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期六']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期六'][key][0].room}}
             <br>
@@ -94,7 +94,7 @@
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周日
-          <div v-for="(item,key) in scheduleStyle['星期日']" :style="item" @click="showCourse(schedule['星期日'][key][0])">
+          <div v-for="(item,key) in scheduleStyle['星期日']" :style="item">
           <span style="display: table-cell; vertical-align: middle;">
             {{schedule['星期日'][key][0].room}}
             <br>
@@ -107,65 +107,21 @@
         <span>本周未安排时间课程</span>
         <el-table :data="unArranged" style="width: 100%">
           <el-table-column prop="coursename" label="课程名称" width="180" />
-          <el-table-column prop="teacher" label="授课教师" width="180" />
+<!--          <el-table-column prop="teacher" label="授课教师" width="180" />-->
         </el-table>
       </div>
     </div>
 
-    <el-dialog
-        v-model="dialogVisible"
-        width="30%"
-    >
-      <el-descriptions
-          class="margin-top"
-          :column="1"
-          border
-      >
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              课程名称
-            </div>
-          </template>
-          {{singleCourse.coursename}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              授课教师
-            </div>
-          </template>
-          {{singleCourse.teacher}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              上课教室
-            </div>
-          </template>
-          {{singleCourse.room}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              上课时间
-            </div>
-          </template>
-          {{singleCourse.day}}{{singleCourse.fromto}}节
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
-
-</div>
+  </div>
 </template>
 
 <script>
-import request from "@/utils/request";
-import {ArrowLeft, ArrowRight} from "@element-plus/icons";
 import refresh from "@element-plus/icons/lib/Refresh";
+import {ArrowLeft, ArrowRight} from "@element-plus/icons";
+import request from "@/utils/request";
 
 export default {
-  name: "stuSchedule",
+  name: "stuAndFamilySchedule",
   components:{
     refresh,
     ArrowLeft,
@@ -173,8 +129,6 @@ export default {
   },
   data(){
     return{
-      dialogVisible:false,
-      singleCourse:{},
       user:{},
       askForm:{
         stu_no:'',
@@ -192,14 +146,14 @@ export default {
         '星期日':{},
       },
       scheduleColor:[
-          '#90FF40',
-          '#F2F243',
-          '#5EAFE9',
-          '#52F5DC',
-          '#EB8E55',
-          '#EB5591',
-          '#7272E6',
-          '#BDE672',
+        '#90FF40',
+        '#F2F243',
+        '#5EAFE9',
+        '#52F5DC',
+        '#EB8E55',
+        '#EB5591',
+        '#7272E6',
+        '#BDE672',
       ],
 
       unArranged:[],
