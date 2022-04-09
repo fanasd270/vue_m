@@ -9,9 +9,9 @@
               placement="bottom-start"
           >
         <el-image
-            style="width: 50px; height: 50px; border-radius: 50%;"
-            :src="require('../assets/logo-xiaohui.png')"
-            :fit="fill"
+            style="width: 30px; height: 30px; border-radius: 50%; margin: 10px 10px 10px 10px"
+            :src="require('../assets/home.png')"
+            fit="fill"
         ></el-image>
       </el-tooltip>
           <span style="position: absolute; top:15px;margin-left: 20px; font-weight: bold; cursor: default">
@@ -20,8 +20,8 @@
         </span>
 
       <span style="position: absolute; top:18px; right:100px;margin-right: 20px;">
-        <el-icon style="margin-right: 20px;" size="20px"><bell-filled /> </el-icon>
-        <el-icon style="margin-right: 20px" size="20px"><info-filled /></el-icon>
+<!--        <el-icon style="margin-right: 20px;" size="20px"><bell-filled /> </el-icon>-->
+        <el-icon style="margin-right: 20px" size="20px" @click="jumpToIntro"><info-filled /></el-icon>
       </span>
       <span style="position: absolute; right:65px">
         <el-dropdown>
@@ -119,6 +119,9 @@ export default {
     }
   },
   methods: {
+    jumpToIntro(){
+      this.$router.push("/teaLayout/teaAboutUs")
+    },
     dialogShow(){
       this.form.no=this.user.t_no
       this.dialogVisible=true
@@ -129,6 +132,7 @@ export default {
         this.form.no=this.form.no-0;
         let formstring=JSON.stringify(this.form);
         request.post("/Stu/upDatePassword", formstring).then(res=>{
+          this.$message.warning(res.msg)
           if(res.data===null)
           {
             ElMessage.error('密码错误')
@@ -136,6 +140,7 @@ export default {
             this.dialogVisible = false;
             this.form={};
             ElMessage('修改成功')
+            this.loginOut()
           }
         })
       } else{
@@ -147,6 +152,14 @@ export default {
       this.form={};
     },
     loginOut(){
+      request.post('/logout').then(res=>{
+        if(res.code===0){
+
+        }else{
+          this.$message.error('未注销成功，账号可能存在安全隐患')
+        }
+      })
+
       sessionStorage.removeItem("user")
       this.$router.push("/Login")
     },

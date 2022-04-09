@@ -9,7 +9,7 @@
             <span style="font-weight: bold; margin-right: 2%">姓名：{{m.award_info_stu_name}}</span>
             <span style="font-weight: bold;">学号：{{m.award_info_stu_no}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="获奖名称:">{{m.award_info_name}}</el-descriptions-item>
+              <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
               <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
               <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>
               <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>
@@ -35,7 +35,7 @@
             <span style="font-weight: bold; margin-right: 2%">姓名：{{m.award_info_stu_name}}</span>
             <span style="font-weight: bold;">学号：{{m.award_info_stu_no}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="获奖名称:">{{m.award_info_name}}</el-descriptions-item>
+              <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
               <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
               <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>
               <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>

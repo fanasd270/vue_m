@@ -8,6 +8,7 @@
       </p>
 
     <el-scrollbar height="600px">
+      <el-empty description="暂无信息" v-if="mess.toDoMsg.length===0" style="width: 35%"></el-empty>
       <div style="width: 35%" v-for="(m,i) in mess.toDoMsg">
         <transition :name="closeStyle">
             <div v-show="show[i]" class="transition-box">
@@ -50,6 +51,7 @@
     <div class="block" style="width: 40%; position: absolute; right: 10%; top:30px">
       <p style="font-weight: bold;font-size: large; margin-bottom: 20px; cursor: default">以往任务记录</p>
       <el-scrollbar height="500px">
+        <el-empty description="暂无信息" v-if="mess.didMsg.length===0"></el-empty>
         <el-timeline>
           <div v-for="(m,j) in mess.didMsg">
             <el-timeline-item :timestamp="m.msg_releasetime" placement="top">

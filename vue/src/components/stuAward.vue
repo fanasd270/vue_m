@@ -22,7 +22,7 @@
         <el-tab-pane label="项目" name="fourth">
           <stu-award-project></stu-award-project>
         </el-tab-pane>
-        <el-tab-pane label="获奖上报" name="fifth">
+        <el-tab-pane label="获奖/荣誉上报" name="fifth">
           <stu-award-up/>
         </el-tab-pane>
         <el-tab-pane label="奖学金" name="sixth">

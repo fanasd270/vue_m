@@ -86,6 +86,11 @@ const routes = [
         name: 'stuApplication',
         component: ()=>import("@/views/stuApplication"),
       },
+      {
+        path: 'stuAboutUs',
+        name: 'stuAboutUs',
+        component: ()=>import("@/views/stuAboutUs"),
+      },
     ]
   },
 //教师路由
@@ -149,6 +154,11 @@ const routes = [
         path: 'gCAM',
         name: 'gCAM',
         component: ()=>import("@/views/gCAM"),
+      },
+      {
+        path: 'teaAboutUs',
+        name: 'teaAboutUs',
+        component: ()=>import("@/views/teaAboutUs"),
       },
     ],
   },

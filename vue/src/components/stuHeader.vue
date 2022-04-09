@@ -9,8 +9,8 @@
               placement="bottom-start"
           >
         <el-image
-            style="width: 50px; height: 50px; border-radius: 50%;"
-            :src="require('../assets/logo-xiaohui.png')"
+            style="width: 30px; height: 30px; border-radius: 50%; margin: 10px 10px 10px 10px"
+            :src="require('../assets/home.png')"
             fit="fill"
         ></el-image>
       </el-tooltip>
@@ -20,8 +20,8 @@
         </span>
 
       <span style="position: absolute; top:18px; right:100px;margin-right: 20px;">
-        <el-icon style="margin-right: 20px;" size="20px"><bell-filled /> </el-icon>
-        <el-icon style="margin-right: 20px" size="20px"><info-filled /></el-icon>
+<!--        <el-icon style="margin-right: 20px;" size="20px"><bell-filled /> </el-icon>-->
+        <el-icon style="margin-right: 20px" size="20px" @click="jumpToIntro"><info-filled /></el-icon>
       </span>
       <span style="position: absolute; right:65px">
         <el-dropdown>
@@ -124,6 +124,9 @@ export default {
     this.updateUrl()
   },
   methods: {
+    jumpToIntro(){
+      this.$router.push("/stuLayout/stuAboutUs")
+    },
     reflesh(){
       this.reload()
     },
@@ -147,6 +150,7 @@ export default {
             this.dialogVisible = false;
             this.form={};
             ElMessage('修改成功')
+            this.loginOut()
           }
         })
       } else{
@@ -158,6 +162,13 @@ export default {
       this.form={};
     },
     loginOut(){
+      request.post('/logout').then(res=>{
+        if(res.code===0){
+
+        }else{
+          this.$message.error('未注销成功，账号可能存在安全隐患')
+        }
+      })
       sessionStorage.clear()
       this.$router.push("/Login")
     },

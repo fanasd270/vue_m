@@ -60,6 +60,7 @@
             </el-card>
           </el-col>
           <el-col v-if="authors[6]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+            <el-badge :value="auditNum" :max="99" v-show="auditNum!==0" style="position: absolute; right:2%"></el-badge>
             <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAudit">
               <div class="ecard">
                 <el-icon :size="30"><finished /></el-icon>
@@ -128,6 +129,7 @@ import promotion from "@element-plus/icons/lib/Promotion";
 import dataAnalysis from "@element-plus/icons/lib/DataAnalysis";
 import timer from "@element-plus/icons/lib/Timer";
 import router from "@/router";
+import request from "@/utils/request";
 
 export default {
   name: "gCHome",
@@ -148,6 +150,7 @@ export default {
   },
   data(){
     return{
+      auditNum:0,
       note:{
         backgroundImage:"url("+require("../assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
@@ -166,8 +169,14 @@ export default {
     }else{
       this.user=JSON.parse(sessionStorage.getItem('user'))
     }
+    this.getData()
   },
   methods:{
+    getData(){
+      request.post('/findTeacherMsgNum',this.user).then(res=>{
+        this.auditNum=res.data
+      })
+    },
     jumpTogCStuInfo(){
       this.$router.push("/teaLayout/gCStuInfo")//跳转至学生信息管理页面
     },

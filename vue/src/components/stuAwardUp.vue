@@ -8,7 +8,7 @@
 
       <el-form ref="form" :model="awardForm" style="margin:30px 0 0 60px; font-weight: bold">
 
-        <el-form-item label="获奖名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+        <el-form-item label="获奖/荣誉名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="awardForm.award_info_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="颁发单位" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
@@ -64,7 +64,7 @@
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="获奖名称:">{{m.award_info_name}}</el-descriptions-item>
+              <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
               <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
               <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>
               <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>

@@ -20,6 +20,7 @@
               </el-card>
             </el-col>
             <el-col :span="8" style="width: 220px; margin: 0 20px 20px 0; position: relative">
+              <el-badge :value="taskNum" :max="99" v-show="taskNum!==0" style="position: absolute; right:2%"></el-badge>
               <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuTask">
                 <div class="ecard">
                   <el-icon :size="30"><finished /></el-icon>
@@ -124,18 +125,32 @@ export default {
   },
   data(){
     return{
+      taskNum:0,
       note:{
         backgroundImage:"url("+require("../assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
       power:{},
+      user:{},
     }
   },
   created() {
     this.power=JSON.parse(sessionStorage.getItem('power'))
+    this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.readData()
   },
   methods:{
+    readData(){
+      request.post('/getstudent_msg', this.user).then(res=>{
+        for(let i=0,temp;i<res.data.length;i++){
+          if(res.data[i].status!==2){
+            this.taskNum++
+          }
+        }
+      })
+    },
+
     jumpToStuPersonal(){
       this.$router.push("/stuLayout/stuPersonal")//跳转至个人信息管理页面
     },

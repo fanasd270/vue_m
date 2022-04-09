@@ -161,6 +161,7 @@
     <div class="block" style="width: 40%; position: absolute; right: 10%; top:30px">
       <p style="font-weight: bold;font-size: large; margin-bottom: 20px; cursor: default">以往任务记录</p>
       <el-scrollbar height="500px">
+        <el-empty description="暂无信息" v-if="oldMsg.length===0"></el-empty>
         <el-timeline>
           <div v-for="(m,j) in oldMsg">
             <el-timeline-item :timestamp="m.msg_releasetime" placement="top" v-if="show[j]">
@@ -427,6 +428,10 @@ export default {
         this.mess.stuList.push(this.multipleSelection[i].stu_no)
       }
       this.mess.msg_releasetime=this.getTime()
+      if(this.mess.stuList.length===0){
+        this.$message.warning("请选择接收者")
+        return
+      }
       request.post('/Tea/send_msg',this.mess).then(res=>{
         this.$message({
           type:"success",
