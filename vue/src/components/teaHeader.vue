@@ -132,7 +132,6 @@ export default {
         this.form.no=this.form.no-0;
         let formstring=JSON.stringify(this.form);
         request.post("/Stu/upDatePassword", formstring).then(res=>{
-          this.$message.warning(res.msg)
           if(res.data===null)
           {
             ElMessage.error('密码错误')
