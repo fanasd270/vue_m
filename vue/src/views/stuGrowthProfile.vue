@@ -1,8 +1,5 @@
 <template>
   <el-tabs tab-position="left" >
-    <el-tab-pane label="教育经历">
-      <stu-edu-exp/>
-    </el-tab-pane>
     <el-tab-pane label="外语/体测">
       <stu-foreign-and-ti-ce/>
     </el-tab-pane>
@@ -14,6 +11,9 @@
     </el-tab-pane>
     <el-tab-pane label="社会工作">
       <stu-work-and-vol/>
+    </el-tab-pane>
+    <el-tab-pane label="教育经历">
+      <stu-edu-exp/>
     </el-tab-pane>
   </el-tabs>
 </template>

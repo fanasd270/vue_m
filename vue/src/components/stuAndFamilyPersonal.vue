@@ -275,18 +275,22 @@
         <div style="border: dimgray solid">
           <div style="width: 88%; margin-top: 30px; position: relative">
             <p style="margin-left: 30px; font-weight: bold; margin-bottom: 20px;">
-              父亲
+              联系人一
             </p>
             <el-form  :model="family[0]" label-width="34%" :inline="true">
               <el-form-item label="关系" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
                 <el-select v-model="family[0].family_relationship" placeholder=" " :disabled="Edit[3]">
                   <el-option label="父亲" value="父亲"></el-option>
+                  <el-option label="母亲" value="母亲"></el-option>
+                  <el-option label="爷爷" value="爷爷"></el-option>
+                  <el-option label="奶奶" value="奶奶"></el-option>
+                  <el-option label="其他" value="其他"></el-option>
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="姓名" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
-                <el-input v-model="family[0].family_name" :disabled="Edit[3]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="姓名" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">-->
+<!--                <el-input v-model="family[0].family_name" :disabled="Edit[3]"></el-input>-->
+<!--              </el-form-item>-->
 
               <!--              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
               <!--                <el-input v-model="family[0].family_age" :disabled="Edit[3]"></el-input>-->
@@ -323,18 +327,22 @@
             </el-form>
 
             <p style="margin-left: 30px; font-weight: bold; margin-bottom: 20px;">
-              母亲
+              联系人二
             </p>
             <el-form  :model="family[1]" label-width="34%" :inline="true">
               <el-form-item label="关系" style="margin-bottom: 40px; margin-right: 2%; width: 23%">
                 <el-select v-model="family[1].family_relationship" placeholder=" " :disabled="Edit[4]">
+                  <el-option label="父亲" value="父亲"></el-option>
                   <el-option label="母亲" value="母亲"></el-option>
+                  <el-option label="爷爷" value="爷爷"></el-option>
+                  <el-option label="奶奶" value="奶奶"></el-option>
+                  <el-option label="其他" value="其他"></el-option>
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="姓名" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">
-                <el-input v-model="family[1].family_name" :disabled="Edit[4]"></el-input>
-              </el-form-item>
+<!--              <el-form-item label="姓名" style="margin-bottom: 40px; width: 23%; margin-right: 2%;">-->
+<!--                <el-input v-model="family[1].family_name" :disabled="Edit[4]"></el-input>-->
+<!--              </el-form-item>-->
 
               <!--              <el-form-item label="年龄" style="margin-bottom: 40px; width: 23%; margin-right: 2%">-->
               <!--                <el-input v-model="family[1].family_age" :disabled="Edit[4]"></el-input>-->
@@ -956,6 +964,7 @@ export default {
         },
       ],
       familyCopy:{},
+      familyCopy1:{},
 
       developmentPlan:{
         development_planning_no:'',
@@ -1157,7 +1166,11 @@ export default {
       this.Edit[index+3]= false;
       this.isShow1[index+3]=false;
       this.isShow2[index+3]=true;
-      this.familyCopy=JSON.parse(JSON.stringify(this.family[index]))
+      if(index===0){
+        this.familyCopy=JSON.parse(JSON.stringify(this.family[index]))
+      }else{
+        this.familyCopy1=JSON.parse(JSON.stringify(this.family[index]))
+      }
     },
     changeDevelopmentPlan(){
       if(this.userFamily.type==='stu'){
@@ -1198,7 +1211,12 @@ export default {
       this.Edit[index+3]=true;
       this.isShow1[index+3]=true;
       this.isShow2[index+3]=false;
-      this.family[index]=JSON.parse(JSON.stringify(this.familyCopy))
+      if(index===0){
+        this.family[index]=JSON.parse(JSON.stringify(this.familyCopy))
+      }else{
+        this.family[index]=JSON.parse(JSON.stringify(this.familyCopy1))
+      }
+
     },
     CancelDevelopmentPlan(){
       this.Edit[5]=true;

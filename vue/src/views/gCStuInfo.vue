@@ -343,6 +343,25 @@
                 </div>
               </el-collapse-item>
 
+              <el-collapse-item title="外语" name="9">
+                <div v-for="(m,index) in detailInfo.foreignLanguages">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="语种:">{{m.foreign_languages_type}}</el-descriptions-item>
+                    <el-descriptions-item label="考试名称:">{{m.foreign_languages_name}}</el-descriptions-item>
+                    <el-descriptions-item label="分数:">{{m.foreign_languages_score}}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+
+              <el-collapse-item title="体测" name="10">
+                <div v-for="(m,index) in detailInfo.sportsTests">
+                  <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+                    <el-descriptions-item label="年份:">{{m.test_of_physical_strength_year}}</el-descriptions-item>
+                    <el-descriptions-item label="分数:">{{m.test_of_physical_strength_score}}</el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-collapse-item>
+
               <el-collapse-item title="计划/进行中" name="6">
                 <el-descriptions v-if="detailInfo.is_doing!=null" border :column="5">
                   <el-descriptions-item label="类别">{{detailInfo.is_doing.is_doing_category}}</el-descriptions-item>
