@@ -941,6 +941,7 @@ export default {
 
       family:[
         {
+          family_no:'',
           family_stu_no:"",
           family_relationship:"",
           family_name:"",
@@ -952,6 +953,7 @@ export default {
           family_ismain:"",
         },
         {
+          family_no:'',
           family_stu_no:"",
           family_relationship:"",
           family_name:"",
@@ -1094,15 +1096,17 @@ export default {
       })
 
       request.post('/Stu/findFamilyInfo', formstring).then(res=>{
-        if(res.data[0]===null){
 
-        } else {
+        if(res.code===0){
+          return
+        }
+
+        if(res.code===1){
           this.family[0]=res.data[0]
         }
 
-        if(res.data[1]===null){
-
-        } else {
+        if(res.code===2){
+          this.family[0]=res.data[0]
           this.family[1]=res.data[1]
         }
       }).catch(err=>{
@@ -1315,11 +1319,20 @@ export default {
         return
       }
 
-      request.post('/Stu/updateFamilyInfo',form).then(res=>{
+      if(this.family[0].family_relationship===this.family[1].family_relationship){
+        this.$message({
+          type:"error",
+          message:"不能两个联系人相同!"
+        })
+        return
+      }
+
+      request.post('/Stu/uploadFamilyInfo',form).then(res=>{
         this.$message({
           type:"success",
           message:"修改成功"
         })
+        this.family[index].family_no=res.data
         this.Edit[index+3]= true;
         this.isShow1[index+3]=true;
         this.isShow2[index+3]=false;

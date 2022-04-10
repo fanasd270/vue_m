@@ -2,6 +2,16 @@ const CopressionPlugin = require('compression-webpack-plugin')
 //跨域配置
 module.exports = {
 
+    pwa: {
+        iconPaths: {
+            favicon32: 'favicon.ico',
+            favicon16: 'favicon.ico',
+            appleTouchIcon: 'favicon.ico',
+            maskIcon: 'favicon.ico',
+            msTileImage: 'favicon.ico'
+        }
+    },
+
     configureWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
             //GZIP压缩

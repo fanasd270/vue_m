@@ -160,6 +160,11 @@ const routes = [
         name: 'teaAboutUs',
         component: ()=>import("@/views/teaAboutUs"),
       },
+      {
+        path: 'gCStuAllSchedule',
+        name: 'gCStuAllSchedule',
+        component: ()=>import("@/views/gCStuAllSchedule"),
+      },
     ],
   },
 ]

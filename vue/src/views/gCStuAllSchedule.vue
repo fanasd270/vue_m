@@ -4,14 +4,16 @@
       <span style="opacity: 0">1</span>
     </i>
     <p style="font-weight: bolder; font-size: large ;display: inline;margin-bottom: 10px; cursor: default">
-      课程表
+      学生课表汇总
     </p>
     <br>
+    <el-button @click="jumpBack" style="margin: 5px 0 5px 0">返回信息管理</el-button>
 
     <div style="margin-left: 3%">
       <el-button type="text" @click="refreshWeek"><el-icon><refresh /></el-icon></el-button>
       <el-button type="primary" style="vertical-align: top" @click="changeWeek(0)"><el-icon><ArrowLeft /></el-icon>上一周</el-button>
       <el-tag size="large">第{{askForm.week}}周</el-tag>
+      <el-input v-model="askForm.week" style="margin-left: 5px; width: 40px" @input="weekChanged"></el-input>
       <el-button type="primary" style="vertical-align: top" @click="changeWeek(1)">下一周<el-icon><ArrowRight /></el-icon></el-button>
     </div>
     <div style="margin-top: 10px">
@@ -34,139 +36,101 @@
       <div style="width: 60%; height: 90vh; display: inline-block; vertical-align: top">
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周一
-          <div v-for="(item,key) in scheduleStyle['星期一']" :style="item" @click="showCourse(schedule['星期一'][key])">
-          <span v-for="(item,index) in schedule['星期一'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期一'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期一']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+<!--            {{schedule['星期一'][key][0].room}}-->
+            {{schedule['星期一'][key]}}人有课
             <br>
-            <span style="font-size: small">{{schedule['星期一'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期一'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周二
-          <div v-for="(item,key) in scheduleStyle['星期二']" :style="item" @click="showCourse(schedule['星期二'][key])">
-          <span v-for="(item,index) in schedule['星期二'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期二'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期二']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+<!--            {{schedule['星期二'][key][0].room}}-->
+            {{schedule['星期二'][key]}}人有课
             <br>
-            <span style="font-size: small">{{schedule['星期二'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期二'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周三
-          <div v-for="(item,key) in scheduleStyle['星期三']" :style="item" @click="showCourse(schedule['星期三'][key])">
-          <span v-for="(item,index) in schedule['星期三'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期三'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期三']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+            {{schedule['星期三'][key]}}人有课
+<!--            {{schedule['星期三'][key][0].room}}-->
             <br>
-            <span style="font-size: small">{{schedule['星期三'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期三'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周四
-          <div v-for="(item,key) in scheduleStyle['星期四']" :style="item" @click="showCourse(schedule['星期四'][key])">
-          <span v-for="(item,index) in schedule['星期四'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期四'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期四']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+<!--            {{schedule['星期四'][key][0].room}}-->
+            {{schedule['星期四'][key]}}人有课
             <br>
-            <span style="font-size: small">{{schedule['星期四'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期四'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周五
-          <div v-for="(item,key) in scheduleStyle['星期五']" :style="item" @click="showCourse(schedule['星期五'][key])">
-          <span v-for="(item,index) in schedule['星期五'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期五'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期五']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+            {{schedule['星期五'][key]}}人有课
+<!--            {{schedule['星期五'][key][0].room}}-->
             <br>
-            <span style="font-size: small">{{schedule['星期五'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期五'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周六
-          <div v-for="(item,key) in scheduleStyle['星期六']" :style="item" @click="showCourse(schedule['星期六'][key])">
-          <span v-for="(item,index) in schedule['星期六'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期六'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期六']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+<!--            {{schedule['星期六'][key][0].room}}-->
+            {{schedule['星期六'][key]}}人有课
             <br>
-            <span style="font-size: small">{{schedule['星期六'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期六'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
         <div style="width: 14%; height: 100%; display: inline-block; position:relative">
           周日
-          <div v-for="(item,key) in scheduleStyle['星期日']" :style="item" @click="showCourse(schedule['星期日'][key])">
-          <span v-for="(item,index) in schedule['星期日'][key]" style="display: table-cell; vertical-align: middle;">
-            {{schedule['星期日'][key][index].room}}
+          <div v-for="(item,key) in scheduleStyle['星期日']" :style="item">
+          <span style="display: table-cell; vertical-align: middle;">
+            {{schedule['星期日'][key]}}人有课
+<!--            {{schedule['星期日'][key][0].room}}-->
             <br>
-            <span style="font-size: small">{{schedule['星期日'][key][index].coursename}}</span>
+<!--            <span style="font-size: small">{{schedule['星期日'][key][0].coursename}}</span>-->
           </span>
           </div>
         </div>
       </div>
-      <div v-if="unArranged.length!==0" style="width: 30%; height: 90vh; display: inline-block; vertical-align: top">
-        <span>本周未安排时间课程</span>
-        <el-table :data="unArranged" style="width: 100%">
-          <el-table-column prop="coursename" label="课程名称" width="180" />
-          <el-table-column prop="teacher" label="授课教师" width="180" />
-        </el-table>
-      </div>
+<!--      <div v-if="unArranged.length!==0" style="width: 30%; height: 90vh; display: inline-block; vertical-align: top">-->
+<!--        <span>本周未安排时间课程</span>-->
+<!--        <el-table :data="unArranged" style="width: 100%">-->
+<!--          <el-table-column prop="coursename" label="课程名称" width="180" />-->
+<!--          <el-table-column prop="teacher" label="授课教师" width="180" />-->
+<!--        </el-table>-->
+<!--      </div>-->
     </div>
 
-    <el-dialog
-        v-model="dialogVisible"
-        width="30%"
-    >
-      <el-descriptions
-          class="margin-top"
-          :column="1"
-          border
-          v-for="(item) in singleCourse"
-      >
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              课程名称
-            </div>
-          </template>
-          {{item.coursename}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              授课教师
-            </div>
-          </template>
-          {{item.teacher}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              上课教室
-            </div>
-          </template>
-          {{item.room}}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template #label>
-            <div class="cell-item">
-              上课时间
-            </div>
-          </template>
-          {{item.day}}{{item.fromto}}节
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
-
-</div>
+  </div>
 </template>
 
 <script>
-import request from "@/utils/request";
-import {ArrowLeft, ArrowRight} from "@element-plus/icons";
 import refresh from "@element-plus/icons/lib/Refresh";
+import {ArrowLeft, ArrowRight} from "@element-plus/icons";
+import request from "@/utils/request";
 
 export default {
-  name: "stuSchedule",
+  name: "gCStuAllSchedule",
   components:{
     refresh,
     ArrowLeft,
@@ -174,11 +138,10 @@ export default {
   },
   data(){
     return{
-      dialogVisible:false,
-      singleCourse:[],
       user:{},
+      power:{},
       askForm:{
-        stu_no:'',
+        teacher:{},
         year:'',
         week:'1',
       },
@@ -193,22 +156,27 @@ export default {
         '星期日':{},
       },
       scheduleColor:[
-          '#90FF40',
-          '#F2F243',
-          '#5EAFE9',
-          '#52F5DC',
-          '#EB8E55',
-          '#EB5591',
-          '#7272E6',
-          '#BDE672',
+        '#90FF40',
+        '#F2F243',
+        '#5EAFE9',
+        '#52F5DC',
+        '#EB8E55',
+        '#EB5591',
+        '#7272E6',
+        '#BDE672',
       ],
 
-      unArranged:[],
+      // unArranged:[],
     }
   },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'));
-    this.askForm.stu_no=this.user.stu_no+''
+    this.power=JSON.parse(sessionStorage.getItem('power'))
+    if(this.power.type===1){
+      this.user=JSON.parse(sessionStorage.getItem('user_t'))
+    }else{
+      this.user=JSON.parse(sessionStorage.getItem('user'))
+    }
+    this.askForm.teacher=this.user
     let aDate=new Date()
     let y=aDate.getFullYear()
     let m=aDate.getMonth()+1;
@@ -220,6 +188,16 @@ export default {
     this.askSchedule()
   },
   methods:{
+    weekChanged(){
+      let reg=/^[0-9]*$/
+      let numReg=new RegExp(reg)
+      if(numReg.test(this.askForm.week)){
+        this.askSchedule()
+      }
+    },
+    jumpBack(){
+      this.$router.push("/teaLayout/gCStuInfo")
+    },
     refreshWeek(){
       this.askForm.week=1
       this.askSchedule()
@@ -233,12 +211,9 @@ export default {
         this.askSchedule()
       }
     },
-    showCourse(courseList){
-      this.dialogVisible=true
-      this.singleCourse=courseList
-    },
     askSchedule(){
-      request.post("/findStudentCourseByStudent",this.askForm).then(res=>{
+      request.post("/findEmptyCourse",this.askForm).then(res=>{
+        console.log(res)
         this.schedule=res.data
         this.scheduleStyle={
           '星期一':{},
@@ -262,6 +237,15 @@ export default {
             flag=true
           }
           for(let time in this.schedule[item]){
+
+            for(let time2 in this.schedule[item]){
+              if(time===time2){
+
+              }else if(time.includes(time2)){
+                this.schedule[item][time]+=this.schedule[item][time2]
+              }
+            }
+
             let times=time.split(",")
             while (color===lastColor){
               color=Math.floor(Math.random()*(max-min))+min
@@ -277,13 +261,6 @@ export default {
             this.scheduleStyle[item][time]=JSON.parse(JSON.stringify(tempStyle))
 
           }
-        }
-      })
-
-      request.post('findStudentCourseNullByStudent',this.askForm).then(res=>{
-        this.unArranged=[]
-        if(res.code!==0){
-          this.unArranged=res.data['未安排']['未安排']
         }
       })
     },

@@ -29,6 +29,7 @@
   <el-button @click="exportExcel">
     导出
   </el-button>
+  <el-button style="margin-left: 5px" @click="jumpToSchedule">学生课表</el-button>
   <el-scrollbar height="90vh">
     <div style="border: #008c8c solid; height: 70vh">
       <el-table
@@ -199,21 +200,21 @@
           </el-collapse-item>
           <el-collapse-item title="家庭信息" name="3">
             <el-descriptions v-if="detailInfo.stu_family[0]!=null" :title="detailInfo.stu_family[0].family_relationship">
-              <el-descriptions-item label="姓名">{{detailInfo.stu_family[0].family_name}}</el-descriptions-item>
-              <el-descriptions-item label="年龄">{{detailInfo.stu_family[0].family_age}}</el-descriptions-item>
+<!--              <el-descriptions-item label="姓名">{{detailInfo.stu_family[0].family_name}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="年龄">{{detailInfo.stu_family[0].family_age}}</el-descriptions-item>-->
               <el-descriptions-item label="电话">{{detailInfo.stu_family[0].family_tel}}</el-descriptions-item>
-              <el-descriptions-item label="工作">{{detailInfo.stu_family[0].family_work}}</el-descriptions-item>
-              <el-descriptions-item label="职位">{{detailInfo.stu_family[0].family_duties}}</el-descriptions-item>
-              <el-descriptions-item label="工作地点">{{detailInfo.stu_family[0].family_workplace}}</el-descriptions-item>
+<!--              <el-descriptions-item label="工作">{{detailInfo.stu_family[0].family_work}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="职位">{{detailInfo.stu_family[0].family_duties}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="工作地点">{{detailInfo.stu_family[0].family_workplace}}</el-descriptions-item>-->
               <el-descriptions-item label="是否第一监护人">{{detailInfo.stu_family[0].family_ismain}}</el-descriptions-item>
             </el-descriptions>
             <el-descriptions v-if="detailInfo.stu_family[1]!=null" :title="detailInfo.stu_family[1].family_relationship">
-              <el-descriptions-item label="姓名">{{detailInfo.stu_family[1].family_name}}</el-descriptions-item>
-              <el-descriptions-item label="年龄">{{detailInfo.stu_family[1].family_age}}</el-descriptions-item>
+<!--              <el-descriptions-item label="姓名">{{detailInfo.stu_family[1].family_name}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="年龄">{{detailInfo.stu_family[1].family_age}}</el-descriptions-item>-->
               <el-descriptions-item label="电话">{{detailInfo.stu_family[1].family_tel}}</el-descriptions-item>
-              <el-descriptions-item label="工作">{{detailInfo.stu_family[1].family_work}}</el-descriptions-item>
-              <el-descriptions-item label="职位">{{detailInfo.stu_family[1].family_duties}}</el-descriptions-item>
-              <el-descriptions-item label="工作地点">{{detailInfo.stu_family[1].family_workplace}}</el-descriptions-item>
+<!--              <el-descriptions-item label="工作">{{detailInfo.stu_family[1].family_work}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="职位">{{detailInfo.stu_family[1].family_duties}}</el-descriptions-item>-->
+<!--              <el-descriptions-item label="工作地点">{{detailInfo.stu_family[1].family_workplace}}</el-descriptions-item>-->
               <el-descriptions-item label="是否第一监护人">{{detailInfo.stu_family[1].family_ismain}}</el-descriptions-item>
             </el-descriptions>
           </el-collapse-item>
@@ -686,6 +687,10 @@ export default {
   },
 
   methods:{
+
+    jumpToSchedule(){
+      this.$router.push("/teaLayout/gCStuAllSchedule")
+    },
 
     initScore(){
       this.scoreChart = echarts.init(document.getElementById("chartScore"));
