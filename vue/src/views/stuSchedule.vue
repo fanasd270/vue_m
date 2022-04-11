@@ -12,6 +12,7 @@
       <el-button type="text" @click="refreshWeek"><el-icon><refresh /></el-icon></el-button>
       <el-button type="primary" style="vertical-align: top" @click="changeWeek(0)"><el-icon><ArrowLeft /></el-icon>上一周</el-button>
       <el-tag size="large">第{{askForm.week}}周</el-tag>
+      <el-input v-model="askForm.week" style="margin-left: 5px; width: 40px" @input="weekChanged"></el-input>
       <el-button type="primary" style="vertical-align: top" @click="changeWeek(1)">下一周<el-icon><ArrowRight /></el-icon></el-button>
     </div>
     <div style="margin-top: 10px">
@@ -220,6 +221,13 @@ export default {
     this.askSchedule()
   },
   methods:{
+    weekChanged(){
+      let reg=/^[0-9]*$/
+      let numReg=new RegExp(reg)
+      if(numReg.test(this.askForm.week)){
+        this.askSchedule()
+      }
+    },
     refreshWeek(){
       this.askForm.week=1
       this.askSchedule()

@@ -152,7 +152,7 @@ export default {
     return{
       auditNum:0,
       note:{
-        backgroundImage:"url("+require("../assets/background2.png")+")",
+        backgroundImage:"url("+require("../../../../vue_project/vue/src/assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
         backgroundSize:"100% 100vh",
       },
