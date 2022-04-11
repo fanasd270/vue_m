@@ -28,7 +28,7 @@
         <el-tab-pane label="学生课表" name="fourth">
           <g-c-stu-schedule/>
         </el-tab-pane>
-        <el-tab-pane label="单人成绩" name="fifth">
+        <el-tab-pane label="个人成绩单" name="fifth">
           <g-c-stu-individual-score/>
         </el-tab-pane>
       </el-tabs>

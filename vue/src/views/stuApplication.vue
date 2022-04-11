@@ -4,7 +4,7 @@
     <span style="opacity: 0">1</span>
   </i>
   <p style="font-weight: bolder; font-size: large ;display: inline;margin-bottom: 10px; cursor: default">
-    留校申请
+    寒暑假留校申请
   </p>
   <div>
     <el-form ref="form" :model="stayApplication" style="margin:30px 0 0 60px; font-weight: bold">

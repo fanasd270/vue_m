@@ -36,7 +36,7 @@
       <el-tab-pane label="奖学金" name="eighth">
         <g-c-audit-scholarship v-on:scholarshipKey="scholarshipCom"></g-c-audit-scholarship>
       </el-tab-pane>
-      <el-tab-pane label="留校申请" name="ninth">
+      <el-tab-pane label="寒暑假留校申请" name="ninth">
         <g-c-audit-application v-on:applicationKey="applicationCom"></g-c-audit-application>
       </el-tab-pane>
     </el-tabs>

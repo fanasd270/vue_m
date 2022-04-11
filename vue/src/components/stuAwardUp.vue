@@ -8,7 +8,7 @@
 
       <el-form ref="form" :model="awardForm" style="margin:30px 0 0 60px; font-weight: bold">
 
-        <el-form-item label="获奖/荣誉名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+        <el-form-item label="获奖/荣誉称号" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
           <el-input v-model="awardForm.award_info_name" clearable></el-input>
         </el-form-item>
         <el-form-item label="颁发单位" style="margin-bottom: 40px; margin-right: 2%; width: 46%">

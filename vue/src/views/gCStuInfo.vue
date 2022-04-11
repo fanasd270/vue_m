@@ -318,10 +318,10 @@
                 </div>
               </el-collapse-item>
 
-              <el-collapse-item title="获奖/荣誉信息" name="7">
+              <el-collapse-item title="获奖/荣誉称号" name="7">
                 <div v-for="(m,index) in detailInfo.awardInfos">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-                    <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
+                    <el-descriptions-item label="获奖/荣誉称号:">{{m.award_info_name}}</el-descriptions-item>
                     <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>
                     <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
                     <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>

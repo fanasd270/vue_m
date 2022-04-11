@@ -3,7 +3,7 @@
        element-loading-text="正在加载">
     <el-button @click="drawer=true" style="margin: 10px 0 5px 0">选择学生</el-button>
     <div style="margin: 5px 0 5px 5px; display: inline-block">
-      <el-date-picker v-model="year" type="year" placeholder="选择学年" value-format="YYYY" style="width: 10em">
+      <el-date-picker v-model="year" type="year" placeholder="选择学年" value-format="YYYY" style="width: 10em" @change="tea_stu.year=year+year2">
       </el-date-picker>
       <el-select v-model="year2" style="width: 6em;" placeholder="学期" :disabled="year===''||year===null" @change="tea_stu.year=year+year2">
         <el-option
@@ -225,6 +225,8 @@ export default {
         }
         request.post('/uploadExcelforGradePoint', formData).then(res=>{
           this.tea_stu.file_path=res.data
+          console.log(1111111111111111111111)
+          console.log(this.tea_stu)
           request.post('/readStudentCourse',this.tea_stu).then(res=>{
             this.schedule=res.data
             this.$message.success("操作成功，请在确认信息无误后点击确认上传，此操作请在一分钟内完成，之后将自动取消")
