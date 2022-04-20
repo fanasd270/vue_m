@@ -52,12 +52,13 @@
       <el-table-column
           prop="grade_point_rankforclass"
           label="年级排名"
-          sortable>
+          sortable="custom"
+          >
       </el-table-column>
       <el-table-column
           prop="grade_point_rankformajor"
           label="专业排名"
-          sortable>
+          sortable="custom">
       </el-table-column>
       <el-table-column
           prop="grade_point_major_num"
@@ -144,14 +145,14 @@ export default {
     sortChange(val){
       if(val.order==='descending'){
         this.showPointsCopy.sort(function (a,b){
-          let x=a[val.prop]
-          let y=b[val.prop]
-          return((x>=y)?-1:((x<y)?1:0))
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
         })
       }else{
         this.showPointsCopy.sort(function (a,b){
-          let x=a[val.prop]
-          let y=b[val.prop]
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
           return((x<=y)?-1:((x>y)?1:0))
         })
       }

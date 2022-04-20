@@ -11,6 +11,7 @@
   <el-table
       :data="showPoints"
       stripe
+      @sort-change="sortChange"
       style="width: 100%">
     <el-table-column
         prop="comprehensive_evaluation_stu_no"
@@ -27,12 +28,12 @@
     <el-table-column
         prop="comprehensive_evaluation_rankforscore"
         label="成绩排名"
-        sortable>
+        sortable="custom">
     </el-table-column>
     <el-table-column
         prop="comprehensive_evaluation_rank"
         label="综合素质测评排名"
-        sortable>
+        sortable="custom">
     </el-table-column>
     <el-table-column
         prop="comprehensive_evaluation_totalnumforscore"
@@ -69,6 +70,21 @@ export default {
     this.getData()
   },
   methods:{
+    sortChange(val){
+      if(val.order==='descending'){
+        this.showPoints.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
+        })
+      }else{
+        this.showPoints.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+    },
     changeTerms(val){
       this.showPoints=this.otherTermsPoint[val]
     },
