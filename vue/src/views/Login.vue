@@ -103,11 +103,13 @@
 
 <script>
 import '@/assets/css/entypo.css';
-import {Avatar,Lock} from "@element-plus/icons-vue"
+import {Avatar, Lock} from "@element-plus/icons-vue"
 
 import request from "@/utils/request";
 import phone from "@element-plus/icons/lib/Phone";
 import chatDotSquare from "@element-plus/icons/lib/ChatDotSquare";
+
+import moment from "moment"
 
 export default {
   name: "Login",
@@ -157,9 +159,81 @@ export default {
     }
   },
   created() {
+
+
+    // let askForm={
+    //   stu_no:'',
+    //   year:'',
+    //   week:'1',
+    //     }
+    //
+    // let aDate=new Date()
+    // let y=aDate.getFullYear()
+    // let m=aDate.getMonth()+1;
+    // if(m>9||m<3){
+    //   askForm.year=y+'秋'
+    // }else{
+    //   askForm.year=y+'春'
+    // }
+    // let week=this.getWeekNum()-1
+    // console.log(aDate)
+    // console.log(week)
+    // let yDate=new Date()
+    // yDate.setMonth(2-1,19)
+    // console.log(yDate)
+    // let week2=this.getWeek(yDate)
+    // console.log(111111)
+    // console.log(week2)
+
+
+
+
     this.numLogin()
   },
   methods:{
+
+
+    // getWeekNum() {
+    //   //获得当前日期是第几周的方法
+    //   var year = new Date().getFullYear();
+    //   var week = moment(new Date()).format("E");//获得今天是星期几
+    //   var startweek = moment(new Date(year + "-01-01")).format("E");//获得今年的1月1号是星期几
+    //   //今天到1月1号的时间戳之差
+    //   var millisDiff =
+    //       new Date(moment().format("yyyy-MM-DD")).getTime() -
+    //       new Date(year + "-01-01").getTime();
+    //   var days =
+    //       (millisDiff -
+    //           week * (24 * 60 * 60 * 1000) -
+    //           (7 - startweek) * (24 * 60 * 60 * 1000)) /
+    //       86400000;
+    //   return days / 7 + 2;
+    //   //这里加的2代表的是本周和今年1月1号所在的那一周
+    // },
+    //
+    // getWeek(val) {
+    //   let firstDay = new Date(val.getFullYear(), 0, 1)
+    //   let dayOfWeek = firstDay.getDay()
+    //   let spendDay = 1
+    //   if (dayOfWeek !== 0) {
+    //     spendDay = 7 - dayOfWeek + 1
+    //   }
+    //   firstDay = new Date(val.getFullYear(), 0, 1 + spendDay)
+    //   let d = Math.ceil((val.valueOf() - firstDay.valueOf()) / 86400000)
+    //   let year = val.getFullYear()
+    //   let week = Math.ceil(d / 7) + 1
+    //   if(year >= new Date().getFullYear()) {
+    //     week = week - 1
+    //   }
+    //   // let startTime = formatDate('yyyy-MM-dd', val.valueOf() - 86400000) // 周开始日期
+    //   // let endTime = formatDate('yyyy-MM-dd', val.valueOf() + 5*86400000) // 周结束日期
+    //   // return { year, week, startTime, endTime }
+    //   return week
+    // },
+
+
+
+
 
     getKey(){
       request.post('/familylogin_code',this.keyForm).then(res=>{

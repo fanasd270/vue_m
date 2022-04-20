@@ -44,7 +44,7 @@
             <el-tag type="success" v-if="m.voluntary_activities_status==='1'">已通过</el-tag>
             <el-tag type="danger" v-if="m.voluntary_activities_status==='2'">已驳回</el-tag>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
-            <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
+            <el-button style="margin-left: 5px" v-if="m.voluntary_activities_status==='1'" @click="rejectServeDid(index)">驳回</el-button>
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
           </el-card>
         </transition>
@@ -119,6 +119,12 @@ export default {
         } else {
           this.toDoNum--
         }
+        this.refreshComponent()
+      })
+    },
+    rejectServeDid(index) {
+      request.post('/refuse_activity', this.serveDid[index]).then(res => {
+
         this.refreshComponent()
       })
     },

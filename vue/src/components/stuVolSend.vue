@@ -93,6 +93,7 @@
               drag
               :on-error="fileUploadError"
               :limit="1"
+              :on-exceed="uploadCover"
               :auto-upload="false">
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
@@ -100,7 +101,7 @@
             </div>
             <template #tip>
               <div class="el-upload__tip">
-                仅上传jpg/pdf
+                仅上传jpg/pdf/png
               </div>
             </template>
           </el-upload>
@@ -116,7 +117,8 @@
     </el-dialog>
 
     <div>申请记录:</div>
-    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>
+<!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
+    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in sendDid">
@@ -146,8 +148,9 @@
             <el-tag type="success" v-if="m.dispatch_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="m.dispatch_status==='0'">待审核</el-tag>
             <el-tag type="danger" v-if="m.dispatch_status==='2'">已驳回</el-tag>
-            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.dispatch_status==='0'">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.dispatch_status==='0'">删除</el-button>
+<!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.dispatch_status==='0'">修改</el-button>-->
+            <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.dispatch_status==='0'||m.dispatch_status==='2'">删除</el-button>
           </el-card>
         </transition>
       </div>
@@ -192,7 +195,7 @@ export default {
       sendDid:[],//历史记录表
       tagType:['success','warning','danger'],
       toDoShow:[],//每条历史记录的v-if
-      newButtons:false,//新建按钮是否可用
+      // newButtons:false,//新建按钮是否可用
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
@@ -205,6 +208,10 @@ export default {
     this.getData()
   },
   methods:{
+    uploadCover(files, fileList){
+      this.$refs.upload.clearFiles()
+      this.$refs.upload.handleStart(files[0])
+    },
     downloadSend(m){
       window.location.href=this.Fapi+"/Dispatches/"+m
     },
@@ -251,10 +258,15 @@ export default {
       formData.append('file', param.file)
       let that=this
       request.post('/upload_dispatch_info2', formData).then(res=>{
+        if(res.code===0){
+          this.$message.error("文件类型错误")
+          return
+        }
         this.sendForm.dispatch_supporting_materials=res.data
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.sendForm.dispatch_stu_no=user.stu_no//
         this.sendForm.dispatch_stu_name=user.stu_name//
+        this.sendForm.dispatch_status='0'
         request.post("/upload_dispatch_info", that.sendForm).then(res=>{
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
@@ -283,14 +295,14 @@ export default {
       })
 
       // 判断是否有正在审核的信息
-      request.post('/dispatch_isexamineing',user).then(res=>{
-        if(res===1){
-          this.newButtons=true
-        }
-        else{
-          this.newButtons=false
-        }
-      })
+      // request.post('/dispatch_isexamineing',user).then(res=>{
+      //   if(res===1){
+      //     this.newButtons=true
+      //   }
+      //   else{
+      //     this.newButtons=false
+      //   }
+      // })
 
     },
 

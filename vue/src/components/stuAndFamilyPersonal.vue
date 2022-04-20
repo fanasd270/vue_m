@@ -1311,6 +1311,10 @@ export default {
       this.family[index].family_stu_no=user.stu_no.toString()
       let form=JSON.stringify(this.family[index])
 
+      if(this.family[index].family_ismain===''||this.family[index].family_tel===''){
+        this.$message.warning('请完整填写资料')
+      }
+
       if(this.family[0].family_ismain===this.family[1].family_ismain){
         this.$message({
           type:"error",

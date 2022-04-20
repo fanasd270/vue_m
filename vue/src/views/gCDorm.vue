@@ -245,14 +245,19 @@
 <!--              </el-collapse-item>-->
 <!--            </el-collapse>-->
 <!--          </el-collapse-item>-->
-          <el-collapse-item title="成长档案" name="4">
+          <el-collapse-item name="4">
+            <template #title>
+              <span>成长档案({{titleMap.detailInfo}})</span>
+            </template>
             <el-collapse v-model="activeName2" style="margin-left: 3%">
-              <el-collapse-item title="社会工作" name="5">
-                <el-table :data="detailInfo.socialWords" style="width: 100%">
+              <el-collapse-item name="5">
+                <template #title>
+                  <span>社会工作({{titleMap.social_activities}})</span>
+                </template>
+                <el-table :data="detailInfo.social_activities" style="width: 100%">
                   <el-table-column label="年度" width="180">
                     <template #default="scope">
                       <div style="display: flex; align-items: center">
-                        <el-icon><timer /></el-icon>
                         <span style="margin-left: 10px">{{ scope.row.social_activity_start_time }}年-{{scope.row.social_activity_end_time}}年</span>
                       </div>
                     </template>
@@ -266,8 +271,11 @@
                   </el-table-column>
                 </el-table>
               </el-collapse-item>
-              <el-collapse-item title="论文" name="1">
-                <div v-for="(m,index) in detailInfo.paper">
+              <el-collapse-item name="1">
+                <template #title>
+                  <span>论文({{titleMap.paper}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.paper">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
                     <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
@@ -277,10 +285,13 @@
                     <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
-              <el-collapse-item title="专利" name="2">
-                <div v-for="(m,index) in detailInfo.patent">
+              <el-collapse-item name="2">
+                <template #title>
+                  <span>专利({{titleMap.patent}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.patent">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
                     <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
@@ -291,10 +302,13 @@
                     <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
-              <el-collapse-item title="竞赛" name="3">
-                <div v-for="(m,index) in detailInfo.contest">
+              <el-collapse-item name="3">
+                <template #title>
+                  <span>竞赛({{titleMap.contest}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.contest">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="竞赛名称:">{{m.contest_name}}</el-descriptions-item>
                     <el-descriptions-item label="项目名称:">{{m.contest_projectname}}</el-descriptions-item>
@@ -307,10 +321,13 @@
                     <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
-              <el-collapse-item title="项目" name="4">
-                <div v-for="(m,index) in detailInfo.project">
+              <el-collapse-item name="4">
+                <template #title>
+                  <span>项目({{titleMap.project}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.project">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="项目名称:">{{m.project_name}}</el-descriptions-item>
                     <el-descriptions-item label="项目所在单位:">{{m.project_unit}}</el-descriptions-item>
@@ -322,10 +339,14 @@
                     <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
-              <el-collapse-item title="获奖/荣誉称号" name="7">
-                <div v-for="(m,index) in detailInfo.awardInfos">
+
+              <el-collapse-item name="7">
+                <template #title>
+                  <span>获奖/荣誉称号({{titleMap.awardInfos}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.awardInfos">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="获奖/荣誉称号:">{{m.award_info_name}}</el-descriptions-item>
                     <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>
@@ -334,11 +355,14 @@
                     <el-descriptions-item label="认定时间:">{{m.award_info_year}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadAward(m.award_info_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
 
-              <el-collapse-item title="奖学金" name="8">
-                <div v-for="(m,index) in detailInfo.scholarshipInfoList">
+              <el-collapse-item name="8">
+                <template #title>
+                  <span>奖学金({{titleMap.scholarshipInfoList}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.scholarshipInfoList">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="奖学金名称:">{{m.scholarship_info_name}}</el-descriptions-item>
                     <el-descriptions-item label="颁发单位:">{{m.scholarship_info_unit}}</el-descriptions-item>
@@ -347,26 +371,32 @@
                     <el-descriptions-item label="认定时间:">{{m.scholarship_info_year}}</el-descriptions-item>
                     <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadScholarship(m.scholarship_info_supporting_materials)">点击下载</span></el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
 
-              <el-collapse-item title="外语" name="9">
-                <div v-for="(m,index) in detailInfo.foreignLanguages">
+              <el-collapse-item name="9">
+                <template #title>
+                  <span>外语({{titleMap.foreignLanguages}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.foreignLanguages">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="语种:">{{m.foreign_languages_type}}</el-descriptions-item>
                     <el-descriptions-item label="考试名称:">{{m.foreign_languages_name}}</el-descriptions-item>
                     <el-descriptions-item label="分数:">{{m.foreign_languages_score}}</el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
 
-              <el-collapse-item title="体测" name="10">
-                <div v-for="(m,index) in detailInfo.sportsTests">
+              <el-collapse-item name="10">
+                <template #title>
+                  <span>体测({{titleMap.sportsTests}})</span>
+                </template>
+                <el-card v-for="(m,index) in detailInfo.sportsTests">
                   <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
                     <el-descriptions-item label="年份:">{{m.test_of_physical_strength_year}}</el-descriptions-item>
                     <el-descriptions-item label="分数:">{{m.test_of_physical_strength_score}}</el-descriptions-item>
                   </el-descriptions>
-                </div>
+                </el-card>
               </el-collapse-item>
 
               <el-collapse-item title="计划/进行中" name="6">
@@ -548,6 +578,19 @@ export default {
 
   data() {
     return {
+      titleMap:{
+        detailInfo:0,
+        social_activities:0,
+        paper:0,
+        patent:0,
+        contest:0,
+        project:0,
+        awardInfos:0,
+        scholarshipInfoList:0,
+        foreignLanguages:0,
+        sportsTests:0,
+      },
+
       developmentPlanYears:[],
       selectYear:'',
       developmentPlan:{
@@ -690,6 +733,54 @@ export default {
         this.detailInfo=res.data
         this.headUrl=fileApi.fileApi+'/Pictures/'+res.data.stu_photourl
         this.infoDialog=true
+
+        this.titleMap={
+          detailInfo:0,
+          social_activities:0,
+          paper:0,
+          patent:0,
+          contest:0,
+          project:0,
+          awardInfos:0,
+          scholarshipInfoList:0,
+          foreignLanguages:0,
+          sportsTests:0,
+        }
+
+        if(this.detailInfo.social_activities!==null){
+          this.titleMap.social_activities=this.detailInfo.social_activities.length
+        }
+        if(this.detailInfo.paper!==null){
+          this.titleMap.paper=this.detailInfo.paper.length
+        }
+        if(this.detailInfo.patent!==null){
+          console.log('patent1111')
+          this.titleMap.patent=this.detailInfo.patent.length
+        }
+        if(this.detailInfo.contest!==null){
+          console.log('contest1111')
+          this.titleMap.contest=this.detailInfo.contest.length
+        }
+        if(this.detailInfo.project!==null){
+          console.log('project1111')
+          this.titleMap.project=this.detailInfo.project.length
+        }
+        if(this.detailInfo.awardInfos!==null){
+          this.titleMap.awardInfos=this.detailInfo.awardInfos.length
+        }
+        if(this.detailInfo.scholarshipInfoList!==null){
+          this.titleMap.scholarshipInfoList=this.detailInfo.scholarshipInfoList.length
+        }
+        if(this.detailInfo.foreignLanguages!==null){
+          this.titleMap.foreignLanguages=this.detailInfo.foreignLanguages.length
+        }
+        if(this.detailInfo.sportsTests!==null){
+          this.titleMap.sportsTests=this.detailInfo.sportsTests.length
+        }
+        this.titleMap.detailInfo=this.titleMap.social_activities+this.titleMap.paper+this.titleMap.patent+this.titleMap.contest+this.titleMap.project
+            +this.titleMap.awardInfos+this.titleMap.scholarshipInfoList+this.titleMap.foreignLanguages+this.titleMap.sportsTests
+
+
         //折线图
         this.optionScore.series=[]
         this.optionScore.xAxis.data=[]

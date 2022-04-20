@@ -46,6 +46,7 @@
             <el-tag type="danger" v-if="m.scholarship_info_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
             <span style="color:cornflowerblue;">{{m.scholarship_info_year}}</span>
+            <el-button style="margin-left: 5px" v-if="m.scholarship_info_status==='1'" @click="rejectProjectDid(index)">驳回</el-button>
           </el-card>
         </transition>
       </div>
@@ -119,6 +120,12 @@ export default {
         } else {
           this.toDoNum--
         }
+        this.refreshComponent()
+      })
+    },
+    rejectProjectDid(index){
+      request.post('/refuse_scholarship',this.projectDid[index]).then(res=>{
+
         this.refreshComponent()
       })
     },

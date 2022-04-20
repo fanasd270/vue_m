@@ -245,6 +245,10 @@
       </el-pagination>
     </div>
 
+    <div style="border-radius: 2px;border: solid #9AFF9A; margin-top: 10px">
+      <g-c-stu-all-schedule style="margin-bottom: 50px"/>
+    </div>
+
   </div>
 
 <!--  图表学生详细信息-->
@@ -349,8 +353,10 @@ import request from "@/utils/request";
 import {Search} from "@element-plus/icons";
 import FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import GCStuAllSchedule from "@/components/gCStuAllSchedule";
 export default {
   name: "gCTable",
+  components: {GCStuAllSchedule},
   setup(){
     return{
       Search,
@@ -894,8 +900,8 @@ export default {
         })
 
         request.post('/findScoreByBedRoom',this.user).then(res=>{
-          let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
           for(let index in res.data){
+            let tempDorm={room:'',score:0,GPA:0,paper_num:0,patent_num:0,project_num:0,contest_num:0}
             tempDorm.room=res.data[index].room
             tempDorm.paper_num=res.data[index].paper_num
             tempDorm.patent_num=res.data[index].patent_num
@@ -905,7 +911,8 @@ export default {
               tempDorm.GPA+=res.data[index].score[j]
             }
             tempDorm.GPA=tempDorm.GPA/res.data[index].score.length
-            tempDorm.score=parseFloat(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
+            // tempDorm.score=parseFloat(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
+            tempDorm.score=(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
             this.sortDorm.push(JSON.parse(JSON.stringify(tempDorm)))
           }
         })

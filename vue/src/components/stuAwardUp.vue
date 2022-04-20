@@ -34,6 +34,7 @@
               drag
               :on-error="fileUploadError"
               :limit="1"
+              :on-exceed="uploadCover"
               :auto-upload="false">
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
@@ -41,7 +42,7 @@
             </div>
             <template #tip>
               <div class="el-upload__tip">
-                仅上传jpg/pdf
+                仅上传jpg/pdf/png
               </div>
             </template>
           </el-upload>
@@ -57,7 +58,8 @@
     </el-dialog>
 
     <div>申请记录:</div>
-    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>
+<!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
+    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in paperDid">
@@ -75,8 +77,9 @@
             <el-tag type="danger" v-if="m.award_info_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
             <span style="color:cornflowerblue;">{{m.award_info_year}}</span>
-            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.award_info_status==='0'">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.award_info_status==='0'">删除</el-button>
+<!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.award_info_status==='0'">修改</el-button>-->
+            <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.award_info_status==='0'||m.award_info_status==='2'">删除</el-button>
           </el-card>
         </transition>
       </div>
@@ -108,7 +111,7 @@ export default {
       paperDid:[],//论文历史记录表
       tagType:['success','warning','danger'],
       toDoShow:[],//paper每条历史记录的v-if
-      newButtons:false,//新建按钮是否可用
+      // newButtons:false,//新建按钮是否可用
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
@@ -121,6 +124,10 @@ export default {
     this.getData()
   },
   methods:{
+    uploadCover(files, fileList){
+      this.$refs.upload.clearFiles()
+      this.$refs.upload.handleStart(files[0])
+    },
     downloadPaper(m){
       window.location.href=this.Fapi+"/Award/"+m
     },
@@ -168,10 +175,15 @@ export default {
       formData.append('file', param.file)
       let that=this
       request.post('/upload_award_info2', formData).then(res=>{
+        if(res.code===0){
+          this.$message.error("文件类型错误")
+          return
+        }
         this.awardForm.award_info_supporting_materials=res.data
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.awardForm.award_info_stu_no=user.stu_no+''//
         this.awardForm.award_info_stu_name=user.stu_name//以上三句可在getData实现后删除
+        this.awardForm.award_info_status='0'
         request.post("/upload_award_info", that.awardForm).then(res=>{
           that.$message.success(res.msg)
           this.dialogVisible=false//关闭表单
@@ -200,14 +212,16 @@ export default {
       })
 
       // 判断是否有正在审核的信息
-      request.post('/award_isexamineing',user).then(res=>{
-        if(res===1){
-          this.newButtons=true
-        }
-        else{
-          this.newButtons=false
-        }
-      })
+      // request.post('/award_isexamineing',user).then(res=>{
+      //   if(res===1){
+      //     this.newButtons=true
+      //   }
+      //   else{
+      //     this.newButtons=false
+      //   }
+      //
+      //   this.newButtons=false//之后删除
+      // })
 
     },
 

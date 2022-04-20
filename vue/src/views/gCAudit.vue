@@ -9,7 +9,7 @@
     <el-badge :value="toDoNum[5]" :max="99" v-show="numShow[5]" style="position: absolute; left:436px"></el-badge>
     <el-badge :value="toDoNum[6]" :max="99" v-show="numShow[6]" style="position: absolute; left:504px"></el-badge>
     <el-badge :value="toDoNum[7]" :max="99" v-show="numShow[7]" style="position: absolute; left:582px"></el-badge>
-    <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:682px"></el-badge>
+    <el-badge :value="toDoNum[8]" :max="99" v-show="numShow[8]" style="position: absolute; left:720px"></el-badge>
     <el-tabs v-model="activeName" style="margin:0 1% 0 1%">
 
       <el-tab-pane label="论文" name="first">

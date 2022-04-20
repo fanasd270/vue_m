@@ -34,6 +34,7 @@
               drag
               :on-error="fileUploadError"
               :limit="1"
+              :on-exceed="uploadCover"
               :auto-upload="false">
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
@@ -41,7 +42,7 @@
             </div>
             <template #tip>
               <div class="el-upload__tip">
-                仅上传jpg/pdf
+                仅上传jpg/pdf/png
               </div>
             </template>
           </el-upload>
@@ -62,7 +63,8 @@
       <span style="color: turquoise">{{sumTime}}</span>
       <span>小时</span>
     </div>
-    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>
+<!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
+    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in serveDid">
@@ -79,8 +81,9 @@
             <el-tag type="success" v-if="m.voluntary_activities_status==='1'">已通过</el-tag>
             <el-tag type="warning" v-if="m.voluntary_activities_status==='0'">待审核</el-tag>
             <el-tag type="danger" v-if="m.voluntary_activities_status==='2'">已驳回</el-tag>
-            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.voluntary_activities_status==='0'">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.voluntary_activities_status==='0'">删除</el-button>
+<!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.voluntary_activities_status==='0'">修改</el-button>-->
+            <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.voluntary_activities_status==='0'||m.voluntary_activities_status==='2'">删除</el-button>
           </el-card>
         </transition>
       </div>
@@ -116,7 +119,7 @@ export default {
       serveDid:[],//历史记录表
       tagType:['success','warning','danger'],
       toDoShow:[],//每条历史记录的v-if
-      newButtons:false,//新建按钮是否可用
+      // newButtons:false,//新建按钮是否可用
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
@@ -130,6 +133,10 @@ export default {
     this.getData()
   },
   methods:{
+    uploadCover(files, fileList){
+      this.$refs.upload.clearFiles()
+      this.$refs.upload.handleStart(files[0])
+    },
     NumberCheck(num) {
       let str = this.serveForm.voluntary_activities_time_long;
       //限制只能输入一个小数点
@@ -181,11 +188,16 @@ export default {
       formData.append('file', param.file)
       let that=this
       request.post('/upload_activity_info2', formData).then(res=>{
+        if(res.code===0){
+          this.$message.error("文件类型错误")
+          return
+        }
         this.fileList=[]
         this.serveForm.voluntary_activities_url=res.data
         let user=JSON.parse(sessionStorage.getItem('user'))//
         this.serveForm.voluntary_activities_stu_no=user.stu_no//
         this.serveForm.voluntary_activities_stu_name=user.stu_name//
+        this.serveForm.voluntary_activities_status='0'
 
         request.post("/upload_activity_info", that.serveForm).then(res=>{
           that.$message.success(res.msg)

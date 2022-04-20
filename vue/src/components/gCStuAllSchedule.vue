@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; margin:20px 0 0 9% ">
+  <div style="position: relative; margin:20px 0 0 5% ">
     <i style="background-color: blue;">
       <span style="opacity: 0">1</span>
     </i>
@@ -7,7 +7,7 @@
       学生课表汇总
     </p>
     <br>
-    <el-button @click="jumpBack" style="margin: 5px 0 5px 0">返回信息管理</el-button>
+<!--    <el-button @click="jumpBack" style="margin: 5px 0 5px 0">返回信息管理</el-button>-->
 
     <div style="margin-left: 3%">
       <el-button type="text" @click="refreshWeek"><el-icon><refresh /></el-icon></el-button>
@@ -195,9 +195,9 @@ export default {
         this.askSchedule()
       }
     },
-    jumpBack(){
-      this.$router.push("/teaLayout/gCStuInfo")
-    },
+    // jumpBack(){
+    //   this.$router.push("/teaLayout/gCStuInfo")
+    // },
     refreshWeek(){
       this.askForm.week=1
       this.askSchedule()
@@ -213,7 +213,6 @@ export default {
     },
     askSchedule(){
       request.post("/findEmptyCourse",this.askForm).then(res=>{
-        console.log(res)
         this.schedule=res.data
         this.scheduleStyle={
           '星期一':{},

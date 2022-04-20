@@ -56,7 +56,7 @@
             <span style="margin-left: 5px" >认定时间:</span>
             <span style="color:cornflowerblue;">{{m.contest_year.substring(0,4)}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
-            <!--                <el-button @click="rejectPaper(index)">驳回</el-button>-->
+            <el-button style="margin-left: 5px" v-if="m.contest_status==='1'" @click="rejectContestDid(index)">驳回</el-button>
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
           </el-card>
         </transition>
@@ -133,6 +133,12 @@ export default {
         } else {
           this.toDoNum--
         }
+        this.refreshComponent()
+      })
+    },
+    rejectContestDid(index){
+      request.post('/refuse_contest',this.contestDid[index]).then(res=>{
+
         this.refreshComponent()
       })
     },

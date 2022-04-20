@@ -21,7 +21,7 @@
           <el-checkbox v-model="confirmToForm.authors[0]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
           <div class="ecard" style="display: inline-block">
             <el-icon :size="30"><edit /></el-icon>
-            <span style="position: absolute; top: 35%">学生信息管理</span>
+            <span style="position: absolute; top: 35%">信息管理</span>
           </div>
         </el-card>
       </el-col>
@@ -48,7 +48,7 @@
           <el-checkbox v-model="confirmToForm.authors[3]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
           <div class="ecard">
             <el-icon :size="30"><reading /></el-icon>
-            <span style="position: absolute; top: 35%">年鉴导出</span>
+            <span style="position: absolute; top: 35%">信息统计</span>
           </div>
         </el-card>
       </el-col>
@@ -57,7 +57,7 @@
           <el-checkbox v-model="confirmToForm.authors[4]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
           <div class="ecard">
             <el-icon :size="30"><trophy /></el-icon>
-            <span style="position: absolute; top: 35%">查看学生成绩</span>
+            <span style="position: absolute; top: 35%">学生成绩</span>
           </div>
         </el-card>
       </el-col>
@@ -75,7 +75,7 @@
           <el-checkbox v-model="confirmToForm.authors[6]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
           <div class="ecard">
             <el-icon :size="30"><finished /></el-icon>
-            <span style="position: absolute; top: 35%">审核学生表单</span>
+            <span style="position: absolute; top: 35%">审核表单</span>
           </div>
         </el-card>
       </el-col>
