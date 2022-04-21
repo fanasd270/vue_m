@@ -11,8 +11,8 @@
     <div style="margin-left: 3%">
       <el-button type="text" @click="refreshWeek"><el-icon><refresh /></el-icon></el-button>
       <el-button type="primary" style="vertical-align: top" @click="changeWeek(0)"><el-icon><ArrowLeft /></el-icon>上一周</el-button>
-      <el-tag size="large">第{{askForm.week}}周</el-tag>
-      <el-button type="primary" style="vertical-align: top" @click="changeWeek(1)">下一周<el-icon><ArrowRight /></el-icon></el-button>
+      <el-tag size="large" style="margin-left: 5px">第{{askForm.week}}周</el-tag>
+      <el-button type="primary" style="vertical-align: top; margin-left: 5px" @click="changeWeek(1)">下一周<el-icon><ArrowRight /></el-icon></el-button>
     </div>
     <div style="margin-top: 10px">
       <div style="width: 5%;height: 90vh;display: inline-block; vertical-align: top">
@@ -170,12 +170,17 @@ export default {
     }else{
       this.askForm.year=y+'春'
     }
-    this.askSchedule()
+    this.getInitial()
   },
   methods:{
+    getInitial(){
+      request.post("/findWeekforNow").then(res=>{
+        this.askForm.week=res.data
+        this.askSchedule()
+      })
+    },
     refreshWeek(){
-      this.askForm.week=1
-      this.askSchedule()
+      this.getInitial()
     },
     changeWeek(num){
       if(num===0&&this.askForm.week>1){

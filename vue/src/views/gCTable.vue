@@ -11,7 +11,7 @@
     <div style="width: 59%; height: 400px;border-radius: 2px;border: solid #9AFF9A; margin-bottom: 5px; display: inline-block;
     vertical-align: top">
       <el-scrollbar height="400px" style="display: inline-block; width: 50%">
-        <el-table :data="sortClass" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleClass">
+        <el-table @sort-change="sortChangeForClass" :data="sortClass" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleClass">
           <el-table-column
               type="index"
               width="50">
@@ -25,13 +25,14 @@
               prop="score"
               label="分数"
               width="100"
-              sortable>
+              sortable="custom"
+              >
           </el-table-column>
         </el-table>
       </el-scrollbar>
 
       <el-scrollbar height="400px" style="display: inline-block; width: 50%">
-        <el-table :data="sortDorm" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleDorm">
+        <el-table @sort-change="sortChangeForDor" :data="sortDorm" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }" @row-click="showSingleDorm">
           <el-table-column
               type="index"
               width="50">
@@ -45,7 +46,7 @@
               prop="score"
               label="分数"
               width="100"
-              sortable>
+              sortable="custom">
           </el-table-column>
         </el-table>
       </el-scrollbar>
@@ -59,6 +60,7 @@
       <el-divider></el-divider>
       <el-scrollbar height="310px">
         <el-table
+            @sort-change="sortChangeForVol"
             :data="volunteerData"
             style="width: 100%">
           <el-table-column
@@ -82,7 +84,7 @@
           <el-table-column
               prop="time"
               label="时长"
-              sortable>
+              sortable="custom">
           </el-table-column>
         </el-table>
       </el-scrollbar>
@@ -166,6 +168,7 @@
 
       <el-table
           :data="showPoints"
+          @sort-change="sortChange"
           stripe
           style="width: 100%">
         <el-table-column
@@ -217,12 +220,12 @@
         <el-table-column
             prop="final_Information_comprehensive_achievements"
             label="综合成绩"
-            sortable>
+            sortable="custom">
         </el-table-column>
         <el-table-column
             prop="final_Information_effective_achievement"
             label="有效成绩"
-            sortable>
+            sortable="custom">
         </el-table-column>
         <el-table-column
             prop="final_Information_examination_situation"
@@ -544,10 +547,72 @@ export default {
       this.user=JSON.parse(sessionStorage.getItem('user'))
     }
     this.getData()
+    console.log(2)
   },
 
 
   methods: {
+    sortChangeForClass(val){
+      if(val.order==='descending'){
+        this.sortClass.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
+        })
+      }else{
+        this.sortClass.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+    },
+    sortChangeForDor(val){
+      if(val.order==='descending'){
+        this.sortDorm.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
+        })
+      }else{
+        this.sortDorm.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+    },
+    sortChangeForVol(val){
+      if(val.order==='descending'){
+        this.volunteerData.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
+        })
+      }else{
+        this.volunteerData.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+    },
+    sortChange(val){
+      if(val.order==='descending'){
+        this.showPointsCopy.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x>y)?-1:((x<=y)?1:0))
+        })
+      }else{
+        this.showPointsCopy.sort(function (a,b){
+          let x=a[val.prop]-0
+          let y=b[val.prop]-0
+          return((x<=y)?-1:((x>y)?1:0))
+        })
+      }
+      this.showDataChange()
+    },
     showSingleClass(row){
       this.classShow=true
       this.singleClass=row
@@ -897,6 +962,11 @@ export default {
             tempClass.score=parseFloat(tempClass.GPA*10+tempClass.paper_num+tempClass.patent_num+tempClass.project_num+tempClass.contest_num).toFixed(3)
             this.sortClass.push(JSON.parse(JSON.stringify(tempClass)))
           }
+          this.sortClass.sort(function (a,b){
+            let x=a.score-0
+            let y=b.score-0
+            return((x>y)?-1:((x<=y)?1:0))
+          })
         })
 
         request.post('/findScoreByBedRoom',this.user).then(res=>{
@@ -915,6 +985,11 @@ export default {
             tempDorm.score=(tempDorm.GPA*10+tempDorm.paper_num+tempDorm.patent_num+tempDorm.project_num+tempDorm.contest_num).toFixed(3)
             this.sortDorm.push(JSON.parse(JSON.stringify(tempDorm)))
           }
+          this.sortDorm.sort(function (a,b){
+            let x=a.score-0
+            let y=b.score-0
+            return((x>y)?-1:((x<=y)?1:0))
+          })
         })
 
       }).catch(err=>{
