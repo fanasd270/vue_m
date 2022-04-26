@@ -68,6 +68,22 @@
                 </div>
               </el-card>
             </el-col>
+            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuQuestions">
+                <div class="ecard">
+                  <el-icon :size="30"><document-checked /></el-icon>
+                  <span style="position: absolute; top: 35%">刷题自测</span>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+              <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuTakeOff">
+                <div class="ecard">
+                  <el-icon :size="30"><document-checked /></el-icon>
+                  <span style="position: absolute; top: 35%">外出请假</span>
+                </div>
+              </el-card>
+            </el-col>
             <div style="clear: both"></div>
           </div>
 
@@ -174,6 +190,12 @@ export default {
     },
     jumpToStuApplication(){
       this.$router.push("/stuLayout/stuApplication")
+    },
+    jumpToStuQuestions(){
+      this.$router.push("/stuLayout/stuQuestions")
+    },
+    jumpToStuTakeOff(){
+      this.$router.push("/stuLayout/stuTakeOff")
     },
     changePage(){
       let data={student:{},teacher:{}}

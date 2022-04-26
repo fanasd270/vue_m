@@ -355,10 +355,15 @@ export default {
               this.$router.push("/stuHome")//跳转至主页
             }
             else if(this.form.user_type===0){
-              let temp={type:2}
-              sessionStorage.setItem('power',JSON.stringify(temp))
-              sessionStorage.setItem("user",JSON.stringify(res.data))
-              this.$router.push("/tealayout")//跳转至主页
+              if(res.code===4){
+                sessionStorage.setItem("user",JSON.stringify(res.data))
+                this.$router.push("/courseTeaLayout")//跳转至主页
+              }else{
+                let temp={type:2}
+                sessionStorage.setItem('power',JSON.stringify(temp))
+                sessionStorage.setItem("user",JSON.stringify(res.data))
+                this.$router.push("/tealayout")//跳转至主页
+              }
             }
 
           }

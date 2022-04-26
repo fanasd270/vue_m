@@ -30,7 +30,7 @@ module.exports = {
                 //   target:'http://10.236.12.60:8088',
                 //   target:'http://10.236.11.68:8520',
                 //   target:'http://10.236.11.68:3310',
-                  target:'http://10.236.11.68:8520',
+                  target:'http://10.236.11.68:8080',
                  changeOrigin: true,              //是否设置同源，输入是的
                 pathRewrite: {                   //路径重写
                     '^/api': ''                     //选择忽略拦截器里面的内容

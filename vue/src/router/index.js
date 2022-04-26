@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '../layout/Layout.vue'
 import stuLayout from "@/layout/stuLayout";
 import teaLayout from "@/layout/teaLayout"
+import courseTeaLayout from "@/layout/courseTeaLayout";
 
 const routes = [
   {
@@ -87,11 +88,55 @@ const routes = [
         component: ()=>import("@/views/stuApplication"),
       },
       {
+        path: 'stuQuestions',
+        name: 'stuQuestions',
+        component: ()=>import("@/views/stuQuestions"),
+      },
+      {
+        path: 'stuTakeOff',
+        name: 'stuTakeOff',
+        component: ()=>import("@/views/stuTakeOff"),
+      },
+      {
+        path: 'stuTest',
+        name: 'stuTest',
+        component: ()=>import("@/views/stuTest"),
+      },
+      {
+        path: 'stuExam',
+        name: 'stuExam',
+        component: ()=>import("@/views/stuExam"),
+      },
+      {
         path: 'stuAboutUs',
         name: 'stuAboutUs',
         component: ()=>import("@/views/stuAboutUs"),
       },
     ]
+  },
+  //任课老师路由
+  {
+   path: '/courseTeaLayout',
+   name: 'courseTeaLayout' ,
+   component: courseTeaLayout,
+   redirect: '/teaHome',
+    children: [
+      {
+        path: '/teaHome',
+        name: 'teaHome',
+        component: ()=>import("@/views/teaHome"),
+      },
+      {
+        path: 'courseTeaAboutUs',
+        name: 'courseTeaAboutUs',
+        component: ()=>import("@/views/courseTeaAboutUs"),
+      },
+      {
+        path: 'ctCourseManage',
+        name: 'ctCourseManage',
+        component: ()=>import("@/views/ctCourseManage"),
+      },
+    ],
   },
 //教师路由
   {

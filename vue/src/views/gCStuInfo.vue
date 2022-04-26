@@ -15,7 +15,7 @@
   <el-checkbox v-model="isShow[10]" label="电话" />
   <el-checkbox v-model="isShow[11]" label="QQ" />
   <el-checkbox v-model="isShow[12]" label="邮箱" />
-
+  <br>
   <el-input
       v-model="searchInfo.stu_name"
       placeholder="模糊查询名字或学号"
@@ -108,11 +108,11 @@
     <div>
       <div>
         <el-image
-            style="width: 96px; height: 96px;"
+            style="width: 180px; height: 240px;"
             :src="headUrl"
         ></el-image>
 
-        <el-descriptions :column="3" size="small" border style="display: inline-block; width: 764px">
+        <el-descriptions :column="2" size="large" border style="display: inline-block; width: 670px; height: 240px">
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
@@ -165,6 +165,22 @@
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
+                班级
+              </div>
+            </template>
+            {{detailInfo.stu_class}}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label>
+              <div class="cell-item">
+                民族
+              </div>
+            </template>
+            {{detailInfo.stu_ethnic}}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label>
+              <div class="cell-item">
                 地址
               </div>
             </template>
@@ -174,8 +190,6 @@
         <el-collapse v-model="activeName1">
           <el-collapse-item title="更多基本信息" name="1">
             <el-descriptions>
-              <el-descriptions-item label="班级">{{detailInfo.stu_class}}</el-descriptions-item>
-              <el-descriptions-item label="民族">{{detailInfo.stu_ethnic}}</el-descriptions-item>
               <el-descriptions-item label="籍贯">{{detailInfo.stu_origin}}</el-descriptions-item>
               <el-descriptions-item label="身份证号">{{detailInfo.stu_id}}</el-descriptions-item>
               <el-descriptions-item label="政治面貌">{{detailInfo.stu_politicalface}}</el-descriptions-item>
