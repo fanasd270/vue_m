@@ -186,6 +186,11 @@ const routes = [
         component: ()=>import("@/views/gCAudit"),
       },
       {
+        path: 'gCTakeOff',
+        name: 'gCTakeOff',
+        component: ()=>import("@/views/gCTakeOff"),
+      },
+      {
         path: 'gCDorm',
         name: 'gCDorm',
         component: ()=>import("@/views/gCDorm"),

@@ -97,7 +97,7 @@ export default {
     },
 
     downloadProject(m){
-      window.location.href=this.Fapi+"/ScholarshipInfo/"+m
+      window.open(this.Fapi+"/ScholarshipInfo/"+m)
     },
     passProject(index){
       request.post('/pass_scholarship',this.projectToDo[index]).then(res=>{

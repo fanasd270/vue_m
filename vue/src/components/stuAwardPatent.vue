@@ -147,7 +147,7 @@ export default {
       this.$refs.upload.handleStart(files[0])
     },
     downloadPatent(m){
-      window.location.href=this.Fapi+"/Patents/"+m
+      window.open(this.Fapi+"/Patents/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

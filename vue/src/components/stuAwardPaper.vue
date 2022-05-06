@@ -143,7 +143,7 @@ export default {
     },
     downloadPaper(m){
       console.log("点击下载")
-      window.location.href=this.Fapi+"/Papers/"+m
+      window.open(this.Fapi+"/Papers/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

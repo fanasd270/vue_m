@@ -149,7 +149,8 @@ export default {
     downloadFile(item){
       request.post('/countDownload',item).then(res=>{
         if(res.code===1){
-          window.location.href=this.Fapi+"/DownloadCenter/"+item.download_center_url
+          // window.location.href=this.Fapi+"/DownloadCenter/"+item.download_center_url
+          window.open(this.Fapi+"/DownloadCenter/"+item.download_center_url)
           item.count=res.data
         }else{
           this.$message.error("下载失败")

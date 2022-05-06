@@ -98,7 +98,7 @@ export default {
     },
 
     downloadProject(m){
-      window.location.href=this.Fapi+"/Award/"+m
+      window.open(this.Fapi+"/Award/"+m)
     },
     passProject(index){
       request.post('/pass_award',this.projectToDo[index]).then(res=>{

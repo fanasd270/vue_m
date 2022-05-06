@@ -105,7 +105,7 @@ export default {
     },
 
     downloadPatent(m){
-      window.location.href=this.Fapi+"/Patents/"+m
+      window.open(this.Fapi+"/Patents/"+m)
     },
 
     passPatent(index){

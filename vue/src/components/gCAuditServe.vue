@@ -96,7 +96,7 @@ export default {
     },
 
     downloadServe(m){
-      window.location.href=this.Fapi+"/Activities/"+m
+      window.open(this.Fapi+"/Activities/"+m)
     },
     passServe(index) {
       request.post('/pass_activity', this.serveToDo[index]).then(res => {

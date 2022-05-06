@@ -129,7 +129,7 @@ export default {
       this.$refs.upload.handleStart(files[0])
     },
     downloadPaper(m){
-      window.location.href=this.Fapi+"/ScholarshipInfo/"+m
+      window.open(this.Fapi+"/ScholarshipInfo/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

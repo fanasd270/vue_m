@@ -104,7 +104,7 @@ export default {
     },
 
     downloadPaper(m){
-      window.location.href=this.Fapi+"/Papers/"+m
+      window.open(this.Fapi+"/Papers/"+m)
     },
 
     passPaper(index){

@@ -151,7 +151,7 @@ export default {
       this.serveForm.voluntary_activities_time_long=str
     },
     downloadServe(m){
-      window.location.href=this.Fapi+"/Activities/"+m
+      window.open(this.Fapi+"/Activities/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

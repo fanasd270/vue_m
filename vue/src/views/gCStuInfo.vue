@@ -765,26 +765,26 @@ export default {
 
     downloadPlan(){
       request.post('/Tea/writeplanning',this.developmentPlan).then(res=>{
-        window.location.href=this.Fapi+"/Word/"+res.data
+        window.open(this.Fapi+"/Word/"+res.data)
       })
     },
     downloadScholarship(m){
-      window.location.href=this.Fapi+"/ScholarshipInfo/"+m
+      window.open(this.Fapi+"/ScholarshipInfo/"+m)
     },
     downloadAward(m){
-      window.location.href=this.Fapi+"/Award/"+m
+      window.open(this.Fapi+"/Award/"+m)
     },
     downloadProject(m){
-      window.location.href=this.Fapi+"/Projects/"+m
+      window.open(this.Fapi+"/Projects/"+m)
     },
     downloadContest(m){
-      window.location.href=this.Fapi+"/Contests/"+m
+      window.open(this.Fapi+"/Contests/"+m)
     },
     downloadPatent(m){
-      window.location.href=this.Fapi+"/Patents/"+m
+      window.open(this.Fapi+"/Patents/"+m)
     },
     downloadPaper(m){
-      window.location.href=this.Fapi+"/Papers/"+m
+      window.open(this.Fapi+"/Papers/"+m)
     },
     filterClassHandler(value, row, column){
       const property = column['property']

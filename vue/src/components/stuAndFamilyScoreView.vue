@@ -259,7 +259,7 @@ export default {
   methods:{
     downloadPDF(){
       request.post('/findStudentScorePDF',this.user).then(res=>{
-        window.location.href=this.Fapi+"/excel/UploadPDF/"+res.data[0].score_pdf_url
+        window.open(this.Fapi+"/excel/UploadPDF/"+res.data[0].score_pdf_url)
       }).catch(err=>{
         this.$message.error("下载失败")
       })

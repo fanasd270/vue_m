@@ -68,7 +68,7 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+            <el-col v-if="false" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
               <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToStuQuestions">
                 <div class="ecard">
                   <el-icon :size="30"><document-checked /></el-icon>

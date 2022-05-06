@@ -158,7 +158,7 @@ export default {
       this.$refs.upload.handleStart(files[0])
     },
     downloadContest(m){
-      window.location.href=this.Fapi+"/Contests/"+m
+      window.open(this.Fapi+"/Contests/"+m)
     },
     submitUpload() {
       if(this.contestForm.contest_year===''){

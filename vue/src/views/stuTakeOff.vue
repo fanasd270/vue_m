@@ -15,14 +15,60 @@
 
         <el-form ref="form" :model="askForm" style="margin:30px 0 0 60px; font-weight: bold">
 
-          <el-form-item label="请假理由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="去向类型" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select v-model="askForm.leave_type" placeholder="请选择">
+              <el-option
+                  v-for="item in leaveType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="离校事由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-input v-model="askForm.leave_reason" clearable></el-input>
           </el-form-item>
-          <el-form-item label="开始时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="离校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker v-model="askForm.leave_starttime" value-format="YYYY-MM-DD" type="date" />
           </el-form-item>
-          <el-form-item label="结束时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="返校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker v-model="askForm.leave_endtime" value-format="YYYY-MM-DD" type="date" />
+          </el-form-item>
+          <el-form-item label="离校所乘交通工具及车次号（航班号）" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input v-model="askForm.leave_vehicle" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input v-model="askForm.leave_destination" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地疫情防控情况" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select v-model="askForm.leave_epidemic_prevention" placeholder="请选择">
+              <el-option
+                  v-for="item in preventionType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="建康码" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-select v-model="askForm.leave_firsthealth" placeholder="请选择">
+              <el-option
+                  v-for="item in healthCode"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="家长知情同意书" style="margin-bottom: 70px;">
+            <el-upload
+                action="https://jsonplaceholder.typicode.com/posts/"
+                list-type="picture"
+                limit="1"
+                :http-request="fileUploadFamily"
+            >
+              <el-button type="text">点击上传</el-button>
+            </el-upload>
           </el-form-item>
 
           <el-form-item style="position: absolute; left:40%">
@@ -42,15 +88,57 @@
 
         <el-form ref="form" :model="changeForm" style="margin:30px 0 0 60px; font-weight: bold">
 
-          <el-form-item label="请假理由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="去向类型" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select disabled v-model="changeForm.leave_type" placeholder="请选择">
+              <el-option
+                  v-for="item in leaveType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="离校事由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-input disabled v-model="changeForm.leave_reason"></el-input>
           </el-form-item>
-          <el-form-item label="开始时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="离校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker disabled v-model="changeForm.leave_starttime" value-format="YYYY-MM-DD" type="date" />
           </el-form-item>
-          <el-form-item label="结束时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="返校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker disabled v-model="changeForm.leave_endtime" value-format="YYYY-MM-DD" type="date" />
           </el-form-item>
+
+          <el-form-item label="离校所乘交通工具及车次号（航班号）" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input disabled v-model="changeForm.leave_vehicle" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input disabled v-model="changeForm.leave_destination" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地疫情防控情况" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select disabled v-model="changeForm.leave_epidemic_prevention" placeholder="请选择">
+              <el-option
+                  v-for="item in preventionType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="建康码" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-select disabled v-model="changeForm.leave_firsthealth" placeholder="请选择">
+              <el-option
+                  v-for="item in healthCode"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="家长知情同意书" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <span style="color:cornflowerblue;" @click="downloadFile(changeForm.leave_parental_consent)">点击下载</span>
+          </el-form-item>
+
           <el-form-item label="健康码" style="margin-bottom: 70px;">
             <el-upload
                 action="https://jsonplaceholder.typicode.com/posts/"
@@ -99,14 +187,56 @@
           width="50%"
       >
         <el-form ref="form" :model="eliminateForm" style="margin:30px 0 0 60px; font-weight: bold">
-          <el-form-item label="请假理由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+
+          <el-form-item label="去向类型" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select disabled v-model="eliminateForm.leave_type" placeholder="请选择">
+              <el-option
+                  v-for="item in leaveType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="离校事由" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-input v-model="eliminateForm.leave_reason" disabled></el-input>
           </el-form-item>
-          <el-form-item label="开始时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="离校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker disabled v-model="eliminateForm.leave_starttime" value-format="YYYY-MM-DD" type="date" />
           </el-form-item>
-          <el-form-item label="结束时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+          <el-form-item label="返校时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
             <el-date-picker disabled v-model="eliminateForm.leave_endtime" value-format="YYYY-MM-DD" type="date" />
+          </el-form-item>
+
+          <el-form-item label="离校所乘交通工具及车次号（航班号）" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input disabled v-model="eliminateForm.leave_vehicle" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-input disabled v-model="eliminateForm.leave_destination" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="离校目的地疫情防控情况" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <el-select disabled v-model="eliminateForm.leave_epidemic_prevention" placeholder="请选择">
+              <el-option
+                  v-for="item in preventionType"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="建康码" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-select disabled v-model="eliminateForm.leave_firsthealth" placeholder="请选择">
+              <el-option
+                  v-for="item in healthCode"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="家长知情同意书" style="margin-bottom: 40px; margin-right: 2%; width: 70%">
+            <span style="color:cornflowerblue;" @click="downloadFile(eliminateForm.leave_parental_consent)">点击下载</span>
           </el-form-item>
 
           <el-form-item label="健康码" style="margin-bottom: 70px;">
@@ -151,6 +281,7 @@
       </el-dialog>
 
       <div style="margin-top: 10px">申请记录:</div>
+      <div style="color: red">为保证请假成功，请确保你的基本信息填写无误</div>
       <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
       <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
       <el-scrollbar height="60vh">
@@ -159,9 +290,17 @@
           <transition name="el-fade-in-linear">
             <el-card class="box-card" style="margin: 10px 5px 0 5px">
               <el-descriptions style="padding: 10px 5px 0 5px" :column=3>
-                <el-descriptions-item label="请假理由:">{{m.leave_reason}}</el-descriptions-item>
-                <el-descriptions-item label="开始时间:">{{m.leave_starttime}}</el-descriptions-item>
-                <el-descriptions-item label="结束时间:">{{m.leave_endtime}}</el-descriptions-item>
+                <el-descriptions-item label="离校去向类型:">{{m.leave_type}}</el-descriptions-item>
+                <el-descriptions-item label="离校事由:">{{m.leave_reason}}</el-descriptions-item>
+                <el-descriptions-item label="离校时间:">{{m.leave_starttime}}</el-descriptions-item>
+                <el-descriptions-item label="返校时间:">{{m.leave_endtime}}</el-descriptions-item>
+                <el-descriptions-item label="离校所乘交通工具及车次号（航班号）:">{{m.leave_vehicle}}</el-descriptions-item>
+                <el-descriptions-item label="离校目的地:">{{m.leave_destination}}</el-descriptions-item>
+                <el-descriptions-item label="离校目的地疫情防控情况:">{{m.leave_epidemic_prevention}}</el-descriptions-item>
+                <el-descriptions-item label="建康码:">{{m.leave_firsthealth}}</el-descriptions-item>
+                <el-descriptions-item label="家长知情同意书:">
+                  <span style="color:cornflowerblue;" @click="downloadFile(m.leave_parental_consent)">点击下载</span>
+                </el-descriptions-item>
                 <el-descriptions-item v-if="m.leave_status==='3'||m.leave_status==='4'" label="健康码:">
                   <span style="color:cornflowerblue;" @click="downloadFile(m.leave_health_code)">点击下载</span>
                 </el-descriptions-item>
@@ -203,6 +342,25 @@ export default {
       dialogVisible3:false,
       user:{},
       histories:[],
+      leaveType:[
+        '离校不离渝(不离开高新区和沙坪坝)',
+        '离校不离渝(离开高新区和沙坪坝，当日返回宿舍)',
+        '离校不离渝(不离开高新区和沙坪坝，且在校外住宿)',
+        '离校离渝',
+      ],
+      preventionType:[
+          '中高风险区',
+          '中高风险区所在县级行政区域的其他低风险区',
+          '中高风险区所在地级市的其他县级行政区',
+          '出现本土病例、但为划定中高风险区的地级市或县级市',
+          '低风险区',
+          '其他情况',
+      ],
+      healthCode:[
+          '绿码',
+          '黄码',
+          '红码',
+      ],
       askForm:{
         leave_reason:'',
         leave_endtime:"",
@@ -215,6 +373,12 @@ export default {
         leave_stu_name:"",
         leave_stu_no:"",
         leave_travel_code:"",
+        leave_type:'',
+        leave_vehicle:'',
+        leave_destination:'',
+        leave_parental_consent:'',
+        leave_epidemic_prevention:'',
+        leave_firsthealth:'',
       },
       changeForm:{
         leave_reason:'',
@@ -257,7 +421,19 @@ export default {
       this.reload()
     },
     downloadFile(m){
-      window.location.href=this.Fapi+"/Leaves/"+m
+      window.open(this.Fapi+"/Leaves/"+m)
+    },
+    fileUploadFamily(param){
+      const formData=new FormData()
+      formData.append('file', param.file)
+      request.post('/uploadFamilyMean', formData).then(res=>{
+        if(res.code===0){
+          this.$message.error("文件类型错误")
+          return
+        }
+        console.log(res.data)
+        this.askForm.leave_parental_consent=res.data
+      })
     },
     fileUpload1(param){
       const formData=new FormData()
@@ -320,7 +496,7 @@ export default {
       this.reflesh()
     },
     onSubmitSecond(){
-      if(this.changeForm.leave_starttime===''||this.changeForm.leave_endtime===''||this.changeForm.leave_reason===''){
+      if(this.changeForm.leave_health_code===''||this.changeForm.leave_travel_code===''||this.changeForm.leave_nucleic_acid_report===''){
         this.$message.warning('请上传完整信息')
         return
       }
@@ -351,7 +527,9 @@ export default {
       this.askForm.leave_reason=''
     },
     onSubmitFirst(){
-      if(this.askForm.leave_starttime===''||this.askForm.leave_endtime===''||this.askForm.leave_reason===''){
+      if(this.askForm.leave_starttime===''||this.askForm.leave_endtime===''||this.askForm.leave_reason===''||this.askForm.leave_type===''||
+          this.askForm.leave_vehicle===''||this.askForm.leave_destination===''||this.askForm.leave_epidemic_prevention===''||this.askForm.leave_firsthealth===''||
+          this.askForm.leave_parental_consent===''){
         this.$message.warning('请上传完整信息')
         return
       }

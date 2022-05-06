@@ -172,7 +172,7 @@ export default {
     },
 
     downloadSend(m){
-      window.location.href=this.Fapi+"/Dispatches/"+m
+      window.open(this.Fapi+"/Dispatches/"+m)
     },
 
     passSend(index) {

@@ -76,6 +76,15 @@
               </div>
             </el-card>
           </el-col>
+          <el-col v-if="authors[8]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+            <el-badge :value="takeOffNum" :max="99" v-show="takeOffNum!==0" style="position: absolute; right:2%"></el-badge>
+            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToTakeOff">
+              <div class="ecard">
+                <el-icon :size="30"><school /></el-icon>
+                <span style="position: absolute; top: 35%">外出请假</span>
+              </div>
+            </el-card>
+          </el-col>
           <div style="clear: both"></div>
         </div>
 
@@ -151,6 +160,7 @@ export default {
   data(){
     return{
       auditNum:0,
+      takeOffNum:0,
       note:{
         backgroundImage:"url("+require("../../../../vue_project/vue/src/assets/background2.png")+")",
         backgroundRepeat:"no-repeat",
@@ -158,7 +168,7 @@ export default {
       },
       power:{},
       user:{},
-      authors:[true,true,true,true,true,true,true,true],
+      authors:[true,true,true,true,true,true,true,true,true],
     }
   },
   created() {
@@ -176,6 +186,12 @@ export default {
       request.post('/findTeacherMsgNum',this.user).then(res=>{
         this.auditNum=res.data
       })
+      request.post('/leaveCount',this.user).then(res=>{
+        this.takeOffNum=res.data
+      })
+    },
+    jumpToTakeOff(){
+      this.$router.push("/teaLayout/gCTakeOff")
     },
     jumpTogCStuInfo(){
       this.$router.push("/teaLayout/gCStuInfo")//跳转至学生信息管理页面

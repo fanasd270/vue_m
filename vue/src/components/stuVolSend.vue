@@ -213,7 +213,7 @@ export default {
       this.$refs.upload.handleStart(files[0])
     },
     downloadSend(m){
-      window.location.href=this.Fapi+"/Dispatches/"+m
+      window.open(this.Fapi+"/Dispatches/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

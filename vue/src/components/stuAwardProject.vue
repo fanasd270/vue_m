@@ -152,7 +152,7 @@ export default {
       this.$refs.upload.handleStart(files[0])
     },
     downloadProject(m){
-      window.location.href=this.Fapi+"/Projects/"+m
+      window.open(this.Fapi+"/Projects/"+m)
     },
     submitUpload() {
       this.$refs.upload.submit();

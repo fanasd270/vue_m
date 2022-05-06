@@ -110,7 +110,7 @@ export default {
     },
 
     downloadContest(m){
-      window.location.href=this.Fapi+"/Contests/"+m
+      window.open(this.Fapi+"/Contests/"+m)
     },
     passContest(index){
       request.post('/pass_contest',this.contestToDo[index]).then(res=>{
