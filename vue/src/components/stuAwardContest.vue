@@ -78,32 +78,35 @@
 
     <div>申请记录:</div>
 <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
-    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
+    <el-button type="text" @click="openDialog">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in contestDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="contestShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="竞赛名称:">{{m.contest_name}}</el-descriptions-item>
-              <el-descriptions-item label="项目名称:">{{m.contest_projectname}}</el-descriptions-item>
-              <el-descriptions-item label="授予部门:">{{m.contest_grantingdepartment}}</el-descriptions-item>
-              <el-descriptions-item label="获奖级别:">{{m.contest_level}}</el-descriptions-item>
-              <el-descriptions-item label="获奖名次:">{{m.contest_ranking}}</el-descriptions-item>
-              <el-descriptions-item label="获奖时间:">{{m.contest_date}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师姓名:">{{m.contest_teachername}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师学院:">{{m.contest_teacherdept}}</el-descriptions-item>
-              <el-descriptions-item label="获奖证书上传:">{{m.contest_issubmitcertificate}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.contest_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="竞赛名称:">{{m.data.contest_name}}</el-descriptions-item>
+              <el-descriptions-item label="项目名称:">{{m.data.contest_projectname}}</el-descriptions-item>
+              <el-descriptions-item label="授予部门:">{{m.data.contest_grantingdepartment}}</el-descriptions-item>
+              <el-descriptions-item label="获奖级别:">{{m.data.contest_level}}</el-descriptions-item>
+              <el-descriptions-item label="获奖名次:">{{m.data.contest_ranking}}</el-descriptions-item>
+              <el-descriptions-item label="获奖时间:">{{m.data.contest_date}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师姓名:">{{m.data.contest_teachername}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师学院:">{{m.data.contest_teacherdept}}</el-descriptions-item>
+              <el-descriptions-item label="获奖证书上传:">{{m.data.contest_issubmitcertificate}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.data.contest_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.contest_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.contest_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.contest_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.contest_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.contest_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.contest_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.contest_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.contest_year.substring(0,4)}}</span>
 <!--            <el-button @click="changeContestInfo(index)" style="margin-left: 5%" v-if="m.contest_status==='0'">修改</el-button>-->
             <el-button @click="changeContestInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteContestInfo(index)" style="margin-left: 1%" v-if="m.contest_status==='0'||m.contest_status==='2'">删除</el-button>
+            <el-button @click="deleteContestInfo(index)" style="margin-left: 1%" v-if="m.data.contest_status==='0'||m.data.contest_status==='2'">删除</el-button>
+            <div v-if="m.data.contest_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -153,6 +156,26 @@ export default {
     this.getData()
   },
   methods:{
+    openDialog(){
+      this.dialogVisible = true
+      this.contestForm={
+        contest_no: "",
+        contest_name: "",
+        contest_projectname: "",
+        contest_grantingdepartment: "",
+        contest_level: "",
+        contest_ranking: "",
+        contest_date: "",
+        contest_teachername: "",
+        contest_teacherdept: "",
+        contest_stuname: "",
+        contest_stuno: "",
+        contest_issubmitcertificate: "",
+        contest_year: "",
+        contest_supporting_materials: "",
+        contest_status: "0"
+      }
+    },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
@@ -191,16 +214,6 @@ export default {
     },
     //表单关闭
     contestHandleClose(){
-      this.contestForm.contest_name=''
-      this.contestForm.contest_projectname=''
-      this.contestForm.contest_grantingdepartment=''
-      this.contestForm.contest_level=''
-      this.contestForm.contest_ranking=''
-      this.contestForm.contest_date=''
-      this.contestForm.contest_teachername=''
-      this.contestForm.contest_teacherdept=''
-      this.contestForm.contest_issubmitcertificate=''
-      this.contestForm.contest_year=''
       this.dialogVisible=false
     },
 
@@ -262,12 +275,12 @@ export default {
 
     changeContestInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.contestDid[index])
+      let temp=JSON.stringify(this.contestDid[index].data)
       this.contestForm=JSON.parse(temp)
     },
 
     deleteContestInfo(index){
-      let contest=JSON.stringify(this.contestDid[index])
+      let contest=JSON.stringify(this.contestDid[index].data)
       let that=this
       request.post('/delete_contest', contest).then(res=>{
         this.contestShow[index]=false

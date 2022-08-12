@@ -71,19 +71,22 @@
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="志愿活动名称:">{{m.voluntary_activities_name}}</el-descriptions-item>
-              <el-descriptions-item label="举办部门:">{{m.voluntary_activities_studept}}</el-descriptions-item>
-              <el-descriptions-item label="活动始、末时间:">{{m.voluntary_activities_time_from_to}}</el-descriptions-item>
-              <el-descriptions-item label="参与时长:">{{m.voluntary_activities_time_long}}</el-descriptions-item>
-              <el-descriptions-item label="活动内容:">{{m.voluntary_activities_content}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.voluntary_activities_url)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="志愿活动名称:">{{m.data.voluntary_activities_name}}</el-descriptions-item>
+              <el-descriptions-item label="举办部门:">{{m.data.voluntary_activities_studept}}</el-descriptions-item>
+              <el-descriptions-item label="活动始、末时间:">{{m.data.voluntary_activities_time_from_to}}</el-descriptions-item>
+              <el-descriptions-item label="参与时长:">{{m.data.voluntary_activities_time_long}}</el-descriptions-item>
+              <el-descriptions-item label="活动内容:">{{m.data.voluntary_activities_content}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.data.voluntary_activities_url)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.voluntary_activities_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.voluntary_activities_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.voluntary_activities_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.voluntary_activities_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.voluntary_activities_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.voluntary_activities_status==='2'">已驳回</el-tag>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.voluntary_activities_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.voluntary_activities_status==='0'||m.voluntary_activities_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.voluntary_activities_status==='0'||m.data.voluntary_activities_status==='2'">删除</el-button>
+            <div v-if="m.data.voluntary_activities_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -164,6 +167,16 @@ export default {
         this.$message.warning('请选择证明材料')
         return
       }
+      // this.serveForm.voluntary_activities_name=''
+      // this.serveForm.voluntary_activities_studept=''
+      // this.serveForm.voluntary_activities_time_from_to=''
+      // this.serveForm.voluntary_activities_time_long=null
+      // this.serveForm.voluntary_activities_content=''
+      if(this.serveForm.voluntary_activities_name===''||this.serveForm.voluntary_activities_studept===''||
+          this.serveForm.voluntary_activities_time_from_to===''||this.serveForm.voluntary_activities_time_long===''||this.serveForm.voluntary_activities_content===''){
+        this.$message.warning('请将信息填写完整')
+        return
+      }
       this.submitUpload()
     },
     //刷新组件
@@ -201,7 +214,7 @@ export default {
 
         request.post("/upload_activity_info", that.serveForm).then(res=>{
           that.$message.success(res.msg)
-          this.dialogVisible=false//关闭表单
+          this.serveHandleClose()//关闭表单
           that.refreshComponent()
         }).catch(err=>{
           that.$message.error("请求错误")
@@ -230,11 +243,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.serveDid[index])
+      let temp=JSON.stringify(this.serveDid[index].data)
       this.serveForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let serve=JSON.stringify(this.serveDid[index])
+      let serve=JSON.stringify(this.serveDid[index].data)
       let that=this
       request.post('/delete_activity', serve).then(res=>{
         this.toDoShow[index]=false

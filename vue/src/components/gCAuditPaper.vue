@@ -6,25 +6,40 @@
       <div v-for="(m,index) in paperToDo">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
-            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.paper_stuname}}</span>
-            <span style="font-weight: bold;">学号：{{m.paper_stuno}}</span>
+            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.paper_stuname}}</span>
+            <span style="font-weight: bold;">学号：{{m.data.paper_stuno}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
-              <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
-              <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
-              <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="论文名称:">{{m.data.paper_name}}</el-descriptions-item>
+              <el-descriptions-item label="发表期刊/会议名称:">{{m.data.paper_periodical}}</el-descriptions-item>
+              <el-descriptions-item label="出版时间:">{{m.data.paper_publicationTime}}</el-descriptions-item>
+              <el-descriptions-item label="是否CSCD:">{{m.data.paper_iscscd}}</el-descriptions-item>
+              <el-descriptions-item label="SCI检索号:">{{m.data.paper_sciSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="EI检索号:">{{m.data.paper_eiSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.data.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passPaper(index)">通过</el-button>
-            <el-button @click="rejectPaper(index)">驳回</el-button>
+            <el-button @click="rejectReason(index)">驳回</el-button>
             <el-button @click="waitPaper(index)">稍后</el-button>
             <span style="margin-left: 5px" >认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.paper_year.substring(0,4)}}</span>
           </el-card>
         </transition>
       </div>
+
+      <el-dialog
+          v-model="rejectReasonDia"
+          title="驳回理由"
+          width="30%"
+      >
+        <el-input v-model="rejectItem.reason"></el-input>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="rejectReasonDia = false">取消</el-button>
+        <el-button v-if="rejectType==='toDo'" type="primary" @click="rejectPaper(rejectIndex)">确认</el-button>
+        <el-button v-if="rejectType==='did'" type="primary" @click="rejectPaperDid(rejectIndex)">确认</el-button>
+      </span>
+        </template>
+      </el-dialog>
     </el-scrollbar>
 
     <!--        历史-->
@@ -34,24 +49,27 @@
       <div v-for="(m,index) in paperDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="didShow[index]">
-            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.paper_stuname}}</span>
-            <span style="font-weight: bold;">学号：{{m.paper_stuno}}</span>
+            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.paper_stuname}}</span>
+            <span style="font-weight: bold;">学号：{{m.data.paper_stuno}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
-              <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
-              <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
-              <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="论文名称:">{{m.data.paper_name}}</el-descriptions-item>
+              <el-descriptions-item label="发表期刊/会议名称:">{{m.data.paper_periodical}}</el-descriptions-item>
+              <el-descriptions-item label="出版时间:">{{m.data.paper_publicationTime}}</el-descriptions-item>
+              <el-descriptions-item label="是否CSCD:">{{m.data.paper_iscscd}}</el-descriptions-item>
+              <el-descriptions-item label="SCI检索号:">{{m.data.paper_sciSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="EI检索号:">{{m.data.paper_eiSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.data.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.paper_status==='1'">已通过</el-tag>
-            <el-tag type="danger" v-if="m.paper_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.paper_status==='1'">已通过</el-tag>
+            <el-tag type="danger" v-if="m.data.paper_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.paper_year.substring(0,4)}}</span>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
-            <el-button style="margin-left: 5px" v-if="m.paper_status==='1'" @click="rejectPaperDid(index)">驳回</el-button>
+            <el-button style="margin-left: 5px" v-if="m.data.paper_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
+            <div v-if="m.data.paper_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -68,6 +86,10 @@ export default {
   props:["Data"],
   data(){
     return{
+      rejectReasonDia:false,
+      rejectType:'',
+      rejectIndex:0,
+      rejectItem:{},
       user:{},
       power:{},
       numShow:false,//是否显示红点
@@ -108,7 +130,7 @@ export default {
     },
 
     passPaper(index){
-      request.post('/pass_paper',this.paperToDo[index]).then(res=>{
+      request.post('/pass_paper',this.paperToDo[index].data).then(res=>{
         this.toDoShow[index]=false
         delete this.paperToDo[index]
         if(this.toDoNum-1===0){
@@ -119,8 +141,21 @@ export default {
         this.refreshComponent()
       })
     },
+    rejectReason(index){
+      this.rejectReasonDia=true
+      this.rejectType='toDo'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.paperToDo[index]))
+    },
+    rejectReason_did(index){
+      this.rejectReasonDia=true
+      this.rejectType='did'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.paperDid[index]))
+    },
     rejectPaper(index){
-      request.post('/refuse_paper',this.paperToDo[index]).then(res=>{
+      request.post('/refuse_paper',this.rejectItem).then(res=>{
+        this.rejectReasonDia=false
         this.toDoShow[index]=false
         delete this.paperToDo[index]
         if(this.toDoNum-1===0){
@@ -132,7 +167,8 @@ export default {
       })
     },
     rejectPaperDid(index){
-      request.post('/refuse_paper',this.paperDid[index]).then(res=>{
+      request.post('/refuse_paper',this.rejectItem).then(res=>{
+        this.rejectReasonDia=false
         // this.didShow[index]=false
         // delete this.paperDid[index]
 
@@ -151,6 +187,7 @@ export default {
     getData(){
       request.post('/find_all_paper_info_new',this.user).then(res=>{
         this.paperToDo=res
+        console.log(res)
         for(let i=0;i<this.paperToDo.length;i++){
           this.toDoShow[i]=true
         }

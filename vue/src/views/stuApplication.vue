@@ -98,8 +98,20 @@ export default {
       })
     },
     onSubmit(){
+      if(this.stayApplication.stay_school_info_begin===''||this.stayApplication.stay_school_info_end===''||this.stayApplication.stay_school_info_reason===''||this.year===''||this.year2===''){
+        this.$message.warning("请将信息填写完整")
+        return
+      }
       this.stayApplication.stay_school_info_time=this.year+this.year2
       this.stayApplication.stay_school_info_status='0'
+
+      //需要测试！！！
+      if(!this.stayApplication.stay_school_info_stu_no||this.stayApplication.stay_school_info_stu_no===''||this.stayApplication.stay_school_info_stu_no===null){
+        this.$message.warning("请先登录")
+        this.$router.push('/Login')
+      }
+
+
       request.post('/upload_stayschool_info',this.stayApplication).then(res=>{
         this.$message.success(res.msg)
         this.getData()

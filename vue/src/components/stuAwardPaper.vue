@@ -68,29 +68,32 @@
 
     <div>申请记录:</div>
 <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
-    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
+    <el-button type="text" @click="openDialog">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in paperDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="论文名称:">{{m.paper_name}}</el-descriptions-item>
-              <el-descriptions-item label="发表期刊/会议名称:">{{m.paper_periodical}}</el-descriptions-item>
-              <el-descriptions-item label="出版时间:">{{m.paper_publicationTime}}</el-descriptions-item>
-              <el-descriptions-item label="是否CSCD:">{{m.paper_iscscd}}</el-descriptions-item>
-              <el-descriptions-item label="SCI检索号:">{{m.paper_sciSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="EI检索号:">{{m.paper_eiSearchNumber}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.paper_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="论文名称:">{{m.data.paper_name}}</el-descriptions-item>
+              <el-descriptions-item label="发表期刊/会议名称:">{{m.data.paper_periodical}}</el-descriptions-item>
+              <el-descriptions-item label="出版时间:">{{m.data.paper_publicationTime}}</el-descriptions-item>
+              <el-descriptions-item label="是否CSCD:">{{m.data.paper_iscscd}}</el-descriptions-item>
+              <el-descriptions-item label="SCI检索号:">{{m.data.paper_sciSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="EI检索号:">{{m.data.paper_eiSearchNumber}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.data.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.paper_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.paper_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.paper_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.paper_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.paper_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.paper_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.paper_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.paper_year.substring(0,4)}}</span>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.paper_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.paper_status==='0'||m.paper_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.paper_status==='0'||m.data.paper_status==='2'">删除</el-button>
+            <div v-if="m.data.paper_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -128,15 +131,29 @@ export default {
       dialogVisible:false,//表单的显示
       didHistory:false,//空状态是否显示
       fresh:true,
-      Fapi:'',
+      Fapi:fileApi.fileApi,
     }
   },
 
   created() {
-    this.Fapi=fileApi.fileApi
     this.getData()
   },
   methods:{
+    openDialog(){
+      this.dialogVisible = true
+      this.paperForm.paper_no=""
+      this.paperForm.paper_stuno= 0
+      this.paperForm.paper_stuname= ""
+      this.paperForm.paper_name=''
+      this.paperForm.paper_periodical=''
+      this.paperForm.paper_publicationTime=''
+      this.paperForm.paper_year=''
+      this.paperForm.paper_iscscd=''
+      this.paperForm.paper_sciSearchNumber=''
+      this.paperForm.paper_eiSearchNumber=''
+      this.paperForm.paper_supporting_materials=''
+      this.paper_status='0'
+    },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
@@ -216,6 +233,7 @@ export default {
 
       //请求论文
       request.post('/find_my_paper_info',user).then(res=>{
+        console.log(res)
         this.paperDid=res
         if(this.paperDid.length===0){
           this.didHistory=true
@@ -244,11 +262,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.paperDid[index])
+      let temp=JSON.stringify(this.paperDid[index].data)
       this.paperForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let paper=JSON.stringify(this.paperDid[index])
+      let paper=JSON.stringify(this.paperDid[index].data)
       let that=this
       request.post('/delete_paper', paper).then(res=>{
         this.toDoShow[index]=false

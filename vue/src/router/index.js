@@ -83,6 +83,11 @@ const routes = [
         component: ()=>import("@/views/stuChat"),
       },
       {
+        path: 'stuCA',
+        name: 'stuCA',
+        component: ()=>import("@/views/stuCA"),
+      },
+      {
         path: 'stuApplication',
         name: 'stuApplication',
         component: ()=>import("@/views/stuApplication"),

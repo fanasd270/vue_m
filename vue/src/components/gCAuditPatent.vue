@@ -6,26 +6,40 @@
     <div v-for="(m,index) in patentToDo">
       <transition name="el-fade-in-linear">
         <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="patentToDoShow[index]">
-          <span style="font-weight: bold; margin-right: 2%">姓名：{{m.patent_stu_name}}</span>
-          <span style="font-weight: bold;">学号：{{m.patent_stu_no}}</span>
+          <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.patent_stu_name}}</span>
+          <span style="font-weight: bold;">学号：{{m.data.patent_stu_no}}</span>
           <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-            <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
-            <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
-            <el-descriptions-item label="专利申请号:">{{m.patent_application_no}}</el-descriptions-item>
-            <el-descriptions-item label="专利申请日:">{{m.patent_application_time}}</el-descriptions-item>
-            <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
-            <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
-            <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
+            <el-descriptions-item label="专利名称:">{{m.data.patent_name}}</el-descriptions-item>
+            <el-descriptions-item label="专利类型:">{{m.data.patent_type}}</el-descriptions-item>
+            <el-descriptions-item label="专利申请号:">{{m.data.patent_application_no}}</el-descriptions-item>
+            <el-descriptions-item label="专利申请日:">{{m.data.patent_application_time}}</el-descriptions-item>
+            <el-descriptions-item label="专利证书号:">{{m.data.patent_certificate_no}}</el-descriptions-item>
+            <el-descriptions-item label="专利获权时间:">{{m.data.patent_authorization_time}}</el-descriptions-item>
+            <el-descriptions-item label="是否第一发明人:">{{m.data.patent_isfirstone}}</el-descriptions-item>
+            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.data.patent_supporting_materials)">点击下载</span></el-descriptions-item>
           </el-descriptions>
           <el-button @click="passPatent(index)">通过</el-button>
-          <el-button @click="rejectPatent(index)">驳回</el-button>
+          <el-button @click="rejectReason(index)">驳回</el-button>
           <el-button @click="waitPatent(index)">稍后</el-button>
           <span style="margin-left: 5px">认定时间:</span>
-          <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
+          <span style="color:cornflowerblue;">{{m.data.patent_year.substring(0,4)}}</span>
         </el-card>
       </transition>
     </div>
+    <el-dialog
+        v-model="rejectReasonDia"
+        title="驳回理由"
+        width="30%"
+    >
+      <el-input v-model="rejectItem.reason"></el-input>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="rejectReasonDia = false">取消</el-button>
+        <el-button v-if="rejectType==='toDo'" type="primary" @click="rejectPatent(rejectIndex)">确认</el-button>
+        <el-button v-if="rejectType==='did'" type="primary" @click="rejectPatentDid(rejectIndex)">确认</el-button>
+      </span>
+      </template>
+    </el-dialog>
   </el-scrollbar>
 
   <!--        历史-->
@@ -35,25 +49,28 @@
     <div v-for="(m,index) in patentDid">
       <transition name="el-fade-in-linear">
         <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="patentDidShow[index]">
-          <span style="font-weight: bold; margin-right: 2%">姓名：{{m.patent_stu_name}}</span>
-          <span style="font-weight: bold;">学号：{{m.patent_stu_no}}</span>
+          <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.patent_stu_name}}</span>
+          <span style="font-weight: bold;">学号：{{m.data.patent_stu_no}}</span>
           <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-            <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
-            <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
-            <el-descriptions-item label="专利申请号:">{{m.patent_application_no}}</el-descriptions-item>
-            <el-descriptions-item label="专利申请日:">{{m.patent_application_time}}</el-descriptions-item>
-            <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
-            <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
-            <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
+            <el-descriptions-item label="专利名称:">{{m.data.patent_name}}</el-descriptions-item>
+            <el-descriptions-item label="专利类型:">{{m.data.patent_type}}</el-descriptions-item>
+            <el-descriptions-item label="专利申请号:">{{m.data.patent_application_no}}</el-descriptions-item>
+            <el-descriptions-item label="专利申请日:">{{m.data.patent_application_time}}</el-descriptions-item>
+            <el-descriptions-item label="专利证书号:">{{m.data.patent_certificate_no}}</el-descriptions-item>
+            <el-descriptions-item label="专利获权时间:">{{m.data.patent_authorization_time}}</el-descriptions-item>
+            <el-descriptions-item label="是否第一发明人:">{{m.data.patent_isfirstone}}</el-descriptions-item>
+            <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.data.patent_supporting_materials)">点击下载</span></el-descriptions-item>
           </el-descriptions>
-          <el-tag type="success" v-if="m.patent_status==='1'">已通过</el-tag>
-          <el-tag type="danger" v-if="m.patent_status==='2'">已驳回</el-tag>
+          <el-tag type="success" v-if="m.data.patent_status==='1'">已通过</el-tag>
+          <el-tag type="danger" v-if="m.data.patent_status==='2'">已驳回</el-tag>
           <span style="margin-left: 5px">认定时间:</span>
-          <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
+          <span style="color:cornflowerblue;">{{m.data.patent_year.substring(0,4)}}</span>
           <!--                <el-button @click="passPaper(index)">通过</el-button>-->
-          <el-button style="margin-left: 5px" v-if="m.patent_status==='1'" @click="rejectPatentDid(index)">驳回</el-button>
+          <el-button style="margin-left: 5px" v-if="m.data.patent_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
           <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
+          <div v-if="m.data.patent_status==='2'">
+            驳回理由:{{m.reason}}
+          </div>
         </el-card>
       </transition>
     </div>
@@ -70,6 +87,10 @@ export default {
 
   data(){
     return{
+      rejectReasonDia:false,
+      rejectType:'',
+      rejectIndex:0,
+      rejectItem:{},
       user:{},
       power:{},
       numShow:false,//是否显示红点
@@ -109,7 +130,7 @@ export default {
     },
 
     passPatent(index){
-      request.post('/pass_patent',this.patentToDo[index]).then(res=>{
+      request.post('/pass_patent',this.patentToDo[index].data).then(res=>{
         this.patentToDoShow[index]=false
         delete this.patentToDo[index]
         if(this.toDoNum-1===0){
@@ -120,8 +141,21 @@ export default {
         this.refreshComponent()
       })
     },
+    rejectReason(index){
+      this.rejectReasonDia=true
+      this.rejectType='toDo'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.patentToDo[index]))
+    },
+    rejectReason_did(index){
+      this.rejectReasonDia=true
+      this.rejectType='did'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.patentDid[index]))
+    },
     rejectPatent(index){
-      request.post('/refuse_patent',this.patentToDo[index]).then(res=>{
+      request.post('/refuse_patent',this.rejectItem).then(res=>{
+        this.rejectReasonDia=false
         this.patentToDoShow[index]=false
         delete this.patentToDo[index]
         if(this.toDoNum-1===0){
@@ -133,8 +167,8 @@ export default {
       })
     },
     rejectPatentDid(index){
-      request.post('/refuse_patent',this.patentDid[index]).then(res=>{
-
+      request.post('/refuse_patent',this.rejectItem).then(res=>{
+        this.rejectReasonDia=false
         this.refreshComponent()
       })
     },

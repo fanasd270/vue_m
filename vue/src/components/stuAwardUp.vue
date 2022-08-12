@@ -59,27 +59,30 @@
 
     <div>申请记录:</div>
 <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
-    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
+    <el-button type="text" @click="openDialog">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in paperDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="获奖/荣誉名称:">{{m.award_info_name}}</el-descriptions-item>
-              <el-descriptions-item label="颁发单位:">{{m.award_info_unit}}</el-descriptions-item>
-              <el-descriptions-item label="获奖时间:">{{m.award_info_time}}</el-descriptions-item>
-              <el-descriptions-item label="获奖名次:">{{m.award_info_rank}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.award_info_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="获奖/荣誉名称:">{{m.data.award_info_name}}</el-descriptions-item>
+              <el-descriptions-item label="颁发单位:">{{m.data.award_info_unit}}</el-descriptions-item>
+              <el-descriptions-item label="获奖时间:">{{m.data.award_info_time}}</el-descriptions-item>
+              <el-descriptions-item label="获奖名次:">{{m.data.award_info_rank}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.data.award_info_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.award_info_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.award_info_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.award_info_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.award_info_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.award_info_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.award_info_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.award_info_year}}</span>
+            <span style="color:cornflowerblue;">{{m.data.award_info_year}}</span>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.award_info_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.award_info_status==='0'||m.award_info_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.award_info_status==='0'||m.data.award_info_status==='2'">删除</el-button>
+            <div v-if="m.data.award_info_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -124,6 +127,21 @@ export default {
     this.getData()
   },
   methods:{
+    openDialog(){
+      this.dialogVisible = true
+      this.awardForm={
+        award_info_no: "",
+        award_info_name: "",
+        award_info_unit: "",
+        award_info_rank: "",
+        award_info_time: "",
+        award_info_year: "",
+        award_info_stu_no: "",
+        award_info_stu_name: "",
+        award_info_status: "0",
+        award_info_supporting_materials:""
+      }
+    },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
@@ -227,11 +245,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.paperDid[index])
+      let temp=JSON.stringify(this.paperDid[index].data)
       this.awardForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let paper=JSON.stringify(this.paperDid[index])
+      let paper=JSON.stringify(this.paperDid[index].data)
       let that=this
       request.post('/delete_award', paper).then(res=>{
         this.toDoShow[index]=false

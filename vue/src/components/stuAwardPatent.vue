@@ -72,30 +72,33 @@
 
     <div>申请记录:</div>
 <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
-    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
+    <el-button type="text" @click="openDialog">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in patentDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="patentShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="专利名称:">{{m.patent_name}}</el-descriptions-item>
-              <el-descriptions-item label="专利类型:">{{m.patent_type}}</el-descriptions-item>
-              <el-descriptions-item label="专利申请号:">{{m.patent_application_no}}</el-descriptions-item>
-              <el-descriptions-item label="专利申请日:">{{m.patent_application_time}}</el-descriptions-item>
-              <el-descriptions-item label="专利证书号:">{{m.patent_certificate_no}}</el-descriptions-item>
-              <el-descriptions-item label="专利获权时间:">{{m.patent_authorization_time}}</el-descriptions-item>
-              <el-descriptions-item label="是否第一发明人:">{{m.patent_isfirstone}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.patent_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="专利名称:">{{m.data.patent_name}}</el-descriptions-item>
+              <el-descriptions-item label="专利类型:">{{m.data.patent_type}}</el-descriptions-item>
+              <el-descriptions-item label="专利申请号:">{{m.data.patent_application_no}}</el-descriptions-item>
+              <el-descriptions-item label="专利申请日:">{{m.data.patent_application_time}}</el-descriptions-item>
+              <el-descriptions-item label="专利证书号:">{{m.data.patent_certificate_no}}</el-descriptions-item>
+              <el-descriptions-item label="专利获权时间:">{{m.data.patent_authorization_time}}</el-descriptions-item>
+              <el-descriptions-item label="是否第一发明人:">{{m.data.patent_isfirstone}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.data.patent_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.patent_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.patent_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.patent_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.patent_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.patent_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.patent_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.patent_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.patent_year.substring(0,4)}}</span>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.patent_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.patent_status==='0'||m.patent_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.patent_status==='0'||m.data.patent_status==='2'">删除</el-button>
+            <div v-if="m.data.patent_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -142,6 +145,24 @@ export default {
     this.getData()
   },
   methods:{
+    openDialog(){
+      this.dialogVisible = true
+      this.patentForm={
+        patent_no: "",
+        patent_stu_no: "",
+        patent_stu_name: "",
+        patent_name: "",
+        patent_type: "",
+        patent_application_no: "",
+        patent_application_time: "",
+        patent_certificate_no: "",
+        patent_authorization_time: "",
+        patent_isfirstone: "",
+        patent_year: "",
+        patent_supporting_materials: "",
+        patent_status: "0"
+      }
+    },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
@@ -180,14 +201,6 @@ export default {
     },
     //表单关闭
     patentHandleClose(){
-      this.patentForm.patent_name=''
-      this.patentForm.patent_type=''
-      this.patentForm.patent_application_no=''
-      this.patentForm.patent_application_time=''
-      this.patentForm.patent_certificate_no=''
-      this.patentForm.patent_authorization_time=''
-      this.patentForm.patent_isfirstone=''
-      this.patentForm.patent_year=''
       this.dialogVisible=false
     },
     patentUpload(param){
@@ -247,11 +260,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.patentDid[index])
+      let temp=JSON.stringify(this.patentDid[index].data)
       this.patentForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let patent=JSON.stringify(this.patentDid[index])
+      let patent=JSON.stringify(this.patentDid[index].data)
       let that=this
       request.post('/delete_patent', patent).then(res=>{
         this.patentShow[index]=false

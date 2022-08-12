@@ -125,32 +125,35 @@
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="toDoShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="项目名称:">{{m.dispatch_name}}</el-descriptions-item>
-              <el-descriptions-item label="校/院:">{{m.dispatch_level}}</el-descriptions-item>
-              <el-descriptions-item label="项目类别:">{{m.dispatch_project_type}}</el-descriptions-item>
-              <el-descriptions-item label="国家/地区:">{{m.dispatch_nation}}</el-descriptions-item>
-              <el-descriptions-item label="大洲:">{{m.dispatch_continent}}</el-descriptions-item>
-              <el-descriptions-item label="外方学校/组织:">{{m.dispatch_foreign_counterpart}}</el-descriptions-item>
-              <el-descriptions-item label="性别:">{{m.dispatch_stu_gender}}</el-descriptions-item>
-              <el-descriptions-item label="学院:">{{m.dispatch_stu_department}}</el-descriptions-item>
-              <el-descriptions-item label="专业:">{{m.dispatch_stu_major}}</el-descriptions-item>
-              <el-descriptions-item label="项目时间段:">{{m.dispatch_project_time_from_to}}</el-descriptions-item>
-              <el-descriptions-item label="项目时长大于三个月:">{{m.dispatch_greater_than_3month}}</el-descriptions-item>
-              <el-descriptions-item label="层次(本/硕/博):">{{m.dispatch_arrangement}}</el-descriptions-item>
-              <el-descriptions-item label="年级:">{{m.dispatch_grade}}</el-descriptions-item>
-              <el-descriptions-item label="护照号码:">{{m.dispatch_passport_no}}</el-descriptions-item>
-              <el-descriptions-item label="电话号码:">{{m.dispatch_tel}}</el-descriptions-item>
-              <el-descriptions-item label="邮箱:">{{m.dispatch_email}}</el-descriptions-item>
-              <el-descriptions-item label="是否录取:">{{m.dispatch_is_admission}}</el-descriptions-item>
-              <el-descriptions-item label="是否200强:">{{m.dispatch_is_top200}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadSend(m.dispatch_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="项目名称:">{{m.data.dispatch_name}}</el-descriptions-item>
+              <el-descriptions-item label="校/院:">{{m.data.dispatch_level}}</el-descriptions-item>
+              <el-descriptions-item label="项目类别:">{{m.data.dispatch_project_type}}</el-descriptions-item>
+              <el-descriptions-item label="国家/地区:">{{m.data.dispatch_nation}}</el-descriptions-item>
+              <el-descriptions-item label="大洲:">{{m.data.dispatch_continent}}</el-descriptions-item>
+              <el-descriptions-item label="外方学校/组织:">{{m.data.dispatch_foreign_counterpart}}</el-descriptions-item>
+              <el-descriptions-item label="性别:">{{m.data.dispatch_stu_gender}}</el-descriptions-item>
+              <el-descriptions-item label="学院:">{{m.data.dispatch_stu_department}}</el-descriptions-item>
+              <el-descriptions-item label="专业:">{{m.data.dispatch_stu_major}}</el-descriptions-item>
+              <el-descriptions-item label="项目时间段:">{{m.data.dispatch_project_time_from_to}}</el-descriptions-item>
+              <el-descriptions-item label="项目时长大于三个月:">{{m.data.dispatch_greater_than_3month}}</el-descriptions-item>
+              <el-descriptions-item label="层次(本/硕/博):">{{m.data.dispatch_arrangement}}</el-descriptions-item>
+              <el-descriptions-item label="年级:">{{m.data.dispatch_grade}}</el-descriptions-item>
+              <el-descriptions-item label="护照号码:">{{m.data.dispatch_passport_no}}</el-descriptions-item>
+              <el-descriptions-item label="电话号码:">{{m.data.dispatch_tel}}</el-descriptions-item>
+              <el-descriptions-item label="邮箱:">{{m.data.dispatch_email}}</el-descriptions-item>
+              <el-descriptions-item label="是否录取:">{{m.data.dispatch_is_admission}}</el-descriptions-item>
+              <el-descriptions-item label="是否200强:">{{m.data.dispatch_is_top200}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadSend(m.data.dispatch_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.dispatch_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.dispatch_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.dispatch_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.dispatch_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.dispatch_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.dispatch_status==='2'">已驳回</el-tag>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.dispatch_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.dispatch_status==='0'||m.dispatch_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.dispatch_status==='0'||m.data.dispatch_status==='2'">删除</el-button>
+            <div v-if="m.data.dispatch_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -308,11 +311,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.sendDid[index])
+      let temp=JSON.stringify(this.sendDid[index].data)
       this.sendForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let send=JSON.stringify(this.sendDid[index])
+      let send=JSON.stringify(this.sendDid[index].data)
       let that=this
       request.post('/delete_dispatch', send).then(res=>{
         this.toDoShow[index]=false

@@ -74,31 +74,34 @@
 
     <div>申请记录:</div>
 <!--    <el-button type="text" @click="dialogVisible = true" :disabled=newButtons>点击新建</el-button>-->
-    <el-button type="text" @click="dialogVisible = true">点击新建</el-button>
+    <el-button type="text" @click="openDialog">点击新建</el-button>
     <el-scrollbar height="60vh">
       <el-empty description="暂无信息" v-if="didHistory"></el-empty>
       <div v-for="(m,index) in projectDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="projectShow[index]">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="项目名称:">{{m.project_name}}</el-descriptions-item>
-              <el-descriptions-item label="项目所在单位:">{{m.project_unit}}</el-descriptions-item>
-              <el-descriptions-item label="项目类型:">{{m.project_type}}</el-descriptions-item>
-              <el-descriptions-item label="项目状态:">{{m.project_status}}</el-descriptions-item>
-              <el-descriptions-item label="参与项目时间:">{{m.project_join_time}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师姓名:">{{m.project_teacher_name}}</el-descriptions-item>
-              <el-descriptions-item label="指导老师学院:">{{m.project_teacher_dept}}</el-descriptions-item>
-              <el-descriptions-item label="是否已提交证书:">{{m.project_issubmit}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.project_supporting_materials)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="项目名称:">{{m.data.project_name}}</el-descriptions-item>
+              <el-descriptions-item label="项目所在单位:">{{m.data.project_unit}}</el-descriptions-item>
+              <el-descriptions-item label="项目类型:">{{m.data.project_type}}</el-descriptions-item>
+              <el-descriptions-item label="项目状态:">{{m.data.project_status}}</el-descriptions-item>
+              <el-descriptions-item label="参与项目时间:">{{m.data.project_join_time}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师姓名:">{{m.data.project_teacher_name}}</el-descriptions-item>
+              <el-descriptions-item label="指导老师学院:">{{m.data.project_teacher_dept}}</el-descriptions-item>
+              <el-descriptions-item label="是否已提交证书:">{{m.data.project_issubmit}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.data.project_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.project_audit_status==='1'">已通过</el-tag>
-            <el-tag type="warning" v-if="m.project_audit_status==='0'">待审核</el-tag>
-            <el-tag type="danger" v-if="m.project_audit_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.project_audit_status==='1'">已通过</el-tag>
+            <el-tag type="warning" v-if="m.data.project_audit_status==='0'">待审核</el-tag>
+            <el-tag type="danger" v-if="m.data.project_audit_status==='2'">已驳回</el-tag>
             <span style="margin-left: 5px">认定时间:</span>
-            <span style="color:cornflowerblue;">{{m.project_year.substring(0,4)}}</span>
+            <span style="color:cornflowerblue;">{{m.data.project_year.substring(0,4)}}</span>
 <!--            <el-button @click="changeInfo(index)" style="margin-left: 5%" v-if="m.project_audit_status==='0'">修改</el-button>-->
             <el-button @click="changeInfo(index)" style="margin-left: 5%">修改</el-button>
-            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.project_audit_status==='0'||m.project_audit_status==='2'">删除</el-button>
+            <el-button @click="deleteInfo(index)" style="margin-left: 1%" v-if="m.data.project_audit_status==='0'||m.data.project_audit_status==='2'">删除</el-button>
+            <div v-if="m.data.project_audit_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -147,6 +150,25 @@ export default {
     this.getData()
   },
   methods:{
+    openDialog(){
+      this.dialogVisible = true
+      this.projectForm={
+        project_no: "",
+        project_name: "",
+        project_unit: "",
+        project_type: "",
+        project_status: "",
+        project_join_time: "",
+        project_teacher_name: "",
+        project_teacher_dept: "",
+        project_student_name: "",
+        project_student_no: "",
+        project_issubmit: "",
+        project_year: "",
+        project_supporting_materials: "",
+        project_audit_status: "0"
+      }
+    },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
@@ -227,6 +249,8 @@ export default {
       //请求专利
       request.post('find_my_project_info',user).then(res=>{
         this.projectDid=res
+        console.log(111111111111111111111111)
+        console.log(res)
         if(this.projectDid.length===0){
           this.didHistory=true
         }
@@ -253,11 +277,11 @@ export default {
 
     changeInfo(index){
       this.dialogVisible=true
-      let temp=JSON.stringify(this.projectDid[index])
+      let temp=JSON.stringify(this.projectDid[index].data)
       this.projectForm=JSON.parse(temp)
     },
     deleteInfo(index){
-      let project=JSON.stringify(this.projectDid[index])
+      let project=JSON.stringify(this.projectDid[index].data)
       let that=this
       request.post('/delete_project', project).then(res=>{
         this.projectShow[index]=false

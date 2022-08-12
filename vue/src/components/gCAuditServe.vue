@@ -6,22 +6,38 @@
       <div v-for="(m,index) in serveToDo">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="serveToDoShow[index]">
-            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.voluntary_activities_stu_name}}</span>
-            <span style="font-weight: bold;">学号：{{m.voluntary_activities_stu_no}}</span>
+            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.voluntary_activities_stu_name}}</span>
+            <span style="font-weight: bold;">学号：{{m.data.voluntary_activities_stu_no}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="志愿活动名称:">{{m.voluntary_activities_name}}</el-descriptions-item>
-              <el-descriptions-item label="举办部门:">{{m.voluntary_activities_studept}}</el-descriptions-item>
-              <el-descriptions-item label="活动始、末时间:">{{m.voluntary_activities_time_from_to}}</el-descriptions-item>
-              <el-descriptions-item label="参与时长:">{{m.voluntary_activities_time_long}}</el-descriptions-item>
-              <el-descriptions-item label="活动内容:">{{m.voluntary_activities_content}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.voluntary_activities_url)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="志愿活动名称:">{{m.data.voluntary_activities_name}}</el-descriptions-item>
+              <el-descriptions-item label="举办部门:">{{m.data.voluntary_activities_studept}}</el-descriptions-item>
+              <el-descriptions-item label="活动始、末时间:">{{m.data.voluntary_activities_time_from_to}}</el-descriptions-item>
+              <el-descriptions-item label="参与时长:">{{m.data.voluntary_activities_time_long}}</el-descriptions-item>
+              <el-descriptions-item label="活动内容:">{{m.data.voluntary_activities_content}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.data.voluntary_activities_url)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-button @click="passServe(index)">通过</el-button>
-            <el-button @click="rejectServe(index)">驳回</el-button>
+            <el-button @click="rejectReason(index)">驳回</el-button>
             <el-button @click="waitServe(index)">稍后</el-button>
           </el-card>
         </transition>
       </div>
+
+      <el-dialog
+          v-model="rejectReasonDia"
+          title="驳回理由"
+          width="30%"
+      >
+        <el-input v-model="rejectItem.reason"></el-input>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="rejectReasonDia = false">取消</el-button>
+        <el-button v-if="rejectType==='toDo'" type="primary" @click="rejectServe(rejectIndex)">确认</el-button>
+        <el-button v-if="rejectType==='did'" type="primary" @click="rejectServeDid(rejectIndex)">确认</el-button>
+      </span>
+        </template>
+      </el-dialog>
+
     </el-scrollbar>
 
     <!--        历史-->
@@ -31,21 +47,24 @@
       <div v-for="(m,index) in serveDid">
         <transition name="el-fade-in-linear">
           <el-card class="box-card" style="margin: 10px 5px 0 5px" v-if="serveDidShow[index]">
-            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.voluntary_activities_stu_name}}</span>
-            <span style="font-weight: bold;">学号：{{m.voluntary_activities_stu_no}}</span>
+            <span style="font-weight: bold; margin-right: 2%">姓名：{{m.data.voluntary_activities_stu_name}}</span>
+            <span style="font-weight: bold;">学号：{{m.data.voluntary_activities_stu_no}}</span>
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="志愿活动名称:">{{m.voluntary_activities_name}}</el-descriptions-item>
-              <el-descriptions-item label="举办部门:">{{m.voluntary_activities_studept}}</el-descriptions-item>
-              <el-descriptions-item label="活动始、末时间:">{{m.voluntary_activities_time_from_to}}</el-descriptions-item>
-              <el-descriptions-item label="参与时长:">{{m.voluntary_activities_time_long}}</el-descriptions-item>
-              <el-descriptions-item label="活动内容:">{{m.voluntary_activities_content}}</el-descriptions-item>
-              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.voluntary_activities_url)">点击下载</span></el-descriptions-item>
+              <el-descriptions-item label="志愿活动名称:">{{m.data.voluntary_activities_name}}</el-descriptions-item>
+              <el-descriptions-item label="举办部门:">{{m.data.voluntary_activities_studept}}</el-descriptions-item>
+              <el-descriptions-item label="活动始、末时间:">{{m.data.voluntary_activities_time_from_to}}</el-descriptions-item>
+              <el-descriptions-item label="参与时长:">{{m.data.voluntary_activities_time_long}}</el-descriptions-item>
+              <el-descriptions-item label="活动内容:">{{m.data.voluntary_activities_content}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadServe(m.data.voluntary_activities_url)">点击下载</span></el-descriptions-item>
             </el-descriptions>
-            <el-tag type="success" v-if="m.voluntary_activities_status==='1'">已通过</el-tag>
-            <el-tag type="danger" v-if="m.voluntary_activities_status==='2'">已驳回</el-tag>
+            <el-tag type="success" v-if="m.data.voluntary_activities_status==='1'">已通过</el-tag>
+            <el-tag type="danger" v-if="m.data.voluntary_activities_status==='2'">已驳回</el-tag>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
-            <el-button style="margin-left: 5px" v-if="m.voluntary_activities_status==='1'" @click="rejectServeDid(index)">驳回</el-button>
+            <el-button style="margin-left: 5px" v-if="m.data.voluntary_activities_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
+            <div v-if="m.data.voluntary_activities_status==='2'">
+              驳回理由:{{m.reason}}
+            </div>
           </el-card>
         </transition>
       </div>
@@ -61,6 +80,10 @@ export default {
   name: "gCAuditServe",
   data(){
     return{
+      rejectReasonDia:false,
+      rejectType:'',
+      rejectIndex:0,
+      rejectItem:{},
       user:{},
       power:{},
       numShow:false,//是否显示红点
@@ -99,7 +122,7 @@ export default {
       window.open(this.Fapi+"/Activities/"+m)
     },
     passServe(index) {
-      request.post('/pass_activity', this.serveToDo[index]).then(res => {
+      request.post('/pass_activity', this.serveToDo[index].data).then(res => {
         this.serveToDoShow[index] = false
         delete this.serveToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -110,8 +133,21 @@ export default {
         this.refreshComponent()
       })
     },
+    rejectReason(index){
+      this.rejectReasonDia=true
+      this.rejectType='toDo'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.serveToDo[index]))
+    },
+    rejectReason_did(index){
+      this.rejectReasonDia=true
+      this.rejectType='did'
+      this.rejectIndex=index
+      this.rejectItem=JSON.parse(JSON.stringify(this.serveDid[index]))
+    },
     rejectServe(index) {
-      request.post('/refuse_activity', this.serveToDo[index]).then(res => {
+      request.post('/refuse_activity', this.rejectItem).then(res => {
+        this.rejectReasonDia=false
         this.serveToDoShow[index] = false
         delete this.serveToDo[index]
         if (this.toDoNum - 1 === 0) {
@@ -123,8 +159,8 @@ export default {
       })
     },
     rejectServeDid(index) {
-      request.post('/refuse_activity', this.serveDid[index]).then(res => {
-
+      request.post('/refuse_activity', this.rejectItem).then(res => {
+        this.rejectReasonDia=false
         this.refreshComponent()
       })
     },
