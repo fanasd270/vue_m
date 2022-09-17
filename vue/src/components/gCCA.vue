@@ -26,23 +26,13 @@ import stuACMei from "@/components/stuACMei";
 import stuACLao from "@/components/stuACLao";
 
 export default {
-  name: "stuCA",
+  name: "gCCA",
   components:{
     stuACZhi,
     stuACDe,
     stuACTi,
     stuACMei,
     stuACLao,
-  },
-  created() {
-    this.setStore()
-  },
-  methods:{
-    setStore(){
-      let user=JSON.parse(sessionStorage.getItem('user'))
-      this.$store.commit('setCode', 0)
-      this.$store.commit('setInfo', user)
-    },
   },
 }
 </script>

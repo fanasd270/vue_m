@@ -85,6 +85,14 @@
               </div>
             </el-card>
           </el-col>
+          <el-col v-if="authors[9]" :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+            <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="jumpToAC">
+              <div class="ecard">
+                <el-icon :size="30"><promotion /></el-icon>
+                <span style="position: absolute; top: 35%">综合测评</span>
+              </div>
+            </el-card>
+          </el-col>
           <div style="clear: both"></div>
         </div>
 
@@ -168,7 +176,7 @@ export default {
       },
       power:{},
       user:{},
-      authors:[true,true,true,true,true,true,true,true,true],
+      authors:[true,true,true,true,true,true,true,true,true,true],
     }
   },
   created() {
@@ -225,6 +233,9 @@ export default {
     },
     backToStu(){
       this.$router.push("/stuHome")
+    },
+    jumpToAC(){
+      this.$router.push("/teaLayout/gCAC")
     },
   },
 }

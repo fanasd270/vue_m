@@ -211,6 +211,11 @@ const routes = [
         component: ()=>import("@/views/gCAM"),
       },
       {
+        path: 'gCAC',
+        name: 'gCAC',
+        component: ()=>import("@/views/gCAC"),
+      },
+      {
         path: 'teaAboutUs',
         name: 'teaAboutUs',
         component: ()=>import("@/views/teaAboutUs"),

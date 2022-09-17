@@ -88,6 +88,24 @@
           </div>
         </el-card>
       </el-col>
+      <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+        <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="confirmToForm.authors[8]=!confirmToForm.authors[8]">
+          <el-checkbox v-model="confirmToForm.authors[8]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
+          <div class="ecard">
+            <el-icon :size="30"><school /></el-icon>
+            <span style="position: absolute; top: 35%">外出请假</span>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8" style="width: 220px;margin: 0 20px 20px 0; position: relative">
+        <el-card :body-style="{padding:'28px'}" style="color: dimgray; cursor: default" @click="confirmToForm.authors[9]=!confirmToForm.authors[9]">
+          <el-checkbox v-model="confirmToForm.authors[9]" size="large" style="position: absolute; top: 25%; right: 10%"></el-checkbox>
+          <div class="ecard">
+            <el-icon :size="30"><school /></el-icon>
+            <span style="position: absolute; top: 35%">综合测评</span>
+          </div>
+        </el-card>
+      </el-col>
       <div style="clear: both"></div>
     </div>
 
@@ -152,6 +170,8 @@
     <el-tag v-if="onesAuthors[5]" style="margin: 5px 20px 0 0" size="large">下载中心</el-tag>
     <el-tag v-if="onesAuthors[6]" style="margin: 5px 20px 0 0" size="large">审核表单</el-tag>
     <el-tag v-if="onesAuthors[7]" style="margin: 5px 20px 0 0" size="large">宿舍管理</el-tag>
+    <el-tag v-if="onesAuthors[8]" style="margin: 5px 20px 0 0" size="large">外出请假</el-tag>
+    <el-tag v-if="onesAuthors[9]" style="margin: 5px 20px 0 0" size="large">综合测评</el-tag>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="cancelOnesAuthors">撤销权限</el-button>
@@ -191,7 +211,7 @@ export default {
       confirmToForm:{
         teacher:{},
         student:{},
-        authors:[false,false,false,false,false,false,false,false],
+        authors:[false,false,false,false,false,false,false,false,false,false],
       },
       whoHasauthorize:[],
       singleMan:{},

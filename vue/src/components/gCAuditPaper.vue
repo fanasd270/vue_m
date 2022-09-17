@@ -100,12 +100,11 @@ export default {
       paperToDo:[],//论文待审核列表
       paperDid:[],
       fresh:true,
-      Fapi:'',
+      Fapi:fileApi.fileApi,
     }
   },
 
   created() {
-    this.Fapi=fileApi.fileApi
     this.power=JSON.parse(sessionStorage.getItem('power'))
     if(this.power.type===1){
       this.user=JSON.parse(sessionStorage.getItem('user_t'))

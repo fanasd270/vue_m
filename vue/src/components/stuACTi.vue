@@ -3,7 +3,7 @@
     <div>
       <span>体育成绩：</span>
       <br>
-      <span>T=t1*80%*5%+t2+t3</span>
+      <span>T=t1*80%*5%+t2+t3={{tAll.toFixed(3)}}</span>
     </div>
     <div style="border-bottom: solid 1px #57d3ef">
       <span>t1.体测成绩：({{t1.toFixed(2)}})</span>
@@ -25,15 +25,15 @@
                 trigger="click"
                 :visible="popover_other3[0]"
             >
-              <el-input-number v-model="otherList3.score" :precision="1" :step="0.1" :max="10" :min="0"/>
+              <el-input-number v-model="otherList3.score" :precision="1" :step="0.1" :max="100" :min="0"/>
               <el-button  class="btn2" @click="updateScore(otherList3,0,'t1')">确认</el-button>
               <el-button class="btn2" @click="otherList3.score=0;popover_other3[0]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="otherList3.status===0" @click="popover_other3[0]=true">加分</el-button>
+                <el-button class="btn1" v-if="otherList3.status===0&&$store.state.code===1" @click="popover_other3[0]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="otherList3.status===1" @click="clearScoreOther(otherList3)">取消</el-button>
-            <el-button class="btn1" @click="updateT1">修改</el-button>
+            <el-button class="btn1" v-if="otherList3.status===1&&$store.state.code===1" @click="clearScoreOther(otherList3)">取消</el-button>
+            <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="updateT1">修改</el-button>
           </el-card>
 
           <el-dialog
@@ -85,7 +85,7 @@
       <div class="thirdContent">
         <span>t2.课外体育锻炼加分项得分：({{t2.toFixed(2)}})</span>
         <br>
-        <el-button @click="this.dialogVisible=true">新建</el-button>
+        <el-button :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="this.dialogVisible=true">新建</el-button>
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
@@ -108,11 +108,11 @@
               <el-button  class="btn2" @click="updateScore(m,index,'t2')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0" @click="popover_other[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other[index]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="m.status===1" @click="clearScoreOther(m)">取消</el-button>
-            <el-button class="btn1" @click="deleteOther(m)">删除</el-button>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="deleteOther(m)">删除</el-button>
           </el-card>
         </el-scrollbar>
 
@@ -167,7 +167,7 @@
       <div class="thirdContent" style="margin-top: 30px">
         <span>t3.体育竞赛加分项得分：({{t3.toFixed(2)}})</span>
         <br>
-        <el-button @click="this.dialogVisible2=true">新建</el-button>
+        <el-button :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="this.dialogVisible2=true">新建</el-button>
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList2">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
@@ -190,11 +190,11 @@
               <el-button  class="btn2" @click="updateScore(m,index,'t3')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other2[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0" @click="popover_other2[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other2[index]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="m.status===1" @click="clearScoreOther(m)">取消</el-button>
-            <el-button class="btn1" @click="deleteOther(m)">删除</el-button>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="deleteOther(m)">删除</el-button>
           </el-card>
         </el-scrollbar>
 
@@ -264,6 +264,7 @@ export default {
       t1:0,
       t2:0,
       t3:0,
+      tAll:0,
       otherThing:{
         id:0,
         other_stu_no:'',
@@ -296,17 +297,32 @@ export default {
       },
       otherList3Copy:{},
       infoCopy:'',
+      zCeStatus:{
+        grade:'',
+        status:'',
+        change_time:'',
+      },
     }
   },
+  watch:{
+    "$store.state.info":{
+      handler:function (newVal, oldVal){
+        this.user=newVal
+        this.getData()
+      }
+    },
+  },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    // this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.user=this.$store.state.info
     this.getData()
   },
   methods:{
     getData(){
+      request.post('/getZongceStatus',this.user).then(res=>{
+        this.zCeStatus=res.data
+      })
       request.post('/getT1',this.user).then(res=>{
-        console.log('1111111111111111111')
-        console.log(res)
         this.otherList3=res
         this.countT1()
         this.popover_other3=new Array(1).fill(false)
@@ -337,15 +353,31 @@ export default {
       for(let item of this.otherList){
         this.t2+=item.score
       }
+      this.tAll=this.t1*0.04+this.t2+this.t3
     },
     countT3(){
       this.t3=0
       for(let item of this.otherList2){
         this.t3+=item.score
       }
+      this.tAll=this.t1*0.04+this.t2+this.t3
+    },
+    uploadAll(){
+      let item={
+        id:0,
+        stu_no:this.user.stu_no,
+        stu_name:'',
+        stu_class:'',
+        zongce_type:'T',
+        zongce_score:this.tAll,
+      }
+      request.post('/updateZongce2', item).then(res=>{
+
+      })
     },
     updateInfo(m){
       request.post('/scoreOther',m).then(res=>{
+        this.uploadAll()
         this.getData()
       })
     },
@@ -359,6 +391,7 @@ export default {
       this.countT2()
       this.countT3()
       request.post('/scoreOther',m).then(res=>{
+        this.uploadAll()
         this.getData()
       })
     },
@@ -475,7 +508,7 @@ export default {
         this.otherThing.other_stu_no=this.user.stu_no+''//
         this.otherThing.other_type='T2'
         request.post("/addOther", this.otherThing).then(res=>{
-          that.$message.success(res.msg)
+          that.$message.success('修改成功')
           this.paperHandleClose()//关闭表单
           this.getData()
         }).catch(err=>{
@@ -497,7 +530,7 @@ export default {
         this.otherList3.data.other_stu_no=this.user.stu_no+''//
         this.otherList3.data.other_type='T1'
         request.post("/scoreOther", this.otherList3).then(res=>{
-          that.$message.success(res.msg)
+          that.$message.success('上传成功')
           this.updateT1Close()//关闭表单
           this.getData()
         }).catch(err=>{
@@ -518,7 +551,7 @@ export default {
         this.otherThing.other_stu_no=this.user.stu_no+''//
         this.otherThing.other_type='T3'
         request.post("/addOther", this.otherThing).then(res=>{
-          that.$message.success(res.msg)
+          that.$message.success('上传成功')
           this.paperHandleClose2()//关闭表单
           this.getData()
         }).catch(err=>{

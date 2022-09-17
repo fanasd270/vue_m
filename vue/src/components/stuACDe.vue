@@ -3,7 +3,7 @@
     <div>
       <span>德育成绩：</span>
       <br>
-      <span>D=d1*20%+d2-d3</span>
+      <span>D=d1*20%+d2+d3={{dAll.toFixed(3)}}</span>
     </div>
     <div style="border-bottom: solid 1px #57d3ef">
       <span>d1.德育基础分：({{d1.toFixed(2)}})</span>
@@ -27,10 +27,10 @@
               <el-button  class="btn2" @click="updateScore(m,index,'d1')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other3[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0" @click="popover_other3[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other3[index]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="m.status===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
 
             <el-popover
                 placement="top"
@@ -42,7 +42,7 @@
               <el-button  class="btn2" @click="updateInfo(m)">确认</el-button>
               <el-button class="btn2" @click="m.data.other_info=JSON.parse(JSON.stringify(infoCopy));popover_other3_info[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" @click="infoCopy=JSON.parse(JSON.stringify(m.data.other_info));popover_other3_info[index]=true">修改</el-button>
+                <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="infoCopy=JSON.parse(JSON.stringify(m.data.other_info));popover_other3_info[index]=true">修改</el-button>
               </template>
             </el-popover>
           </el-card>
@@ -53,7 +53,7 @@
       <div class="thirdContent">
         <span>d2.德育加分项得分：({{d2.toFixed(2)}})</span>
         <br>
-        <el-button @click="this.dialogVisible=true">新建</el-button>
+        <el-button :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="this.dialogVisible=true">新建</el-button>
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
@@ -76,11 +76,11 @@
               <el-button  class="btn2" @click="updateScore(m,index,'d2')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0" @click="popover_other[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other[index]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="m.status===1" @click="clearScoreOther(m)">取消</el-button>
-            <el-button class="btn1" @click="deleteOther(m)">删除</el-button>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="deleteOther(m)">删除</el-button>
           </el-card>
         </el-scrollbar>
 
@@ -93,7 +93,7 @@
           <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
 
             <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-input v-model="otherThing.other_name" placeholder="四六级证书/托福雅思等专业技能资格证书" clearable></el-input>
+              <el-input v-model="otherThing.other_name" placeholder="" clearable></el-input>
             </el-form-item>
             <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
               <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
@@ -135,7 +135,7 @@
       <div class="thirdContent" style="margin-top: 30px">
         <span>d3.德育扣分项得分：({{d3.toFixed(2)}})</span>
         <br>
-        <el-button @click="this.dialogVisible2=true">新建</el-button>
+        <el-button v-if="$store.state.code===1" @click="this.dialogVisible2=true">新建</el-button>
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList2">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
@@ -158,11 +158,11 @@
               <el-button  class="btn2" @click="updateScore(m,index,'d3')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other2[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0" @click="popover_other2[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other2[index]=true">加分</el-button>
               </template>
             </el-popover>
-            <el-button class="btn1" v-if="m.status===1" @click="clearScoreOther(m)">取消</el-button>
-            <el-button class="btn1" @click="deleteOther(m)">删除</el-button>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" v-if="$store.state.code===1" @click="deleteOther(m)">删除</el-button>
           </el-card>
         </el-scrollbar>
 
@@ -232,6 +232,7 @@ export default {
       d1:0,
       d2:0,
       d3:0,
+      dAll:0,
       otherThing:{
         id:0,
         other_stu_no:'',
@@ -251,22 +252,32 @@ export default {
       otherList2:[],
       otherList3:[],
       infoCopy:'',
+
+      zCeStatus:{
+        grade:'',
+        status:'',
+        change_time:'',
+      },
     }
   },
+  watch:{
+    "$store.state.info":{
+      handler:function (newVal, oldVal){
+        this.user=newVal
+        this.getData()
+      }
+    },
+  },
   created() {
-    this.user=JSON.parse(sessionStorage.getItem('user'))
+    // this.user=JSON.parse(sessionStorage.getItem('user'))
+    this.user=this.$store.state.info
     this.getData()
   },
   methods:{
     getData(){
-      // request.post('/getZ2',this.user).then(res=>{
-      //   this.allLists=res
-      //   this.countZ2()
-      //   this.popover_paper=new Array(res.paper.length).fill(false)
-      //   this.popover_patent=new Array(res.patent.length).fill(false)
-      //   this.popover_project=new Array(res.project.length).fill(false)
-      //   this.popover_contest=new Array(res.contest.length).fill(false)
-      // })
+      request.post('/getZongceStatus',this.user).then(res=>{
+        this.zCeStatus=res.data
+      })
       request.post('/getD1',this.user).then(res=>{
         this.otherList3=res
         this.countD1()
@@ -290,6 +301,7 @@ export default {
         console.log(item)
         this.d1+=item.score
       }
+      this.dAll=this.d1*0.2+this.d2+this.d3
     },
     countD2(){
       this.d2=0
@@ -297,6 +309,7 @@ export default {
         console.log(item)
         this.d2+=item.score
       }
+      this.dAll=this.d1*0.2+this.d2+this.d3
     },
     countD3(){
       this.d3=0
@@ -304,9 +317,24 @@ export default {
         console.log(item)
         this.d3+=item.score
       }
+      this.dAll=this.d1*0.2+this.d2+this.d3
+    },
+    uploadAll(){
+      let item={
+        id:0,
+        stu_no:this.user.stu_no,
+        stu_name:'',
+        stu_class:'',
+        zongce_type:'D',
+        zongce_score:this.dAll,
+      }
+      request.post('/updateZongce2', item).then(res=>{
+
+      })
     },
     updateInfo(m){
       request.post('/scoreOther',m).then(res=>{
+        this.uploadAll()
         this.getData()
       })
     },
@@ -321,6 +349,7 @@ export default {
       this.countD3()
       request.post('/scoreOther',m).then(res=>{
         console.log(res)
+        this.uploadAll()
         this.getData()
       })
     },
@@ -331,24 +360,12 @@ export default {
     },
     updateScore(m,index,type){
       console.log(m)
-      if (m.score<0.1){
+      if (m.score<0.1&&m.score>-0.1){
         m.status=0
       }else{
         m.status=1
       }
       switch (type) {
-        // case 'paper':this.popover_paper[index]=false
-        //   this.setScorePaper(m)
-        //   break
-        // case 'patent':this.popover_patent[index]=false
-        //   this.setScorePatent(m)
-        //   break
-        // case 'project':this.popover_project[index]=false
-        //   this.setScoreProject(m)
-        //   break
-        // case 'contest':this.popover_contest[index]=false
-        //   this.setScoreContest(m)
-        //   break
         case 'd1':this.popover_other3[index]=false
           this.setScoreOther(m)
           break
