@@ -8,11 +8,14 @@
         综合测评
       </p>
 
-      <el-radio-group v-if="power.type===2" v-model="caStatus" size="large" @change="changeStatus">
-        <el-radio-button label="开启综测填写" />
-        <el-radio-button label="开启综测评分" />
-        <el-radio-button label="关闭综测评分" />
-      </el-radio-group>
+      <div style="display: inline-block">
+        <el-radio-group v-if="power.type===2" v-model="caStatus" size="large" @change="changeStatus">
+          <el-radio-button label="开启综测填写" />
+          <el-radio-button label="开启综测评分" />
+          <el-radio-button label="关闭综测评分" />
+        </el-radio-group>
+        <el-button @click="downloadTable" style="margin-left: 10px;height: 40px;vertical-align: top">下载年级综测表</el-button>
+      </div>
 
       <br>
       <el-button @click="drawer=true" style="margin: 10px 0 5px 0" :disabled="caStatus!=='开启综测评分'">选择对象</el-button>
@@ -44,7 +47,32 @@
         >
         </el-table-column>
         <el-table-column
-            prop="time"
+            prop="d"
+            label="德育"
+            sortable="custom">
+        </el-table-column>
+        <el-table-column
+            prop="z"
+            label="智育"
+            sortable="custom">
+        </el-table-column>
+        <el-table-column
+            prop="t"
+            label="体育"
+            sortable="custom">
+        </el-table-column>
+        <el-table-column
+            prop="m"
+            label="美育"
+            sortable="custom">
+        </el-table-column>
+        <el-table-column
+            prop="l"
+            label="劳育"
+            sortable="custom">
+        </el-table-column>
+        <el-table-column
+            prop="all"
             label="综测分数"
             sortable="custom">
         </el-table-column>
@@ -83,8 +111,6 @@
             sortable
             column-key="stu_no"
         />
-
-
       </el-table>
     </el-drawer>
   </div>
@@ -184,6 +210,33 @@ export default {
       })
       request.post('/getAllZongceOrdered', this.user).then(res=>{
         console.log(res)
+        // this.scoreTable=res.data
+
+        let tableData=[]
+        let single={
+          stu_name:'',
+          stu_no:'',
+          stu_class:'',
+          d:0,
+          z:0,
+          t:0,
+          m:0,
+          l:0,
+          all:0,
+        }
+        for(let i=0;i<res.data.length;i++){
+          single.stu_name=res.data[i].stu_name
+          single.stu_no=res.data[i].stu_no
+          single.stu_class=res.data[i].stu_class
+          single.d=res.data[i].d
+          single.z=res.data[i].z
+          single.t=res.data[i].t
+          single.m=res.data[i].m
+          single.l=res.data[i].l
+          single.all=single.d+single.z+single.t+single.m+single.l
+          tableData.push(JSON.parse(JSON.stringify(single)))
+        }
+        this.scoreTable=JSON.parse(JSON.stringify(tableData))
       })
       request.post('/Stu/stuList', this.user).then(res=>{
         if(this.power.type===1){
@@ -213,6 +266,11 @@ export default {
           return((x<=y)?-1:((x>y)?1:0))
         })
       }
+    },
+    downloadTable(){
+      request.post('/downloadAllZongceT',this.user).then(res=>{
+        window.open(this.Fapi+"/excel/"+res.data)
+      })
     },
   },
 }

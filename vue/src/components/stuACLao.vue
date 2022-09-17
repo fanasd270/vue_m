@@ -58,8 +58,16 @@
           <el-card v-for="(m, index) in otherList">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
               <el-descriptions-item label="项目名称:">{{m.data.other_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.other_time.substring(0,4)}}</el-descriptions-item>
-              <el-descriptions-item label="备注信息:">{{m.data.other_info}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_1'" label="宿舍文明卫生:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_2'" label="创新创业名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_3'" label="活动名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_5'" label="竞赛名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_5'" label="竞赛类别:">{{m.data.other_info3}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_5'&&m.data.other_info3==='团体'" label="团队完成人次序:">{{m.data.other_info}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_5'" label="竞赛等级:">{{m.data.other_info4}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='L2_5'" label="获奖等级:">{{m.data.other_info5}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.other_time}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type!=='L2_5'||m.data.other_info3==='个人'" label="备注信息:">{{m.data.other_info}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadOther(m.data.other_proof)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
@@ -120,12 +128,86 @@
           <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
 
             <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-input v-model="otherThing.other_name" placeholder="" clearable></el-input>
+              <el-select v-model="otherThing.other_name" class="m-2" size="large" @change="typeChangeL2">
+                <el-option
+                    v-for="item in optionsL2"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_1'" label="宿舍文明卫生" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info2" class="m-2" size="large">
+                <el-option
+                    v-for="item in [{value:'五星级寝室'},{value: '卫生流动红旗'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_2'" label="创新创业名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_3'" label="活动名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_5'" label="竞赛名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_5'" label="竞赛类别" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info3" class="m-2" size="large">
+                <el-option
+                    v-for="item in [{value:'个人'},{value: '团体'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_5'&&otherThing.other_info3==='团体'" label="团队完成人次序" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info" class="m-2" size="large">
+                <el-option
+                    v-for="item in optionsL2_order"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_5'" label="竞赛等级" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info4" class="m-2" size="large">
+                <el-option
+                    v-for="item in optionsL2_type"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='L2_5'" label="获奖等级" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info5" class="m-2" size="large">
+                <el-option
+                    v-for="item in optionsL2_level"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
+              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY" style="width: 150px;display: inline-block"></el-date-picker>
+              <el-select v-model="otherThing.other_time2" class="m-2" size="normal" placeholder=" " style="width: 80px;display: inline-block">
+                <el-option
+                    v-for="item in [{value:'春'},{value: '秋'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
-            <el-form-item label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-form-item v-if="otherThing.other_type!=='L2_5'||otherThing.other_info3==='个人'" label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
               <el-input v-model="otherThing.other_info" placeholder="其他信息在此补充(可选)" clearable></el-input>
             </el-form-item>
             <el-form-item label="证明材料" style="margin-bottom: 70px;">
@@ -182,7 +264,12 @@ export default {
         other_stu_no:'',
         other_name:'',
         other_info:'', //备注信息
+        other_info2:'',
+        other_info3:'',
+        other_info4:'',
+        other_info5:'',
         other_time:'',
+        other_time2:'',
         other_proof:'', //证明材料
         other_type:'', //大写字母
       },
@@ -200,6 +287,79 @@ export default {
         status:'',
         change_time:'',
       },
+      optionsL2:[
+        {
+          value:'宿舍文明卫生',
+          type:'L2_1',
+        },
+        {
+          value:'自主创新创业',
+          type:'L2_2',
+        },
+        {
+          value:'社会实践',
+          type:'L2_3',
+        },
+        {
+          value:'劳育比赛及成果',
+          type:'L2_5',
+        },
+        {
+          value:'其他',
+          type:'L2_6',
+        },
+      ],
+      optionsL2_type:[
+        {
+          value:'国际级',
+        },
+        {
+          value:'国家级',
+        },
+        {
+          value:'省市级',
+        },
+        {
+          value:'校级',
+        },
+        {
+          value:'学院级',
+        },
+      ],
+      optionsL2_level:[
+        {
+          value:'特等奖',
+        },
+        {
+          value:'一等奖',
+        },
+        {
+          value:'二等奖',
+        },
+        {
+          value:'三等奖',
+        },
+        {
+          value:'优秀奖',
+        },
+      ],
+      optionsL2_order:[
+        {
+          value:'第一完成人',
+        },
+        {
+          value:'第二完成人',
+        },
+        {
+          value:'第三完成人',
+        },
+        {
+          value:'第四完成人',
+        },
+        {
+          value:'第五完成人',
+        },
+      ],
     }
   },
   watch:{
@@ -216,6 +376,20 @@ export default {
     this.getData()
   },
   methods:{
+    typeChangeL2(val){
+      this.clearOtherThing()
+      if(val==='宿舍文明卫生'){
+        this.otherThing.other_type='L2_1'
+      }else if(val==='自主创新创业'){
+        this.otherThing.other_type='L2_2'
+      }else if(val==='社会实践'){
+        this.otherThing.other_type='L2_3'
+      }else if(val==='劳育比赛及成果'){
+        this.otherThing.other_type='L2_5'
+      }else if(val==='其他'){
+        this.otherThing.other_type='L2_6'
+      }
+    },
     getData(){
       request.post('/getZongceStatus',this.user).then(res=>{
         this.zCeStatus=res.data
@@ -329,7 +503,7 @@ export default {
         this.$message.warning('名称不能为空')
         return
       }
-      if(this.otherThing.other_time===''||this.otherThing.other_time===null){
+      if(this.otherThing.other_time===''||this.otherThing.other_time===null||this.otherThing.other_time2===''){
         this.$message.warning('认定时间不能为空')
         return
       }
@@ -337,13 +511,48 @@ export default {
         this.$message.warning('请选择证明材料')
         return
       }
+      if(this.otherThing.other_type==='L2_5'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('竞赛名称不能为空')
+          return
+        }
+        if(this.otherThing.other_info3===''){
+          this.$message.warning('竞赛类别不能为空')
+          return
+        }
+        if(this.otherThing.other_info4===''){
+          this.$message.warning('竞赛等级不能为空')
+          return
+        }
+        if(this.otherThing.other_info5===''){
+          this.$message.warning('获奖等级不能为空')
+          return
+        }
+        if(this.otherThing.other_info3==='团体'){
+          if(this.otherThing.other_info!=='第一完成人'&&this.otherThing.other_info!=='第二完成人'&&this.otherThing.other_info!=='第三完成人'
+              &&this.otherThing.other_info!=='第四完成人'&&this.otherThing.other_info!=='第五完成人'){
+            this.$message.warning('团队完成人次序非法')
+            return
+          }
+        }
+      }
       this.submitUpload()
     },
-    paperHandleClose(){
+    clearOtherThing(){
       this.otherThing.other_proof=''
-      this.otherThing.other_name=''
+      // this.otherThing.other_name=''
       this.otherThing.other_time=''
+      this.otherThing.other_time2=''
       this.otherThing.other_info=''
+      this.otherThing.other_info2=''
+      this.otherThing.other_info3=''
+      this.otherThing.other_info4=''
+      this.otherThing.other_info5=''
+      this.otherThing.other_type=''
+    },
+    paperHandleClose(){
+      this.otherThing.other_name=''
+      this.clearOtherThing()
       this.dialogVisible=false
     },
     paperUpload(param){
@@ -357,7 +566,7 @@ export default {
         }
         this.otherThing.other_proof=res.data
         this.otherThing.other_stu_no=this.user.stu_no+''//
-        this.otherThing.other_type='L2'
+        this.otherThing.other_time=this.otherThing.other_time+this.otherThing.other_time2
         request.post("/addOther", this.otherThing).then(res=>{
           that.$message.success(res.msg)
           this.paperHandleClose()//关闭表单

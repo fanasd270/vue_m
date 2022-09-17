@@ -12,11 +12,41 @@
     <div class="secondContent">
       <div class="thirdContent">
         <span>z2.科研创新与竞赛类加分项得分：({{z2.toFixed(2)}})</span>
+        <br>
+        <el-button :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="this.dialogVisible2=true">新建</el-button>
         <el-scrollbar max-height="400px">
+          <el-card v-for="(m, index) in allLists.OtherThings">
+            <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
+              <el-descriptions-item label="加分项目:">{{m.data.other_name}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_info2==='Z2_1'" label="活动名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.other_time}}</el-descriptions-item>
+              <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadOther(m.data.other_proof)">点击下载</span></el-descriptions-item>
+            </el-descriptions>
+            <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
+            <el-tag type="warning" v-if="m.status===0">未加分</el-tag>
+            <el-tag type="info" v-if="m.status===2">往年已加分:{{m.score}}</el-tag>
+
+            <el-popover
+                placement="top"
+                :width="200"
+                trigger="click"
+                :visible="popover_otherThing[index]"
+            >
+              <el-input-number v-model="m.score" :precision="1" :step="0.1" :max="10" :min="0"/>
+              <el-button class="btn2" @click="updateScore(m,index,'otherThing')">确认</el-button>
+              <el-button class="btn2" @click="m.score=0;popover_otherThing[index]=false">取消</el-button>
+              <template #reference>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_otherThing[index]=true">加分</el-button>
+              </template>
+            </el-popover>
+            <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
+            <el-button class="btn1" :disabled="zCeStatus.status!=='1'" v-if="$store.state.code===0" @click="deleteOther(m)">删除</el-button>
+          </el-card>
+
           <el-card v-for="(m, index) in allLists.paper">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
               <el-descriptions-item label="论文名称:">{{m.data.paper_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.paper_year.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.paper_year}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPaper(m.data.paper_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
@@ -42,7 +72,7 @@
           <el-card v-for="(m, index) in allLists.patent">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
               <el-descriptions-item label="专利名称:">{{m.data.patent_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.patent_year.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.patent_year}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadPatent(m.data.patent_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
@@ -68,7 +98,7 @@
           <el-card v-for="(m, index) in allLists.project">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
               <el-descriptions-item label="项目名称:">{{m.data.project_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.project_year.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.project_year}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadProject(m.data.project_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
@@ -94,7 +124,7 @@
           <el-card v-for="(m, index) in allLists.contest">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
               <el-descriptions-item label="竞赛名称:">{{m.data.contest_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.contest_year.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.contest_year}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadContest(m.data.contest_supporting_materials)">点击下载</span></el-descriptions-item>
             </el-descriptions>
             <el-tag type="success" v-if="m.status===1">已加分:{{m.score}}</el-tag>
@@ -117,6 +147,72 @@
             <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreContest(m)">取消</el-button>
           </el-card>
         </el-scrollbar>
+
+        <el-dialog
+            title="新建"
+            v-model="dialogVisible2"
+            width="50%"
+            :before-close="paperHandleClose2">
+
+          <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
+
+            <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_name" class="m-2" size="large" @change="typeChangeZ2">
+                <el-option
+                    v-for="item in optionsZ2"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='Z2_1'" label="活动名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY" style="width: 150px;display: inline-block"></el-date-picker>
+              <el-select v-model="otherThing.other_time2" class="m-2" size="normal" placeholder=" " style="width: 80px;display: inline-block">
+                <el-option
+                    v-for="item in [{value:'春'},{value: '秋'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info" placeholder="其他信息在此补充(可选)" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="证明材料" style="margin-bottom: 70px;">
+              <el-upload
+                  class="upload-demo"
+                  ref="upload2"
+                  action="http://10.236.11.68:8080/"
+                  :http-request="paperUpload2"
+                  drag
+                  :limit="1"
+                  :on-exceed="uploadCover2"
+                  :auto-upload="false">
+                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                <div class="el-upload__text">
+                  拖拽或 <em>点击上传</em>
+                </div>
+                <template #tip>
+                  <div class="el-upload__tip">
+                    仅上传jpg/pdf/png
+                  </div>
+                </template>
+              </el-upload>
+            </el-form-item>
+
+            <el-form-item style="position: absolute; left:40%">
+              <el-button type="primary" @click="onSubmit2" style="margin-right: 40px">提交</el-button>
+              <el-button @click="paperHandleClose2">取消</el-button>
+            </el-form-item>
+            <div style="height: 50px"></div>
+          </el-form>
+        </el-dialog>
+
       </div>
       <div class="thirdContent" style="margin-top: 30px">
         <span>z3.专业水平类加分项得分：({{z3.toFixed(2)}})</span>
@@ -125,8 +221,11 @@
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="项目名称:">{{m.data.other_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.other_time.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="项目类别:">{{m.data.other_name}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='Z3_1'||m.data.other_type==='Z3_2'" label="考试名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='Z3_1'||m.data.other_type==='Z3_2'" label="考试分数:">{{m.data.other_info3}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='Z3_3'" label="证书名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.other_time}}</el-descriptions-item>
               <el-descriptions-item label="备注信息:">{{m.data.other_info}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadOther(m.data.other_proof)">点击下载</span></el-descriptions-item>
             </el-descriptions>
@@ -161,10 +260,44 @@
           <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
 
             <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-input v-model="otherThing.other_name" placeholder="四六级证书/托福雅思等专业技能资格证书" clearable></el-input>
+              <el-select v-model="otherThing.other_name" class="m-2" size="large" @change="typeChangeZ3">
+                <el-option
+                    v-for="item in optionsZ3"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='Z3_1'" label="考试名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info2" class="m-2" size="large">
+                <el-option
+                    v-for="item in optionsZ3_language"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='Z3_2'" label="考试名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='Z3_3'" label="证书名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='Z3_1'||otherThing.other_type==='Z3_2'" label="考试分数" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info3" clearable></el-input>
             </el-form-item>
             <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
+              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY" style="width: 150px;display: inline-block"></el-date-picker>
+              <el-select v-model="otherThing.other_time2" class="m-2" size="normal" placeholder=" " style="width: 80px;display: inline-block">
+                <el-option
+                    v-for="item in [{value:'春'},{value: '秋'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
               <el-input v-model="otherThing.other_info" placeholder="其他信息在此补充(可选)" clearable></el-input>
@@ -208,8 +341,10 @@
 <script>
 import fileApi from "@/components/Store";
 import request from "@/utils/request";
+import {Briefcase} from "@element-plus/icons-vue";
 export default {
   name: "stuACZhi",
+  components: {Briefcase},
   data(){
     return{
       Fapi:fileApi.fileApi,
@@ -223,21 +358,29 @@ export default {
         other_stu_no:'',
         other_name:'',
         other_info:'', //备注信息
+        other_info2:'',
+        other_info3:'',
+        other_info4:'',
+        other_info5:'',
         other_time:'',
+        other_time2:'',
         other_proof:'', //证明材料
-        other_type:'Z3', //大写字母
+        other_type:'', //大写字母
       },
       dialogVisible:false,
+      dialogVisible2:false,
       popover_paper:[],
       popover_patent:[],
       popover_project:[],
       popover_contest:[],
+      popover_otherThing:[],
       popover_other:[],
       allLists:{
         paper:[],
         patent:[],
         project:[],
         contest:[],
+        OtherThings:[],
       },
       otherList:[],
       zCeStatus:{
@@ -245,6 +388,44 @@ export default {
         status:'',
         change_time:'',
       },
+      optionsZ2:[
+        {
+          value:'科技学术活动',
+          type:'Z2_1',
+        },
+        {
+          value: '其他',
+          type:'Z2_6',
+        },
+      ],
+      optionsZ3:[
+        {
+          value:'外语考试',
+          type:'Z3_1',
+        },
+        {
+          value: '计算机等级考试',
+          type:'Z3_2',
+        },
+        {
+          value: '其他专业技能资格证书',
+          type:'Z3_3',
+        },
+      ],
+      optionsZ3_language:[
+        {
+          value:'英语四级',
+        },
+        {
+          value:'英语六级',
+        },
+        {
+          value:'雅思',
+        },
+        {
+          value:'托福',
+        },
+      ],
     }
   },
   watch:{
@@ -261,6 +442,22 @@ export default {
     this.getData()
   },
   methods:{
+    typeChangeZ3(val){
+      if(val==='外语考试'){
+        this.otherThing.other_type='Z3_1'
+      }else if(val==='计算机等级考试'){
+        this.otherThing.other_type='Z3_2'
+      }else{
+        this.otherThing.other_type='Z3_3'
+      }
+    },
+    typeChangeZ2(val){
+      if(val==='科技学术活动'){
+        this.otherThing.other_type='Z2_1'
+      }else if(val==='其他'){
+        this.otherThing.other_type='Z2_6'
+      }
+    },
     getData(){
       request.post('/getZongceStatus',this.user).then(res=>{
         this.zCeStatus=res.data
@@ -272,6 +469,7 @@ export default {
         this.popover_patent=new Array(res.patent.length).fill(false)
         this.popover_project=new Array(res.project.length).fill(false)
         this.popover_contest=new Array(res.contest.length).fill(false)
+        this.popover_otherThing=new Array(res.OtherThings.length).fill(false)
       })
       request.post('/getZ3',this.user).then(res=>{
         this.otherList=res
@@ -356,6 +554,7 @@ export default {
     },
     setScoreOther(m){
       this.countZ3()
+      this.countZ2()
       request.post('/scoreOther',m).then(res=>{
         console.log(res)
         this.uploadAll()
@@ -409,14 +608,24 @@ export default {
         case 'other':this.popover_other[index]=false
               this.setScoreOther(m)
               break
+        case 'otherThing':this.popover_otherThing[index]=false
+          this.setScoreOther(m)
+          break
       }
     },
     uploadCover(files, fileList){
       this.$refs.upload.clearFiles()
       this.$refs.upload.handleStart(files[0])
     },
+    uploadCover2(files, fileList){
+      this.$refs.upload2.clearFiles()
+      this.$refs.upload2.handleStart(files[0])
+    },
     submitUpload() {
       this.$refs.upload.submit();
+    },
+    submitUpload2() {
+      this.$refs.upload2.submit();
     },
     fileUploadError(){
       this.$message.error('文件上传失败')
@@ -426,7 +635,7 @@ export default {
         this.$message.warning('名称不能为空')
         return
       }
-      if(this.otherThing.other_time===''||this.otherThing.other_time===null){
+      if(this.otherThing.other_time===''||this.otherThing.other_time===null||this.otherThing.other_time2===''){
         this.$message.warning('认定时间不能为空')
         return
       }
@@ -434,14 +643,66 @@ export default {
         this.$message.warning('请选择证明材料')
         return
       }
+      if(this.otherThing.other_type==='Z3_1'||this.otherThing.other_type==='Z3_2'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('考试名称不能为空')
+          return
+        }
+        if(this.otherThing.other_info3===''){
+          this.$message.warning('考试分数不能为空')
+          return
+        }
+      }
+      if(this.otherThing.other_type==='Z3_3'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('证书名称不能为空')
+          return
+        }
+      }
       this.submitUpload()
     },
-    paperHandleClose(){
+    onSubmit2(){
+      if(this.otherThing.other_name===''){
+        this.$message.warning('加分项目不能为空')
+        return
+      }
+      if(this.otherThing.other_time===''||this.otherThing.other_time===null||this.otherThing.other_time2===''){
+        this.$message.warning('认定时间不能为空')
+        return
+      }
+      if(this.$refs.upload2.uploadFiles.length===0){
+        this.$message.warning('请选择证明材料')
+        return
+      }
+      if(this.otherThing.other_type==='Z2_1'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('活动名称不能为空')
+          return
+        }
+      }
+      this.submitUpload2()
+    },
+    clearOtherThing(){
       this.otherThing.other_proof=''
-      this.otherThing.other_name=''
+      // this.otherThing.other_name=''
       this.otherThing.other_time=''
+      this.otherThing.other_time2=''
       this.otherThing.other_info=''
+      this.otherThing.other_info2=''
+      this.otherThing.other_info3=''
+      this.otherThing.other_info4=''
+      this.otherThing.other_info5=''
+      this.otherThing.other_type=''
+    },
+    paperHandleClose(){
+      this.otherThing.other_name=''
+      this.clearOtherThing()
       this.dialogVisible=false
+    },
+    paperHandleClose2(){
+      this.otherThing.other_name=''
+      this.clearOtherThing()
+      this.dialogVisible2=false
     },
     paperUpload(param){
       const formData=new FormData()
@@ -454,10 +715,31 @@ export default {
         }
         this.otherThing.other_proof=res.data
         this.otherThing.other_stu_no=this.user.stu_no+''//
-        this.otherThing.other_type='Z3'
+        this.otherThing.other_time=this.otherThing.other_time+this.otherThing.other_time2
         request.post("/addOther", this.otherThing).then(res=>{
           that.$message.success(res.msg)
           this.paperHandleClose()//关闭表单
+          this.getData()
+        }).catch(err=>{
+          that.$message.error("请求错误")
+        })
+      })
+    },
+    paperUpload2(param){
+      const formData=new FormData()
+      formData.append('file', param.file)
+      let that=this
+      request.post('/addOther2', formData).then(res=>{
+        if(res.code===0){
+          this.$message.error("文件类型错误")
+          return
+        }
+        this.otherThing.other_proof=res.data
+        this.otherThing.other_stu_no=this.user.stu_no+''//
+        this.otherThing.other_time=this.otherThing.other_time+this.otherThing.other_time2
+        request.post("/addOther", this.otherThing).then(res=>{
+          that.$message.success('上传成功')
+          this.paperHandleClose2()//关闭表单
           this.getData()
         }).catch(err=>{
           that.$message.error("请求错误")
@@ -489,10 +771,12 @@ export default {
   height: 100%;
 }
 .secondContent{
-  height: calc(100vh - 80px - 5em);
+  /*height: calc(100vh - 80px - 5em);*/
+  min-height: 300px;
 }
 .thirdContent{
-  height: calc(50% - 20px);
+  /*height: calc(50% - 20px);*/
+  min-height: 200px;
   border-bottom: solid 1px #57d3ef;
   margin-top: 20px;
 }

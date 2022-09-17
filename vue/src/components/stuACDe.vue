@@ -57,8 +57,13 @@
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="项目名称:">{{m.data.other_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.other_time.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="项目类别:">{{m.data.other_name}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='D2_1'||m.data.other_type==='D2_2'" label="活动名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='D2_3'||m.data.other_type==='D2_4'" label="荣誉名称:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='D2_5'" label="职位:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='D2_3'||m.data.other_type==='D2_4'" label="荣誉等级:">{{m.data.other_info3}}</el-descriptions-item>
+              <el-descriptions-item v-if="m.data.other_type==='D2_4'" label="团队身份:">{{m.data.other_info4}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.other_time}}</el-descriptions-item>
               <el-descriptions-item label="备注信息:">{{m.data.other_info}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadOther(m.data.other_proof)">点击下载</span></el-descriptions-item>
             </el-descriptions>
@@ -93,10 +98,54 @@
           <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
 
             <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-input v-model="otherThing.other_name" placeholder="" clearable></el-input>
+              <el-select v-model="otherThing.other_name" class="m-2" size="large" @change="typeChangeD2">
+                <el-option
+                    v-for="item in optionsD2"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='D2_1'||otherThing.other_type==='D2_2'" label="活动名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='D2_3'||otherThing.other_type==='D2_4'" label="荣誉名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='D2_5'" label="职位" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='D2_3'||otherThing.other_type==='D2_4'" label="荣誉等级" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info3" class="m-2" size="large">
+                <el-option
+                    v-for="item in optionsD2_level"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="otherThing.other_type==='D2_4'" label="团队身份" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_info4" class="m-2" size="large">
+                <el-option
+                    v-for="item in [{value:'负责人'},{value: '成员'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
+              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY" style="width: 150px;display: inline-block"></el-date-picker>
+              <el-select v-model="otherThing.other_time2" class="m-2" size="normal" placeholder=" " style="width: 80px;display: inline-block">
+                <el-option
+                    v-for="item in [{value:'春'},{value: '秋'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
               <el-input v-model="otherThing.other_info" placeholder="其他信息在此补充(可选)" clearable></el-input>
@@ -139,8 +188,9 @@
         <el-scrollbar max-height="400px">
           <el-card v-for="(m, index) in otherList2">
             <el-descriptions style="padding: 10px 5px 0 5px" :column=4>
-              <el-descriptions-item label="项目名称:">{{m.data.other_name}}</el-descriptions-item>
-              <el-descriptions-item label="认定时间:">{{m.data.other_time.substring(0,4)}}</el-descriptions-item>
+              <el-descriptions-item label="扣分项目:">{{m.data.other_name}}</el-descriptions-item>
+              <el-descriptions-item label="具体行为:">{{m.data.other_info2}}</el-descriptions-item>
+              <el-descriptions-item label="认定时间:">{{m.data.other_time}}</el-descriptions-item>
               <el-descriptions-item label="备注信息:">{{m.data.other_info}}</el-descriptions-item>
               <el-descriptions-item label="证明材料:"><span style="color:cornflowerblue;" @click="downloadOther(m.data.other_proof)">点击下载</span></el-descriptions-item>
             </el-descriptions>
@@ -158,7 +208,7 @@
               <el-button  class="btn2" @click="updateScore(m,index,'d3')">确认</el-button>
               <el-button class="btn2" @click="m.score=0;popover_other2[index]=false">取消</el-button>
               <template #reference>
-                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other2[index]=true">加分</el-button>
+                <el-button class="btn1" v-if="m.status===0&&$store.state.code===1" @click="popover_other2[index]=true">扣分</el-button>
               </template>
             </el-popover>
             <el-button class="btn1" v-if="m.status===1&&$store.state.code===1" @click="clearScoreOther(m)">取消</el-button>
@@ -174,11 +224,29 @@
 
           <el-form ref="form" :model="otherThing" style="margin:30px 0 0 60px; font-weight: bold">
 
-            <el-form-item label="加分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-input v-model="otherThing.other_name" placeholder="" clearable></el-input>
+            <el-form-item label="扣分项目" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-select v-model="otherThing.other_name" class="m-2" size="large" @change="typeChangeD3">
+                <el-option
+                    v-for="item in optionsD3"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="具体行为" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+              <el-input v-model="otherThing.other_info2" clearable></el-input>
             </el-form-item>
             <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
-              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>
+              <el-date-picker v-model="otherThing.other_time" type="year" placeholder="上报学院年份" value-format="YYYY" style="width: 150px;display: inline-block"></el-date-picker>
+              <el-select v-model="otherThing.other_time2" class="m-2" size="normal" placeholder=" " style="width: 80px;display: inline-block">
+                <el-option
+                    v-for="item in [{value:'春'},{value: '秋'}]"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                />
+              </el-select>
             </el-form-item>
             <el-form-item label="备注信息" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
               <el-input v-model="otherThing.other_info" placeholder="其他信息在此补充(可选)" clearable></el-input>
@@ -238,7 +306,12 @@ export default {
         other_stu_no:'',
         other_name:'',
         other_info:'', //备注信息
+        other_info2:'',
+        other_info3:'',
+        other_info4:'',
+        other_info5:'',
         other_time:'',
+        other_time2:'',
         other_proof:'', //证明材料
         other_type:'', //大写字母
       },
@@ -258,6 +331,73 @@ export default {
         status:'',
         change_time:'',
       },
+
+      optionsD2:[
+        {
+          value:'主题教育活动',
+          type:'D2_1',
+        },
+        {
+          value:'社会公益活动',
+          type:'D2_2',
+        },
+        {
+          value:'个人荣誉',
+          type:'D2_3',
+        },
+        {
+          value:'集体荣誉',
+          type:'D2_4',
+        },
+        {
+          value:'学生干部',
+          type:'D2_5',
+        },
+        {
+          value:'其他',
+          type:'D2_6',
+        },
+      ],
+      optionsD2_level:[
+        {
+          value:'国家级',
+        },
+        {
+          value:'省部级',
+        },
+        {
+          value:'学校级',
+        },
+        {
+          value:'学院级',
+        },
+      ],
+      optionsD3:[
+        {
+          value:'无故迟到、早退、旷课或不参加集体活动',
+          type:'D3_1',
+        },
+        {
+          value:'不假晚归、无故夜不归宿、使用大规律违章电器',
+          type:'D3_2',
+        },
+        {
+          value:'被学院、学校通报批评',
+          type:'D3_3',
+        },
+        {
+          value:'受到学校纪律处分',
+          type:'D3_4',
+        },
+        {
+          value:'其他违规行为（宿舍抽烟、熬夜打游戏、饲养宠物等影响他人）',
+          type:'D3_5',
+        },
+        {
+          value:'其他未列出情况',
+          type:'D3_6',
+        },
+      ],
     }
   },
   watch:{
@@ -274,6 +414,50 @@ export default {
     this.getData()
   },
   methods:{
+    clearOtherThing(){
+      this.otherThing.other_proof=''
+      // this.otherThing.other_name=''
+      this.otherThing.other_time=''
+      this.otherThing.other_time2=''
+      this.otherThing.other_info=''
+      this.otherThing.other_info2=''
+      this.otherThing.other_info3=''
+      this.otherThing.other_info4=''
+      this.otherThing.other_info5=''
+      this.otherThing.other_type=''
+    },
+    typeChangeD2(val){
+      this.clearOtherThing()
+      if(val==='主题教育活动'){
+        this.otherThing.other_type='D2_1'
+      }else if(val==='社会公益活动'){
+        this.otherThing.other_type='D2_2'
+      }else if(val==='个人荣誉'){
+        this.otherThing.other_type='D2_3'
+      }else if(val==='集体荣誉'){
+        this.otherThing.other_type='D2_4'
+      }else if(val==='学生干部'){
+        this.otherThing.other_type='D2_5'
+      }else if(val==='其他'){
+        this.otherThing.other_type='D2_6'
+      }
+    },
+    typeChangeD3(val){
+      this.clearOtherThing()
+      if(val==='无故迟到、早退、旷课或不参加集体活动'){
+        this.otherThing.other_type='D3_1'
+      }else if(val==='不假晚归、无故夜不归宿、使用大规律违章电器'){
+        this.otherThing.other_type='D3_2'
+      }else if(val==='被学院、学校通报批评'){
+        this.otherThing.other_type='D3_3'
+      }else if(val==='受到学校纪律处分'){
+        this.otherThing.other_type='D3_4'
+      }else if(val==='其他违规行为（宿舍抽烟、熬夜打游戏、饲养宠物等影响他人）'){
+        this.otherThing.other_type='D3_5'
+      }else if(val==='其他未列出情况'){
+        this.otherThing.other_type='D3_6'
+      }
+    },
     getData(){
       request.post('/getZongceStatus',this.user).then(res=>{
         this.zCeStatus=res.data
@@ -393,10 +577,10 @@ export default {
     },
     onSubmit(){
       if(this.otherThing.other_name===''){
-        this.$message.warning('名称不能为空')
+        this.$message.warning('项目不能为空')
         return
       }
-      if(this.otherThing.other_time===''||this.otherThing.other_time===null){
+      if(this.otherThing.other_time===''||this.otherThing.other_time===null||this.otherThing.other_time2===''){
         this.$message.warning('认定时间不能为空')
         return
       }
@@ -404,14 +588,44 @@ export default {
         this.$message.warning('请选择证明材料')
         return
       }
+      if(this.otherThing.other_type==='D2_1'||this.otherThing.other_type==='D2_2'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('活动名称不能为空')
+          return
+        }
+      }
+      if(this.otherThing.other_type==='D2_3'||this.otherThing.other_type==='D2_4'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('荣誉名称不能为空')
+          return
+        }
+        if(this.otherThing.other_info3===''){
+          this.$message.warning('荣誉等级不能为空')
+          return
+        }
+        if(this.otherThing.other_type==='D2_4'&&this.otherThing.other_info4===''){
+          this.$message.warning('团队身份不能为空')
+          return
+        }
+      }
+      if(this.otherThing.other_type==='D2_5'){
+        if(this.otherThing.other_info2===''){
+          this.$message.warning('职位不能为空')
+          return
+        }
+      }
       this.submitUpload()
     },
     onSubmit2(){
       if(this.otherThing.other_name===''){
-        this.$message.warning('名称不能为空')
+        this.$message.warning('扣分项目不能为空')
         return
       }
-      if(this.otherThing.other_time===''||this.otherThing.other_time===null){
+      if(this.otherThing.other_info2===''){
+        this.$message.warning('具体行为不能为空')
+        return
+      }
+      if(this.otherThing.other_time===''||this.otherThing.other_time===null||this.otherThing.other_time2===''){
         this.$message.warning('认定时间不能为空')
         return
       }
@@ -422,17 +636,13 @@ export default {
       this.submitUpload2()
     },
     paperHandleClose(){
-      this.otherThing.other_proof=''
       this.otherThing.other_name=''
-      this.otherThing.other_time=''
-      this.otherThing.other_info=''
+      this.clearOtherThing()
       this.dialogVisible=false
     },
     paperHandleClose2(){
-      this.otherThing.other_proof=''
       this.otherThing.other_name=''
-      this.otherThing.other_time=''
-      this.otherThing.other_info=''
+      this.clearOtherThing()
       this.dialogVisible2=false
     },
     paperUpload(param){
@@ -446,7 +656,7 @@ export default {
         }
         this.otherThing.other_proof=res.data
         this.otherThing.other_stu_no=this.user.stu_no+''//
-        this.otherThing.other_type='D2'
+        this.otherThing.other_time=this.otherThing.other_time+this.otherThing.other_time2
         request.post("/addOther", this.otherThing).then(res=>{
           that.$message.success(res.msg)
           this.paperHandleClose()//关闭表单
@@ -467,7 +677,7 @@ export default {
         }
         this.otherThing.other_proof=res.data
         this.otherThing.other_stu_no=this.user.stu_no+''//
-        this.otherThing.other_type='D3'
+        this.otherThing.other_time=this.otherThing.other_time+this.otherThing.other_time2
         request.post("/addOther", this.otherThing).then(res=>{
           that.$message.success(res.msg)
           this.paperHandleClose2()//关闭表单
