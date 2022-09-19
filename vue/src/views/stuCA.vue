@@ -1,7 +1,7 @@
 <template>
   <div style="position: absolute;width: 100%;height: 50px;padding-left: 150px">
     <el-button @click="download(1)">下载个人综测表</el-button>
-    <el-button @click="download(2)">下载年级综测表</el-button>
+<!--    <el-button @click="download(2)">下载年级综测表</el-button>-->
   </div>
   <div style="margin-top: 50px; width: 100%;border-top: solid 1px #57d3ef">
     <el-tabs tab-position="left" >

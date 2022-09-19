@@ -19,6 +19,7 @@
             <el-button @click="passServe(index)">通过</el-button>
             <el-button @click="rejectReason(index)">驳回</el-button>
             <el-button @click="waitServe(index)">稍后</el-button>
+            <el-button @click="changeInfo(m)">修改</el-button>
           </el-card>
         </transition>
       </div>
@@ -36,6 +37,39 @@
         <el-button v-if="rejectType==='did'" type="primary" @click="rejectServeDid(rejectIndex)">确认</el-button>
       </span>
         </template>
+      </el-dialog>
+
+      <el-dialog
+          title="修改"
+          v-model="dialogVisible"
+          width="50%"
+          :before-close="serveHandleClose">
+
+        <el-form ref="form" :model="serveForm" style="margin:30px 0 0 60px; font-weight: bold">
+
+          <el-form-item label="志愿活动名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="serveForm.voluntary_activities_name" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="举办部门" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="serveForm.voluntary_activities_studept" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="活动始、末时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="serveForm.voluntary_activities_time_from_to" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="参与时长" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="serveForm.voluntary_activities_time_long" clearable @input="NumberCheck"></el-input>
+          </el-form-item>
+          <el-form-item label="活动内容" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="serveForm.voluntary_activities_content" clearable></el-input>
+          </el-form-item>
+
+          <el-form-item style="position: absolute; left:40%">
+            <el-button type="primary" @click="onSubmit" style="margin-right: 40px">提交</el-button>
+            <el-button @click="serveHandleClose">取消</el-button>
+          </el-form-item>
+          <div style="height: 50px"></div>
+        </el-form>
+
       </el-dialog>
 
     </el-scrollbar>
@@ -61,6 +95,7 @@
             <el-tag type="danger" v-if="m.data.voluntary_activities_status==='2'">已驳回</el-tag>
             <!--                <el-button @click="passPaper(index)">通过</el-button>-->
             <el-button style="margin-left: 5px" v-if="m.data.voluntary_activities_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
+            <el-button v-if="m.data.voluntary_activities_status==='1'" @click="changeInfo(m)">修改</el-button>
             <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
             <div v-if="m.data.voluntary_activities_status==='2'">
               驳回理由:{{m.reason}}
@@ -95,6 +130,9 @@ export default {
       serveDid:[],
       fresh:true,
       Fapi:'',
+
+      serveForm:{},
+      dialogVisible:false,
     }
   },
   created() {
@@ -120,6 +158,22 @@ export default {
 
     downloadServe(m){
       window.open(this.Fapi+"/Activities/"+m)
+    },
+    changeInfo(m){
+      this.dialogVisible=true
+      this.serveForm=JSON.parse(JSON.stringify(m.data))
+    },
+    serveHandleClose(){
+      this.dialogVisible=false
+    },
+    onSubmit(){
+      request.post("/upload_activity_info", this.serveForm).then(res=>{
+        this.$message.success(res.msg)
+        this.dialogVisible=false//关闭表单
+        this.refreshComponent()
+      }).catch(err=>{
+        this.$message.error("请求错误")
+      })
     },
     passServe(index) {
       request.post('/pass_activity', this.serveToDo[index].data).then(res => {

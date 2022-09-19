@@ -462,6 +462,13 @@ export default {
       request.post('/getZongceStatus',this.user).then(res=>{
         this.zCeStatus=res.data
       })
+      request.post('/getZ1',this.user).then(res=>{
+        if(res.msg==='NaN'){
+          this.z1=0
+        }else{
+          this.z1=res.msg-0
+        }
+      })
       request.post('/getZ2',this.user).then(res=>{
         this.allLists=res
         this.countZ2()

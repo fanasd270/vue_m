@@ -18,6 +18,7 @@
             <el-button @click="passProject(index)">通过</el-button>
             <el-button @click="rejectReason(index)">驳回</el-button>
             <el-button @click="waitProject(index)">稍后</el-button>
+            <el-button @click="changeInfo(m)">修改</el-button>
             <span style="margin-left: 5px">认定时间:</span>
             <span style="color:cornflowerblue;">{{m.data.award_info_year}}</span>
           </el-card>
@@ -36,6 +37,40 @@
         <el-button v-if="rejectType==='did'" type="primary" @click="rejectProjectDid(rejectIndex)">确认</el-button>
       </span>
         </template>
+      </el-dialog>
+
+      <el-dialog
+          title="修改"
+          v-model="dialogVisible"
+          width="50%"
+          :before-close="awardHandleClose">
+
+        <el-form ref="form" :model="awardForm" style="margin:30px 0 0 60px; font-weight: bold">
+
+          <el-form-item label="获奖/荣誉称号" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="awardForm.award_info_name" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="颁发单位" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="awardForm.award_info_unit" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="获奖时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="awardForm.award_info_time" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="获奖名次" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="awardForm.award_info_rank" clearable placeholder="选填"></el-input>
+          </el-form-item>
+          <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="awardForm.award_info_year" clearable></el-input>
+<!--            <el-date-picker v-model="awardForm.award_info_year" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>-->
+          </el-form-item>
+
+          <el-form-item style="position: absolute; left:40%">
+            <el-button type="primary" @click="onSubmit" style="margin-right: 40px">提交</el-button>
+            <el-button @click="awardHandleClose">取消</el-button>
+          </el-form-item>
+          <div style="height: 50px"></div>
+        </el-form>
+
       </el-dialog>
     </el-scrollbar>
 
@@ -61,6 +96,7 @@
             <span style="margin-left: 5px">认定时间:</span>
             <span style="color:cornflowerblue;">{{m.data.award_info_year}}</span>
             <el-button style="margin-left: 5px" v-if="m.data.award_info_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
+            <el-button v-if="m.data.award_info_status==='1'" @click="changeInfo(m)">修改</el-button>
             <div v-if="m.data.award_info_status==='2'">
               驳回理由:{{m.reason}}
             </div>
@@ -95,6 +131,9 @@ export default {
       projectDid:[],
       fresh:true,
       Fapi:'',
+
+      awardForm:{},
+      dialogVisible:false,
     }
   },
   created() {
@@ -120,6 +159,22 @@ export default {
 
     downloadProject(m){
       window.open(this.Fapi+"/Award/"+m)
+    },
+    changeInfo(m){
+      this.dialogVisible=true
+      this.awardForm=JSON.parse(JSON.stringify(m.data))
+    },
+    awardHandleClose(){
+      this.dialogVisible=false
+    },
+    onSubmit(){
+      request.post("/upload_award_info", this.awardForm).then(res=>{
+        this.$message.success(res.msg)
+        this.dialogVisible=false//关闭表单
+        this.refreshComponent()
+      }).catch(err=>{
+        this.$message.error("请求错误")
+      })
     },
     passProject(index){
       request.post('/pass_award',this.projectToDo[index].data).then(res=>{

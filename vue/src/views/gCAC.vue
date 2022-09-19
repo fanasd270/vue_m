@@ -14,7 +14,8 @@
           <el-radio-button label="开启综测评分" />
           <el-radio-button label="关闭综测评分" />
         </el-radio-group>
-        <el-button @click="downloadTable" style="margin-left: 10px;height: 40px;vertical-align: top">下载年级综测表</el-button>
+        <el-button v-if="power.type===2" @click="downloadTable(1)" style="margin-left: 10px;height: 40px;vertical-align: top">下载年级综测表（详）</el-button>
+        <el-button v-if="power.type===2" @click="downloadTable(2)" style="margin-left: 10px;height: 40px;vertical-align: top">下载年级综测表（略）</el-button>
       </div>
 
       <br>
@@ -225,16 +226,18 @@ export default {
           all:0,
         }
         for(let i=0;i<res.data.length;i++){
-          single.stu_name=res.data[i].stu_name
-          single.stu_no=res.data[i].stu_no
-          single.stu_class=res.data[i].stu_class
-          single.d=res.data[i].d
-          single.z=res.data[i].z
-          single.t=res.data[i].t
-          single.m=res.data[i].m
-          single.l=res.data[i].l
-          single.all=single.d+single.z+single.t+single.m+single.l
-          tableData.push(JSON.parse(JSON.stringify(single)))
+          if(res.data[i].stu_class===this.user_stu.stu_class){
+            single.stu_name=res.data[i].stu_name
+            single.stu_no=res.data[i].stu_no
+            single.stu_class=res.data[i].stu_class
+            single.d=res.data[i].d
+            single.z=res.data[i].z
+            single.t=res.data[i].t
+            single.m=res.data[i].m
+            single.l=res.data[i].l
+            single.all=single.d+single.z+single.t+single.m+single.l
+            tableData.push(JSON.parse(JSON.stringify(single)))
+          }
         }
         this.scoreTable=JSON.parse(JSON.stringify(tableData))
       })
@@ -267,10 +270,16 @@ export default {
         })
       }
     },
-    downloadTable(){
-      request.post('/downloadAllZongceT',this.user).then(res=>{
-        window.open(this.Fapi+"/excel/"+res.data)
-      })
+    downloadTable(val){
+      if(val===1){
+        request.post('/downloadAllZongceT',this.user).then(res=>{
+          window.open(this.Fapi+"/excel/"+res.data)
+        })
+      }else{
+        request.post('/getTotalT',this.user).then(res=>{
+          window.open(this.Fapi+"/excel/"+res.data)
+        })
+      }
     },
   },
 }

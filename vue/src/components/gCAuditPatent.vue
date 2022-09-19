@@ -21,6 +21,7 @@
           <el-button @click="passPatent(index)">通过</el-button>
           <el-button @click="rejectReason(index)">驳回</el-button>
           <el-button @click="waitPatent(index)">稍后</el-button>
+          <el-button @click="changeInfo(m)">修改</el-button>
           <span style="margin-left: 5px">认定时间:</span>
           <span style="color:cornflowerblue;">{{m.data.patent_year.substring(0,4)}}</span>
         </el-card>
@@ -40,6 +41,52 @@
       </span>
       </template>
     </el-dialog>
+
+      <el-dialog
+          title="修改"
+          v-model="dialogVisible"
+          width="50%"
+          :before-close="patentHandleClose">
+
+        <el-form ref="form" :model="patentForm" style="margin:30px 0 0 60px; font-weight: bold">
+
+          <el-form-item label="专利名称" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_name" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="专利类型" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_type" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="专利申请号" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_application_no" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="专利申请日" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_application_time" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="专利证书号" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_certificate_no" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="专利获权时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_authorization_time" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="是否第一发明人" style="width: 46%; margin-bottom: 40px; margin-right: 2%;">
+            <el-radio-group v-model="patentForm.patent_isfirstone">
+              <el-radio  label="是">是</el-radio>
+              <el-radio  label="否">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="认定时间" style="margin-bottom: 40px; margin-right: 2%; width: 46%">
+            <el-input v-model="patentForm.patent_year" clearable></el-input>
+<!--            <el-date-picker v-model="patentForm.patent_year" type="year" placeholder="上报学院年份" value-format="YYYY"></el-date-picker>-->
+          </el-form-item>
+
+          <el-form-item style="position: absolute; left:40%">
+            <el-button type="primary" @click="onSubmit" style="margin-right: 40px">提交</el-button>
+            <el-button @click="patentHandleClose">取消</el-button>
+          </el-form-item>
+          <div style="height: 50px"></div>
+        </el-form>
+
+      </el-dialog>
   </el-scrollbar>
 
   <!--        历史-->
@@ -67,6 +114,7 @@
           <span style="color:cornflowerblue;">{{m.data.patent_year.substring(0,4)}}</span>
           <!--                <el-button @click="passPaper(index)">通过</el-button>-->
           <el-button style="margin-left: 5px" v-if="m.data.patent_status==='1'" @click="rejectReason_did(index)">驳回</el-button>
+          <el-button v-if="m.data.patent_status==='1'" @click="changeInfo(m)">修改</el-button>
           <!--                <el-button @click="waitPaper(index)">稍后</el-button>-->
           <div v-if="m.data.patent_status==='2'">
             驳回理由:{{m.reason}}
@@ -102,6 +150,9 @@ export default {
       patentDid:[],
       fresh:true,
       Fapi:'',
+
+      patentForm:{},
+      dialogVisible:false,
     }
   },
   created() {
@@ -127,6 +178,23 @@ export default {
 
     downloadPatent(m){
       window.open(this.Fapi+"/Patents/"+m)
+    },
+
+    changeInfo(m){
+      this.dialogVisible=true
+      this.patentForm=JSON.parse(JSON.stringify(m.data))
+    },
+    patentHandleClose(){
+      this.dialogVisible=false
+    },
+    onSubmit(){
+      request.post("/upload_patent_info", this.patentForm).then(res=>{
+        this.$message.success(res.msg)
+        this.dialogVisible=false//关闭表单
+        this.refreshComponent()
+      }).catch(err=>{
+        this.$message.error("请求错误")
+      })
     },
 
     passPatent(index){
